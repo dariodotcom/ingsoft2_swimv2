@@ -3,6 +3,7 @@ package it.polimi.swim.business.bean;
 import java.math.BigInteger;
 import java.security.SecureRandom;
 
+import it.polimi.swim.business.bean.remote.AuthenticationControlRemote;
 import it.polimi.swim.business.entity.Administrator;
 import it.polimi.swim.business.entity.Customer;
 import it.polimi.swim.business.entity.User;
