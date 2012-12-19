@@ -1,5 +1,7 @@
 package it.polimi.swim.business.entity;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -13,9 +15,11 @@ import javax.persistence.OneToMany;
 @Inheritance(strategy = InheritanceType.JOINED)
 public abstract class User {
 	
-	protected User(String username, String passwordHash){
+	protected User(){}
+	
+	protected User(String username, String password){
 		this.username = username;
-		this.passwordHash = passwordHash;
+		this.passwordHash = hash(password);
 	}
 	
 	@Id
@@ -34,11 +38,23 @@ public abstract class User {
 		return username;
 	}
 	
-	public String getPasswordHash(){
-		return passwordHash;
+	public boolean matchPassword(String password){
+		return hash(password).equals(passwordHash);
 	}
 	
-	public void setPasswordHash(String passwordHash){
-		this.passwordHash = passwordHash;
+	public void setPassword(String password){
+		this.passwordHash = hash(password);
+	}
+	
+	/*Helper*/
+	private String hash(String input){
+		try{
+			MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
+			messageDigest.update(input.getBytes());
+			return new String(messageDigest.digest());
+		}catch(NoSuchAlgorithmException nse){
+			nse.printStackTrace();
+			return null;
+		}
 	}
 }

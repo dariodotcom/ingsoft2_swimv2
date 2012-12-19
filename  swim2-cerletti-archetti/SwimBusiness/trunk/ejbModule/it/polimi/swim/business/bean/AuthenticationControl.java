@@ -1,5 +1,8 @@
 package it.polimi.swim.business.bean;
 
+import java.math.BigInteger;
+import java.security.SecureRandom;
+
 import it.polimi.swim.business.entity.Administrator;
 import it.polimi.swim.business.entity.Customer;
 import it.polimi.swim.business.entity.User;
@@ -24,6 +27,8 @@ public class AuthenticationControl implements AuthenticationControlRemote {
 	@PersistenceContext(unitName = "swim")
 	EntityManager manager;
 
+	SecureRandom random = new SecureRandom();
+
 	/**
 	 * Default constructor.
 	 */
@@ -31,41 +36,90 @@ public class AuthenticationControl implements AuthenticationControlRemote {
 		// TODO Auto-generated constructor stub
 	}
 
-	public UserType authenticateUser(String username, String passwordHash)
+	public UserType authenticateUser(String username, String password)
 			throws UserNotFoundException, AuthenticationFailedException {
-		String queryString = "FROM user u WHERE username=:username";
+		String queryString = "FROM User u WHERE username=:username";
 		Query query = manager.createQuery(queryString);
 		query.setParameter("username", username);
-		
+
 		User user;
-		try{
+		try {
 			user = (User) query.getSingleResult();
-		}catch(EntityNotFoundException enf){
+		} catch (EntityNotFoundException enf) {
 			throw new UserNotFoundException();
-		}catch(NoResultException nre){
+		} catch (NoResultException nre) {
 			throw new UserNotFoundException();
 		}
-		
-		String correctPasswordHash = (String) user.getPasswordHash();
-		if(!passwordHash.equals(correctPasswordHash)){
+
+		if (!user.matchPassword(password)) {
 			throw new AuthenticationFailedException();
 		}
-		
-		if(user instanceof Administrator){
+
+		if (user instanceof Administrator) {
 			return UserType.ADMINISTRATOR;
-		} else if(user instanceof Customer){
+		} else if (user instanceof Customer) {
 			return UserType.CUSTOMER;
 		} else {
-			throw new ClassCastException(); //TODO: solve this in a better way
+			throw new ClassCastException(); // TODO: solve this in a better way
 		}
 	}
 
 	public void createUser(String username, String password, String email,
-			String name, String surname) throws UsernameAlreadyTakenException,
-			EmailAlreadyTakenException {
-		
+			String name, String surname) throws EmailAlreadyTakenException,
+			UsernameAlreadyTakenException {
+
+		if (!isUsernameAvailable(username)) {
+			throw new UsernameAlreadyTakenException();
+		}
+
+		if (!isEmailAvailable(email)) {
+			throw new EmailAlreadyTakenException();
+		}
+
 		Customer c = new Customer(username, password, email, name, surname);
-		
+
+		manager.persist(c);
 	}
 
+	public void confirmUserEmailAddress(String username)
+			throws UserNotFoundException {
+		findCustomerByUsername(username).setEmailConfirmed(true);
+	}
+
+	public String resetUserPassword(String username)
+			throws UserNotFoundException {
+		Customer c = findCustomerByUsername(username);
+		String newPassword = generateRandomString(10); //TODO: move 10 to external config class
+		c.setPassword(newPassword);
+		return newPassword;
+	}
+
+	/* Helpers */
+	private boolean isEmailAvailable(String email) {
+		Query q = manager.createQuery("FROM Customer c WHERE c.email=:email");
+		q.setParameter("email", email);
+
+		return q.getResultList().size() == 0;
+	}
+
+	private boolean isUsernameAvailable(String username) {
+		Query q = manager
+				.createQuery("FROM Customer c WHERE c.username=:username");
+		q.setParameter("username", username);
+
+		return q.getResultList().size() == 0;
+	}
+
+	private Customer findCustomerByUsername(String username)
+			throws UserNotFoundException {
+		try {
+			return manager.find(Customer.class, username);
+		} catch (NoResultException nre) {
+			throw new UserNotFoundException();
+		}
+	}
+
+	private String generateRandomString(int length) {
+		return new BigInteger(length * 5, random).toString(32);
+	}
 }
