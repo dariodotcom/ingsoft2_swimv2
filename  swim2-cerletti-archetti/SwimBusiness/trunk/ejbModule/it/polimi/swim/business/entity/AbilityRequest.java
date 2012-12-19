@@ -1,4 +1,4 @@
-package it.polimi.swimv2.business.entity;
+package it.polimi.swim.business.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -15,7 +15,7 @@ public class AbilityRequest {
 
 	@Id
 	@Column(name = "id")
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_STORE")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	private int id;
 
 	@Column(name = "abilityName")
