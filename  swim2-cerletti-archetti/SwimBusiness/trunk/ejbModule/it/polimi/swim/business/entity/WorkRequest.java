@@ -62,9 +62,9 @@ public class WorkRequest {
 	@JoinTable(name = "work_request_message", joinColumns = @JoinColumn(name = "workrequest"), inverseJoinColumns = @JoinColumn(name = "message"))
 	private Set<Message> relatedMessages;
 
-//	@OneToOne
-//	@JoinColumn(name = "feedback")
-//	private Feedback feedback;
+	@OneToOne
+	@JoinColumn(name = "feedback")
+	private Feedback feedback;
 
 	public Customer getSender() {
 		return sender;
@@ -158,17 +158,17 @@ public class WorkRequest {
 		return relatedMessages;
 	}
 
-//	public void addRelatedMessages(Message message) {
-//		this.relatedMessages.add(message);
-//	}
-//
-//	public Feedback getFeedback() {
-//		return feedback;
-//	}
-//
-//	public void setFeedback(Feedback feedback) {
-//		this.feedback = feedback;
-//	}
+	public void addRelatedMessages(Message message) {
+		this.relatedMessages.add(message);
+	}
+
+	public Feedback getFeedback() {
+		return feedback;
+	}
+
+	public void setFeedback(Feedback feedback) {
+		this.feedback = feedback;
+	}
 
 	public int getId() {
 		return id;
