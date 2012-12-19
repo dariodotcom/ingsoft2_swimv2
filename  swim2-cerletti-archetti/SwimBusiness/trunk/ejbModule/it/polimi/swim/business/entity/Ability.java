@@ -11,6 +11,12 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "ability")
 public class Ability {
+	
+	public Ability(String name, String description){
+		this.name = name;
+		this.description = description;
+	}
+	
 	@Id
 	@Column(name = "id")
 	@GeneratedValue

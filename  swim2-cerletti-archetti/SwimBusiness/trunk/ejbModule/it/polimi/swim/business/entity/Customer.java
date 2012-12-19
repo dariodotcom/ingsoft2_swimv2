@@ -10,10 +10,11 @@ import javax.persistence.Table;
 @Table(name = "customer")
 public class Customer extends User {
 
-	public Customer(String username, String passwordHash, String name,
-			String surname) {
+	public Customer(String username, String passwordHash, String email,
+			String name, String surname) {
 		super(username, passwordHash);
 
+		this.email = email;
 		this.name = name;
 		this.surname = surname;
 	}
