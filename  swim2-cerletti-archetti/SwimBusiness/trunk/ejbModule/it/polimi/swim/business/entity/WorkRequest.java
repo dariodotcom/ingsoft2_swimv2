@@ -59,7 +59,7 @@ public class WorkRequest {
 	private Ability requiredAbility;
 
 	@OneToMany
-	@JoinTable(name = "work_request_message", joinColumns = @JoinColumn(name = "workrequest"), inverseJoinColumns = @JoinColumn(name = "message"))
+	@JoinTable(name = "workrequest_message", joinColumns = @JoinColumn(name = "workrequest"), inverseJoinColumns = @JoinColumn(name = "message"))
 	private Set<Message> relatedMessages;
 
 	@OneToOne
