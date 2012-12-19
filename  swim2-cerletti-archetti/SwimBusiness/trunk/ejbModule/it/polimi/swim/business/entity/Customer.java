@@ -9,7 +9,9 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "customer")
 public class Customer extends User {
-
+	
+	public Customer() {}
+	
 	public Customer(String username, String passwordHash, String email,
 			String name, String surname) {
 		super(username, passwordHash);
@@ -17,6 +19,7 @@ public class Customer extends User {
 		this.email = email;
 		this.name = name;
 		this.surname = surname;
+		this.emailConfirmed = false;
 	}
 
 	@Column(name = "email", unique = true, nullable = false)
@@ -37,6 +40,9 @@ public class Customer extends User {
 	@Column(name = "photourl", nullable = true)
 	private String photourl;
 
+	@Column(name = "emailactive", nullable = false)
+	private Boolean emailConfirmed;
+	
 	/* Setters and Getters */
 	public String getEmail() {
 		return email;
@@ -84,5 +90,13 @@ public class Customer extends User {
 
 	public void setPhotourl(String photourl) {
 		this.photourl = photourl;
+	}
+	
+	public boolean isEmailConfirmed(){
+		return emailConfirmed;
+	}
+	
+	public void setEmailConfirmed(Boolean confirmed){
+		this.emailConfirmed = confirmed;
 	}
 }
