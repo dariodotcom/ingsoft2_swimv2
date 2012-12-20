@@ -12,9 +12,9 @@ public interface FriendshipControllerRemote {
 			throws BadRequestException, InvalidStateException;
 
 	public void respondToRequest(String responseAuthorUsr, int requestId,
-			Boolean response) throws BadRequestException,
+			boolean response) throws BadRequestException,
 			InvalidStateException, UnauthorizedRequestException;
 
 	public void removeFriendship(String requestAuthorUsr, int requestId)
-			throws BadRequestException, InvalidStateException;
+			throws BadRequestException, InvalidStateException, UnauthorizedRequestException;
 }

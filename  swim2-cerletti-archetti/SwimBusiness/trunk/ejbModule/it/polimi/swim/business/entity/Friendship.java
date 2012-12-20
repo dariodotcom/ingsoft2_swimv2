@@ -14,6 +14,14 @@ import javax.persistence.Table;
 @Table(name = "friendship")
 public class Friendship {
 
+	public Friendship(){}
+	
+	public Friendship(Customer sender, Customer receiver){
+		this.sender = sender;
+		this.receiver = receiver;
+		this.confirmed = false;
+	}
+	
 	@Id
 	@GeneratedValue
 	@Column(name = "friendship")
@@ -34,12 +42,12 @@ public class Friendship {
 	private Date confirmedDate;
 
 	/*Setters and Getters*/
-	public Boolean getConfirmed() {
+	public Boolean isConfirmed() {
 		return confirmed;
 	}
 
-	public void setConfirmed(Boolean confirmed) {
-		this.confirmed = confirmed;
+	public void setConfirmed() {
+		this.confirmed = true;
 	}
 
 	public Date getConfirmedDate() {

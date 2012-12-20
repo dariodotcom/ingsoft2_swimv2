@@ -30,36 +30,53 @@ public class FriendshipController implements FriendshipControllerRemote {
 	public void addFriendshipRequest(String senderUsr, String receiverUsr)
 			throws BadRequestException, InvalidStateException {
 		Customer sender = Helpers.getEntityChecked(manager, Customer.class,
-				senderUsr), receiver = Helpers.getEntityChecked(manager,
-				Customer.class, receiverUsr);
+				senderUsr);
+		Customer receiver = Helpers.getEntityChecked(manager, Customer.class,
+				receiverUsr);
 
+		if (sender.getFriends().contains(receiver)) {
+			// Users are already friends
+			throw new InvalidStateException();
+		}
+
+		Friendship f = new Friendship(sender, receiver);
+		manager.persist(f);
 	}
 
 	public void respondToRequest(String responseAuthorUsr, int requestId,
-			Boolean response) throws BadRequestException, InvalidStateException, UnauthorizedRequestException {
-		Customer author = Helpers.getEntityChecked(manager, Customer.class,
-				responseAuthorUsr);
+			boolean accepted) throws BadRequestException,
+			InvalidStateException, UnauthorizedRequestException {
+		Customer responseAuthor = Helpers.getEntityChecked(manager,
+				Customer.class, responseAuthorUsr);
 		Friendship friendship = Helpers.getEntityChecked(manager,
 				Friendship.class, requestId);
-		
-		if(response == null){
-			throw new BadRequestException();
-		}
-		
-		if(!friendship.getReceiver().equals(author)){
+
+		if (!friendship.getReceiver().equals(responseAuthor)) {
 			throw new UnauthorizedRequestException();
 		}
-		
-		if(friendship.getConfirmed() != null){
-		}
-		
 
+		if (friendship.isConfirmed()) {
+			throw new InvalidStateException();
+		}
+
+		if (accepted == true) {
+			friendship.setConfirmed();
+		} else {
+			manager.remove(friendship);
+		}
 	}
 
 	public void removeFriendship(String requestAuthorUsr, int requestId)
-			throws BadRequestException, InvalidStateException {
-		// TODO Auto-generated method stub
-
+			throws BadRequestException, InvalidStateException, UnauthorizedRequestException {
+		Friendship friendship = Helpers.getEntityChecked(manager,
+				Friendship.class, requestId);
+		Customer author = Helpers.getEntityChecked(manager, Customer.class,
+				requestAuthorUsr);
+		
+		if(!(author.equals(friendship.getSender()) || author.equals(friendship.getReceiver()))){
+			throw new UnauthorizedRequestException();
+		}
+		
+		manager.remove(friendship);
 	}
-
 }
