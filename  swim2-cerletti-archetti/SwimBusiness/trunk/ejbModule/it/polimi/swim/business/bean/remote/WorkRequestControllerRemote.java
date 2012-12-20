@@ -1,5 +1,6 @@
 package it.polimi.swim.business.bean.remote;
 
+import it.polimi.swim.business.exceptions.BadRequestException;
 import it.polimi.swim.business.exceptions.UnauthorizedRequestException;
 
 import javax.ejb.Remote;
@@ -20,7 +21,8 @@ public interface WorkRequestControllerRemote {
 	 *            - the identifier of the user receiving the request.
 	 * @return the identifier of the created work request.
 	 * */
-	public int createWorkRequest(String senderUsr, String receiverUsr);
+	public int createWorkRequest(String senderUsr, String receiverUsr)
+			throws BadRequestException;
 
 	/**
 	 * Confirms or cancels a work request. Both the sender and the receiver can
@@ -38,7 +40,7 @@ public interface WorkRequestControllerRemote {
 	 * */
 	public void respondToWorkRequest(String responseAuthorUsr,
 			Boolean responseDescriptor, int workRequestId)
-			throws UnauthorizedRequestException;
+			throws UnauthorizedRequestException, BadRequestException;
 
 	/**
 	 * Marks a request as complete by either the sender or the receiver
@@ -52,7 +54,7 @@ public interface WorkRequestControllerRemote {
 	 *             request.
 	 * */
 	public void markRequestAsCompleted(String actorUsr, int workRequestId)
-			throws UnauthorizedRequestException;
+			throws UnauthorizedRequestException, BadRequestException;
 
 	/**
 	 * Send a message in the context of a specific work request.
@@ -68,5 +70,5 @@ public interface WorkRequestControllerRemote {
 	 *             request.
 	 */
 	public void sendMessage(String authorUsr, String text, int workRequestId)
-			throws UnauthorizedRequestException;
+			throws UnauthorizedRequestException, BadRequestException;
 }

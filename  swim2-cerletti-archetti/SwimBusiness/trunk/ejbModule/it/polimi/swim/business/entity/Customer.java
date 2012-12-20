@@ -42,6 +42,9 @@ public class Customer extends User {
 
 	@Column(name = "emailactive", nullable = false)
 	private Boolean emailConfirmed;
+
+	/*Relationship*/
+	
 	
 	/* Setters and Getters */
 	public String getEmail() {
