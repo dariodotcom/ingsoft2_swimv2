@@ -12,6 +12,15 @@ import javax.persistence.Table;
 @Table(name = "ability_requests")
 public class AbilityRequest {
 
+	public AbilityRequest() {
+	}
+
+	public AbilityRequest(Customer author, String name, String description) {
+		this.abilityName = name;
+		this.abilityDescription = description;
+		this.requestAuthor = author;
+	}
+
 	@Id
 	@Column(name = "id")
 	@GeneratedValue
@@ -25,6 +34,9 @@ public class AbilityRequest {
 
 	@Column(name = "approved")
 	private Boolean approved;
+
+	@Column(name = "review")
+	private String review;
 
 	@ManyToOne
 	@JoinColumn(name = "requestauthor")
@@ -53,6 +65,14 @@ public class AbilityRequest {
 
 	public void setApproved(Boolean approved) {
 		this.approved = approved;
+	}
+
+	public String getReview() {
+		return review;
+	}
+
+	public void setReview(String review) {
+		this.review = review;
 	}
 
 	public Customer getRequestAuthor() {
