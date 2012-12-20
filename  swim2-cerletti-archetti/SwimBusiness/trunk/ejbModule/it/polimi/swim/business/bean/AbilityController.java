@@ -5,11 +5,13 @@ import java.util.List;
 import it.polimi.swim.business.bean.remote.AbilityControllerRemote;
 import it.polimi.swim.business.entity.Ability;
 import it.polimi.swim.business.entity.AbilityRequest;
+import it.polimi.swim.business.entity.Administrator;
 import it.polimi.swim.business.entity.Customer;
 import it.polimi.swim.business.exceptions.BadRequestException;
 import it.polimi.swim.business.exceptions.InvalidStateException;
 
 import javax.ejb.Stateless;
+import javax.persistence.Query;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
@@ -29,45 +31,93 @@ public class AbilityController implements AbilityControllerRemote {
 	public void addAbilityRequest(String authorUsr, String name,
 			String description) throws BadRequestException,
 			InvalidStateException {
-		if (!checkString(description) || !checkString(name)
-				|| !checkString(authorUsr)) {
+		if (!isValidString(description) || !isValidString(name)
+				|| !isValidString(authorUsr)) {
 			throw new BadRequestException();
 		}
 
-		Customer author = manager.find(Customer.class, authorUsr);
+		Customer author = getEntity(manager, Customer.class, authorUsr);
 
 		if (author == null || !isAbilityNameAvailable(name)) {
 			throw new BadRequestException();
 		}
-		
+
 		AbilityRequest r = new AbilityRequest(author, name, description);
 		manager.persist(r);
 	}
 
 	public void reviewAbilityRequest(String administratorUsr, int requestId,
-			boolean response, String comment) throws BadRequestException,
+			Boolean response, String comment) throws BadRequestException,
 			InvalidStateException {
-		// TODO Auto-generated method stub
+
+		Administrator admin = manager.find(Administrator.class,
+				administratorUsr);
+		AbilityRequest req = manager.find(AbilityRequest.class, requestId);
+
+		if (!isValidString(comment) || response == null || admin == null
+				|| req == null) {
+			throw new BadRequestException();
+		}
+
+		if (response == true) {
+			// Create new ability
+			Ability ab = new Ability(req.getAbilityName(),
+					req.getAbilityDescription(), admin);
+			manager.persist(ab);
+		}
+
+		req.setApproved(response);
+		req.setReview(comment);
 
 	}
 
-	public void addNewAbility(String name, String decription)
-			throws BadRequestException, InvalidStateException {
-		// TODO Auto-generated method stub
+	public void addNewAbility(String administratorUsr, String name,
+			String description) throws BadRequestException,
+			InvalidStateException {
+
+		if (!isValidString(name) || !isValidString(description)) {
+			throw new BadRequestException();
+		}
+		
+		Administrator admin = getEntity(manager, Administrator.class,
+				administratorUsr);
+		
+		if (!isAbilityNameAvailable(name)) {
+			throw new InvalidStateException();
+		}
+		
+		Ability ab = new Ability(name, description, admin);
+		manager.persist(ab);
 
 	}
 
-	public List<Ability> getAvailableAbilityList() {
-		// TODO Auto-generated method stub
-		return null;
+	public List<?> getAvailableAbilityList() {
+		Query q = manager.createQuery("FROM Ability");
+		return q.getResultList();
 	}
 
 	/* Helpers */
-	private boolean checkString(String input) {
+	private boolean isValidString(String input) {
 		return input != null && input.length() > 0;
 	}
 
 	private Boolean isAbilityNameAvailable(String name) {
-		return manager.find(Ability.class, name) == null;
+		Boolean noAbilityWithName = manager.find(Ability.class, name) == null;
+		Query q = manager
+				.createQuery("FROM AbilityRequest r WHERE r.name=:name");
+		q.setParameter("name", name);
+		Boolean noRequestWithName = q.getResultList().size() == 0;
+
+		return noAbilityWithName && noRequestWithName;
+	}
+
+	private <T> T getEntity(EntityManager manager, Class<T> entityClass,
+			Object key) throws BadRequestException {
+		T entity = manager.find(entityClass, key);
+		if (entity == null) {
+			throw new BadRequestException();
+		} else {
+			return entity;
+		}
 	}
 }
