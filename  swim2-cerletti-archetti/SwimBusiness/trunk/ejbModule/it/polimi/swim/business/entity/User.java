@@ -1,5 +1,6 @@
 package it.polimi.swim.business.entity;
 
+import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
@@ -49,9 +50,9 @@ public abstract class User {
 	/*Helper*/
 	private String hash(String input){
 		try{
-			MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
-			messageDigest.update(input.getBytes());
-			return new String(messageDigest.digest());
+			byte[] inputBytes = input.getBytes();
+			byte[] hash = MessageDigest.getInstance("SHA-1").digest(inputBytes);
+			return new BigInteger(1, hash).toString(16);
 		}catch(NoSuchAlgorithmException nse){
 			nse.printStackTrace();
 			return null;
