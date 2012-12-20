@@ -17,6 +17,15 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "workrequests")
 public class WorkRequest {
+
+	public WorkRequest() {
+	}
+	
+	public WorkRequest(Customer sender, Customer receiver){
+		this.sender = sender;
+		this.receiver = receiver;
+	}
+
 	@Id
 	@Column(name = "id")
 	@GeneratedValue
@@ -30,16 +39,16 @@ public class WorkRequest {
 	@JoinColumn(name = "receiver", nullable = false)
 	private Customer receiver;
 
-	@Column(name = "senderconfirmed", nullable = false)
+	@Column(name = "senderconfirmed")
 	private Boolean senderConfirmed;
 
-	@Column(name = "receiverconfirmed", nullable = false)
+	@Column(name = "receiverconfirmed")
 	private Boolean receiverConfirmed;
 
-	@Column(name = "sendercompleted", nullable = false)
+	@Column(name = "sendercompleted")
 	private Boolean senderCompleted;
 
-	@Column(name = "receivercompleted", nullable = true)
+	@Column(name = "receivercompleted")
 	private Boolean receiverCompleted;
 
 	@Column(name = "description")
@@ -102,16 +111,16 @@ public class WorkRequest {
 		return senderCompleted;
 	}
 
-	public void setSenderCompleted(Boolean senderCompleted) {
-		this.senderCompleted = senderCompleted;
+	public void setSenderCompleted() {
+		this.senderCompleted = true;
 	}
 
 	public Boolean getReceiverCompleted() {
 		return receiverCompleted;
 	}
 
-	public void setReceiverCompleted(Boolean receiverCompleted) {
-		this.receiverCompleted = receiverCompleted;
+	public void setReceiverCompleted() {
+		this.receiverCompleted = true;
 	}
 
 	public String getDescription() {
@@ -172,5 +181,13 @@ public class WorkRequest {
 
 	public int getId() {
 		return id;
+	}
+
+	public boolean isCompleted() {
+		return receiverCompleted && senderCompleted;
+	}
+
+	public boolean isConfirmed() {
+		return receiverConfirmed && senderConfirmed;
 	}
 }

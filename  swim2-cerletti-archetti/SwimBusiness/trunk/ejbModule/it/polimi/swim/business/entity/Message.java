@@ -15,18 +15,34 @@ import javax.persistence.UniqueConstraint;
 @Table(name = "message", uniqueConstraints = @UniqueConstraint(columnNames = {
 		"sender", "receiver", "sentdate" }))
 public class Message {
+	
+	public Message() {
+		this.sentDate = new Date();
+	}
+
+	public Message(WorkRequest request, Customer sender, String text){
+		super();
+		this.message = text;
+		this.sender = sender;
+		this.linkedRequest = request;
+	}
+	
 	@Id
 	@GeneratedValue
 	private int id;
 
 	@ManyToOne
-	@JoinColumn(name = "sender")
+	@JoinColumn(name = "sender", nullable=false)
 	private Customer sender;
 
 	@ManyToOne
 	@JoinColumn(name = "receiver")
 	private Customer receiver;
 
+	@ManyToOne
+	@JoinColumn(name = "linkedrequest", nullable=false)
+	private WorkRequest linkedRequest;
+	
 	@Column(name = "sentdate", nullable = false)
 	private Date sentDate;
 
@@ -58,15 +74,16 @@ public class Message {
 		return sentDate;
 	}
 
-	public void setSentDate(Date sentDate) {
-		this.sentDate = sentDate;
-	}
-
 	public String getMessage() {
 		return message;
+	}
+
+	public WorkRequest getLinkedRequest() {
+		return linkedRequest;
 	}
 
 	public void setMessage(String message) {
 		this.message = message;
 	}
+	
 }
