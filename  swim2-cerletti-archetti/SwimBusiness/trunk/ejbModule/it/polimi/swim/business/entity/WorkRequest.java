@@ -8,7 +8,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
@@ -20,8 +19,8 @@ public class WorkRequest {
 
 	public WorkRequest() {
 	}
-	
-	public WorkRequest(Customer sender, Customer receiver){
+
+	public WorkRequest(Customer sender, Customer receiver) {
 		this.sender = sender;
 		this.receiver = receiver;
 	}
@@ -67,11 +66,10 @@ public class WorkRequest {
 	@JoinColumn(name = "requiredAbility")
 	private Ability requiredAbility;
 
-	@OneToMany
-	@JoinTable(name = "workrequest_message", joinColumns = @JoinColumn(name = "workrequest"), inverseJoinColumns = @JoinColumn(name = "message"))
+	@OneToMany(mappedBy = "linkedRequest")
 	private Set<Message> relatedMessages;
 
-	@OneToOne
+	@OneToOne(mappedBy="linkedRequest")
 	@JoinColumn(name = "feedback")
 	private Feedback feedback;
 
@@ -165,10 +163,6 @@ public class WorkRequest {
 
 	public Set<Message> getRelatedMessages() {
 		return relatedMessages;
-	}
-
-	public void addRelatedMessages(Message message) {
-		this.relatedMessages.add(message);
 	}
 
 	public Feedback getFeedback() {
