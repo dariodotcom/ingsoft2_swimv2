@@ -1,5 +1,7 @@
 package it.polimi.swim.business.bean;
 
+import java.util.Date;
+
 import it.polimi.swim.business.bean.remote.FriendshipControllerRemote;
 import it.polimi.swim.business.entity.Customer;
 import it.polimi.swim.business.entity.Friendship;
@@ -61,6 +63,7 @@ public class FriendshipController implements FriendshipControllerRemote {
 
 		if (accepted == true) {
 			friendship.setConfirmed();
+			friendship.setConfirmedDate(new Date());
 		} else {
 			manager.remove(friendship);
 		}
