@@ -1,9 +1,12 @@
 package it.polimi.swim.business.entity;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -44,7 +47,11 @@ public class Customer extends User {
 	private Boolean emailConfirmed;
 
 	/*Relationship*/
+	@OneToMany(mappedBy="sender")
+	List<Friendship> sentFriendship;
 	
+	@OneToMany(mappedBy="receiver")
+	List<Friendship> receivedFriendship;
 	
 	/* Setters and Getters */
 	public String getEmail() {
@@ -101,5 +108,35 @@ public class Customer extends User {
 	
 	public void setEmailConfirmed(Boolean confirmed){
 		this.emailConfirmed = confirmed;
+	}
+	
+	public List<Customer> getFriends(){
+		List<Customer> friends = new ArrayList<Customer>();
+		
+		for(Friendship f : sentFriendship){
+			if(f.isConfirmed()){
+				friends.add(f.getReceiver());
+			}
+		}
+		
+		for(Friendship f : receivedFriendship){
+			if(f.isConfirmed()){
+				friends.add(f.getSender());
+			}
+		}
+		
+		return friends;
+	}
+
+	public Boolean getEmailConfirmed() {
+		return emailConfirmed;
+	}
+
+	public List<Friendship> getSentFriendship() {
+		return sentFriendship;
+	}
+
+	public List<Friendship> getReceivedFriendship() {
+		return receivedFriendship;
 	}
 }
