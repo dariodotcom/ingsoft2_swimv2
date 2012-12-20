@@ -3,7 +3,7 @@ package it.polimi.swim.business.bean;
 import java.math.BigInteger;
 import java.security.SecureRandom;
 
-import it.polimi.swim.business.bean.remote.AuthenticationControlRemote;
+import it.polimi.swim.business.bean.remote.AuthenticationControllerRemote;
 import it.polimi.swim.business.entity.Administrator;
 import it.polimi.swim.business.entity.Customer;
 import it.polimi.swim.business.entity.User;
@@ -23,7 +23,7 @@ import javax.persistence.Query;
  * Session Bean implementation class AuthenticationControl
  */
 @Stateless
-public class AuthenticationControl implements AuthenticationControlRemote {
+public class AuthenticationController implements AuthenticationControllerRemote {
 
 	@PersistenceContext(unitName = "swim")
 	EntityManager manager;
@@ -33,7 +33,7 @@ public class AuthenticationControl implements AuthenticationControlRemote {
 	/**
 	 * Default constructor.
 	 */
-	public AuthenticationControl() {
+	public AuthenticationController() {
 		// TODO Auto-generated constructor stub
 	}
 
