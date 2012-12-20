@@ -35,7 +35,7 @@ public class Feedback {
 	@Column(name = "reply")
 	private String reply;
 
-	@OneToOne(mappedBy = "feedback")
+	@OneToOne
 	@JoinColumn(nullable = false, unique = true)
 	private WorkRequest linkedRequest;
 
