@@ -1,6 +1,5 @@
 package it.polimi.swim.business.bean.remote;
 
-import it.polimi.swim.business.entity.Ability;
 import it.polimi.swim.business.exceptions.BadRequestException;
 import it.polimi.swim.business.exceptions.InvalidStateException;
 
@@ -14,11 +13,12 @@ public interface AbilityControllerRemote {
 			throws BadRequestException, InvalidStateException;
 
 	public void reviewAbilityRequest(String administratorUsr, int requestId,
-			boolean response, String comment) throws BadRequestException,
+			Boolean response, String comment) throws BadRequestException,
 			InvalidStateException;
 
-	public void addNewAbility(String name, String decription) throws BadRequestException,
+	public void addNewAbility(String administratorUsr, String name,
+			String description) throws BadRequestException,
 			InvalidStateException;
 
-	public List<Ability> getAvailableAbilityList();
+	public List<?> getAvailableAbilityList();
 }
