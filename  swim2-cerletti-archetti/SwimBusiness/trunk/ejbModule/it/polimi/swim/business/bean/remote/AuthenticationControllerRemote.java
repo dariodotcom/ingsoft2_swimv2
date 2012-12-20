@@ -9,7 +9,7 @@ import it.polimi.swim.business.exceptions.UsernameAlreadyTakenException;
 import javax.ejb.Remote;
 
 @Remote
-public interface AuthenticationControlRemote {
+public interface AuthenticationControllerRemote {
 
 	public UserType authenticateUser(String username, String passwordHash)
 			throws UserNotFoundException, AuthenticationFailedException;
