@@ -1,12 +1,46 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" id="WebApp_ID" version="2.5">
-  <display-name>SwimWeb</display-name>
-  <welcome-file-list>
-    <welcome-file>index.html</welcome-file>
-    <welcome-file>index.htm</welcome-file>
-    <welcome-file>index.jsp</welcome-file>
-    <welcome-file>default.html</welcome-file>
-    <welcome-file>default.htm</welcome-file>
-    <welcome-file>default.jsp</welcome-file>
-  </welcome-file-list>
+<web-app id="WebApp_ID" version="2.5"
+ xmlns="http://java.sun.com/xml/ns/javaee"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+ <display-name>SwimWeb</display-name>
+ <servlet>
+  <display-name>AuthenticationServlet</display-name>
+  <servlet-name>AuthenticationServlet</servlet-name>
+  <servlet-class>it.polimi.swim.web.servlets.AuthenticationServlet</servlet-class>
+ </servlet>
+ <servlet>
+  <display-name>CustomerFriendship</display-name>
+  <servlet-name>CustomerFriendship</servlet-name>
+  <servlet-class>it.polimi.swim.web.servlets.CustomerFriendship</servlet-class>
+ </servlet>
+ <servlet>
+  <display-name>PersonalPage</display-name>
+  <servlet-name>PersonalPage</servlet-name>
+  <servlet-class>it.polimi.swim.web.servlets.PersonalPage</servlet-class>
+ </servlet>
+ <servlet>
+  <display-name>SwimServlet</display-name>
+  <servlet-name>SwimServlet</servlet-name>
+  <servlet-class>it.polimi.swim.web.servlets.SwimServlet</servlet-class>
+ </servlet>
+ <servlet-mapping>
+  <servlet-name>CustomerFriendship</servlet-name>
+  <url-pattern>/friends/*</url-pattern>
+ </servlet-mapping>
+ <servlet-mapping>
+  <servlet-name>PersonalPage</servlet-name>
+  <url-pattern>/home/*</url-pattern>
+ </servlet-mapping>
+ <servlet-mapping>
+  <servlet-name>AuthenticationServlet</servlet-name>
+  <url-pattern>/*</url-pattern>
+ </servlet-mapping>
+ <welcome-file-list>
+  <welcome-file>index.html</welcome-file>
+  <welcome-file>index.htm</welcome-file>
+  <welcome-file>index.jsp</welcome-file>
+  <welcome-file>default.html</welcome-file>
+  <welcome-file>default.htm</welcome-file>
+  <welcome-file>default.jsp</welcome-file>
+ </welcome-file-list>
 </web-app>
