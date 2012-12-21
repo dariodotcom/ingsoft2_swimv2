@@ -1,8 +1,8 @@
 package it.polimi.swim.web.servlets;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -13,92 +13,77 @@ import javax.servlet.http.HttpServletResponse;
 public class CustomerFriendship extends SwimServlet {
 	private static final long serialVersionUID = 1L;
 
-	private final String sectionName = "friends";
-
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
 	public CustomerFriendship() {
 		super();
-		// TODO Auto-generated constructor stub
-	}
 
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
-	protected void doGet(HttpServletRequest request,
-			HttpServletResponse response) throws ServletException, IOException {
+		setSectionName("friends");
 
-		String identifier = getActionIdentifier(request, sectionName);
-		Action a = Action.getByIdentifier(identifier);
+		// GET Actions
+		registerGetActionMapping("", new ServletAction() {
+			public void runAction(HttpServletRequest req,
+					HttpServletResponse resp) throws IOException {
+				showFriendList(req, resp);
+			}
+		});
 
-		switch (a) {
-		case DEFAULT:
-			this.showFriendList(request, response);
-			break;
-		default:
-			// Servlet cannot perform required action
-		}
-	}
+		registerGetActionMapping("requests", new ServletAction() {
+			public void runAction(HttpServletRequest req,
+					HttpServletResponse resp) throws IOException {
+				showFriendshipRequests(req, resp);
+			}
+		});
 
-	protected void doPost(HttpServletRequest request,
-			HttpServletResponse response) throws ServletException, IOException {
-		Action a = Action.getByIdentifier(this.getActionIdentifier(request,
-				sectionName));
+		// POST Actions
+		ServletAction respond = new ServletAction() {
+			public void runAction(HttpServletRequest req,
+					HttpServletResponse resp) throws IOException {
+				respondToFriendshipRequest(req, resp);
+			}
+		};
 
-		switch (a) {
-		case ACCEPT:
-		case DECLINE:
-			this.respondToFriendshipRequest(request, response);
-			break;
-		case REMOVE:
-			this.removeFriend(request, response);
-			break;
-		default:
-			// Servlet cannot perform required action.
-		}
+		registerPostActionMapping("accept", respond);
+		registerPostActionMapping("decline", respond);
+		
+		registerPostActionMapping("remove", new ServletAction() {
+			public void runAction(HttpServletRequest req, HttpServletResponse resp)
+					throws IOException {
+				removeFriend(req, resp);
+			}
+		});
 	}
 
 	// Implementations of methods to respond to different requests
 	private void respondToFriendshipRequest(HttpServletRequest req,
-			HttpServletResponse res) {
+			HttpServletResponse resp) throws IOException {
 		// Respond to friendship request
 
 		// Show friend list page
-		showFriendList(req, res);
+		showFriendList(req, resp);
 
 	}
 
-	private void removeFriend(HttpServletRequest req, HttpServletResponse res) {
+	private void removeFriend(HttpServletRequest req, HttpServletResponse resp)
+			throws IOException {
 		// Remove friend
 
 		// Show friend list page
-		showFriendList(req, res);
+		showFriendList(req, resp);
 	}
 
-	private void showFriendList(HttpServletRequest req, HttpServletResponse res) {
-
+	private void showFriendList(HttpServletRequest req, HttpServletResponse resp)
+			throws IOException {
+		PrintWriter w = resp.getWriter();
+		resp.setContentType("text/html");
+		w.println("view friends");
 	}
 
-	// Enum to parse request
-	private enum Action {
-
-		ACCEPT("accept"), DECLINE("decline"), REMOVE("remove"), DEFAULT("");
-
-		private String identifier;
-
-		Action(String identifier) {
-			this.identifier = identifier;
-		}
-
-		public static Action getByIdentifier(String identifier) {
-			for (Action a : Action.values()) {
-				if (a.identifier == identifier) {
-					return a;
-				}
-			}
-			return null;
-		}
+	private void showFriendshipRequests(HttpServletRequest req,
+			HttpServletResponse resp) throws IOException {
+		PrintWriter w = resp.getWriter();
+		resp.setContentType("text/html");
+		w.println("view friendship requests");
 	}
 }
