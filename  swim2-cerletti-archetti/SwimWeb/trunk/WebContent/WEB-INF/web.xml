@@ -23,13 +23,58 @@
   <servlet-name>SwimServlet</servlet-name>
   <servlet-class>it.polimi.swim.web.servlets.SwimServlet</servlet-class>
  </servlet>
+ <servlet>
+  <display-name>MailValidator</display-name>
+  <servlet-name>MailValidator</servlet-name>
+  <servlet-class>it.polimi.swim.web.servlets.MailValidator</servlet-class>
+ </servlet>
+ <servlet>
+  <display-name>WorkRequest</display-name>
+  <servlet-name>WorkRequest</servlet-name>
+  <servlet-class>it.polimi.swim.web.servlets.WorkRequest</servlet-class>
+ </servlet>
+ <servlet>
+  <display-name>Feedback</display-name>
+  <servlet-name>Feedback</servlet-name>
+  <servlet-class>it.polimi.swim.web.servlets.Feedback</servlet-class>
+ </servlet>
+ <servlet>
+  <display-name>Search</display-name>
+  <servlet-name>Search</servlet-name>
+  <servlet-class>it.polimi.swim.web.servlets.Search</servlet-class>
+ </servlet>
+ <servlet>
+  <display-name>PasswordReset</display-name>
+  <servlet-name>PasswordReset</servlet-name>
+  <servlet-class>it.polimi.swim.web.servlets.PasswordReset</servlet-class>
+ </servlet>
+ <servlet-mapping>
+  <servlet-name>PersonalPage</servlet-name>
+  <url-pattern>/home/*</url-pattern>
+ </servlet-mapping>
  <servlet-mapping>
   <servlet-name>CustomerFriendship</servlet-name>
   <url-pattern>/friends/*</url-pattern>
  </servlet-mapping>
  <servlet-mapping>
-  <servlet-name>PersonalPage</servlet-name>
-  <url-pattern>/home/*</url-pattern>
+  <servlet-name>WorkRequest</servlet-name>
+  <url-pattern>/works/*</url-pattern>
+ </servlet-mapping>
+ <servlet-mapping>
+  <servlet-name>Feedback</servlet-name>
+  <url-pattern>/feedbacks/*</url-pattern>
+ </servlet-mapping>
+ <servlet-mapping>
+  <servlet-name>Search</servlet-name>
+  <url-pattern>/search/*</url-pattern>
+ </servlet-mapping>
+ <servlet-mapping>
+  <servlet-name>PasswordReset</servlet-name>
+  <url-pattern>/resetpassword/*</url-pattern>
+ </servlet-mapping>
+ <servlet-mapping>
+  <servlet-name>MailValidator</servlet-name>
+  <url-pattern>/validatemail/*</url-pattern>
  </servlet-mapping>
  <servlet-mapping>
   <servlet-name>AuthenticationServlet</servlet-name>
