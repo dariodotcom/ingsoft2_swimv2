@@ -1,8 +1,8 @@
 package it.polimi.swim.web.servlets;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -16,12 +16,12 @@ public class AuthenticationServlet extends SwimServlet {
 	public AuthenticationServlet() {
 		super();
 
-		setSectionName("");
+		setSectionName("landing");
 
 		// GET request actions
 		registerGetActionMapping("", new ServletAction() {
 			public void runAction(HttpServletRequest req,
-					HttpServletResponse resp) throws IOException {
+					HttpServletResponse resp) throws IOException, ServletException {
 				showPage(req, resp);
 			}
 		});
@@ -50,10 +50,8 @@ public class AuthenticationServlet extends SwimServlet {
 	}
 
 	private void showPage(HttpServletRequest req, HttpServletResponse resp)
-			throws IOException {
-		PrintWriter w = resp.getWriter();
-		resp.setContentType("text/html");
-		w.println("Swim homepage, LOL");
+			throws IOException, ServletException {
+		req.getRequestDispatcher("landing.jsp").forward(req, resp);
 	}
 
 	private void doLogin(HttpServletRequest req, HttpServletResponse resp) {
