@@ -32,6 +32,7 @@ public abstract class SwimServlet extends HttpServlet {
 	protected final void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 		if (getActionMappings == null) {
+			req.setAttribute("error", "No mappings set.");
 			sendError(req, resp);
 		}
 
@@ -40,6 +41,8 @@ public abstract class SwimServlet extends HttpServlet {
 			// The action identifier has been mapped to an action to perform
 			getActionMappings.get(identifier).runAction(req, resp);
 		} else {
+			req.setAttribute("error", "No mapping for identifier '"
+					+ identifier + "'");
 			sendError(req, resp);
 		}
 	}
@@ -76,8 +79,7 @@ public abstract class SwimServlet extends HttpServlet {
 
 	/* Helpers */
 	private String getActionIdentifier(HttpServletRequest request) {
-		String prefix = request.getContextPath() + "/"
-				+ (sectionName == "" ? "" : sectionName + "/");
+		String prefix = request.getContextPath() + "/" + sectionName;
 		return request.getRequestURI().replace(prefix, "");
 	}
 
@@ -86,6 +88,6 @@ public abstract class SwimServlet extends HttpServlet {
 			throws IOException {
 		resp.setContentType("text/html");
 		PrintWriter w = resp.getWriter();
-		w.println("bad request: " + req.getContextPath());
+		w.println("bad request: " + req.getAttribute("error"));
 	}
 }

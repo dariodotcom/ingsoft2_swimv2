@@ -1,0 +1,317 @@
+body.swim{
+	background: transparent url('resources/grey-noise.png') top left repeat;
+	font-family: "Droid Sans";
+}
+
+.topWidthElement{
+	width: 960px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+/*Header*/
+#swimHeaderContainer{
+	height: 100px;
+	background: transparent url('resources/blue-noise.png') top left repeat;
+	box-shadow: 0 -2px 2px -2px black inset,
+				0 1px 0 0 rgba(255,255,255,.3);
+}
+
+#swimHeader{
+	height: 58px;
+}
+
+/*Logo*/
+#swimLogoContainer{
+	padding: 10px 3px;
+	float: left;
+}
+
+#swimLogo > img{
+	width: 129px;
+	height: 33px;
+	background-image: url('resources/logo.png');
+}
+
+#swimLogo:hover > img{
+	background-image: url('resources/logo-hover.png');
+}
+
+/* User Awareness */
+#swimUserAwareness{
+	float: right;
+	height: 34px;
+	padding: 8px;
+}
+
+#swimUserAwareness #userImageFrame{
+	display: inline-block;
+	background-color: white;
+	padding: 2px;
+	box-shadow: 0 0 2px 0 rgba(0,0,0,1);
+}
+
+#swimUserAwareness #userControl{
+	display: inline-block;
+	font-family: verdana;
+	text-shadow: 0 0 1px black;
+	margin: 0 5px;
+	line-height: 17px;
+	vertical-align: top;
+}
+
+#swimUserAwareness #userName{
+    font-weight: bold;
+	color: white;
+	font-size: 14px;
+}
+
+#swimUserAwareness #userLogout{
+	color: rgb(255,255,255);
+	font-size: 11px;
+}
+
+#loginForm{
+	float: right;
+	height: 38px;
+	padding: 6px;
+}
+
+#loginForm .loginInputContainer{
+	display: inline-block;
+	margin-right: 5px;
+}
+
+#loginForm .label{
+    color: white;
+    font-size: 12px;
+    line-height: 15px;
+    vertical-align: text-top;
+	color: white;
+	text-shadow: 0 0 1px rgba(0,0,0,.9);
+}
+
+#loginForm .textinput{
+	border-radius: 1px;
+	border: none;
+	box-shadow: 0 0 1px 0 rgba(0,0,0,.9);
+	padding: 2px;
+	background: rgba(255,255,255,.9);
+}
+
+#loginForm .textinput:hover,
+#loginForm .textinput:focus{
+	background: rgba(255,255,255,1);
+}
+
+#loginForm #submit{
+	border-radius: 1px;
+	border: none;
+	box-shadow: 0 0 1px 0 rgba(0,0,0,.9);
+	padding: 1px 4px;
+
+}
+
+/* Swim menu */
+#swimMenuContainer{
+	height: 42px;
+}
+
+#swimMenu{
+	height: 42px;
+}
+
+#swimMenu .menuEntry{
+	width: 160px;
+	height: 42px;
+	float: left;
+}
+
+#swimMenu .menuEntry:hover:not(.selected){
+	background-image: url('resources/tab/hover-tab.png');
+}
+
+#swimMenu .menuEntry.selected{
+	background-image: url('resources/tab/selected-tab.png');
+}
+
+#swimMenu .menuEntry:not(.selected):not(:hover) + .menuEntry:not(.selected):not(:hover){
+	background: url('resources/tab/separator.png') top left no-repeat;
+}
+
+/*tab title*/
+#swimMenu .menuEntry .tabLink{
+	font-family: verdana;
+	font-size: 14px;
+	font-weight: bold;
+	padding: 0 14px;
+	line-height: 40px;
+	color: white;
+	text-shadow: 0 0 1px rgba(0,0,0,.9);
+	text-decoration: none;
+	vertical-align: middle;
+	display: block;
+}
+
+#swimMenu .menuEntry .tabIcon,
+#swimMenu .menuEntry .tabTitle{
+	vertical-align: middle;
+}
+
+#swimMenu .menuEntry .tabTitle{
+	margin-left: 4px;
+}
+
+#swimMenu .menuEntry:not(.selected) .tabTitle{
+	color: white;
+	text-shadow: 0 0 1px rgba(0,0,0,.9);
+}
+
+#swimMenu .menuEntry.selected .tabTitle{
+	cursor: default;
+}
+
+#swimMenu .menuEntry.selected .tabTitle,
+#swimMenu .menuEntry:hover:not(.selected) .tabTitle{
+	color: #3d3d3d;
+	text-shadow: none;
+}
+
+/*icons*/
+#swimMenu .menuEntry .tabIcon{
+	width: 18px;
+	height: 18px;
+}
+
+#swimMenu .menuEntry#home .tabIcon{
+	background-image: url('resources/icon/home.png');
+}
+
+#swimMenu .menuEntry#search .tabIcon{
+	background-image: url('resources/icon/search.png');
+}
+
+#swimMenu .menuEntry#works .tabIcon{
+	background-image: url('resources/icon/works.png');
+}
+
+#swimMenu .menuEntry#feedbacks .tabIcon{
+	background-image: url('resources/icon/feedbacks.png');
+}
+
+#swimMenu .menuEntry#friends .tabIcon{
+	background-image: url('resources/icon/friends.png');
+}
+
+#swimMenu .menuEntry#home.selected .tabIcon,
+#swimMenu .menuEntry#home:hover:not(.selected) .tabIcon{
+	background-image: url('resources/icon/home-dark.png');
+}
+
+#swimMenu .menuEntry#search.selected .tabIcon,
+#swimMenu .menuEntry#search:hover:not(.selected) .tabIcon{
+	background-image: url('resources/icon/search-dark.png');
+}
+
+#swimMenu .menuEntry#works.selected .tabIcon,
+#swimMenu .menuEntry#works:hover:not(.selected) .tabIcon{
+	background-image: url('resources/icon/works-dark.png');
+}
+
+#swimMenu .menuEntry#feedbacks.selected .tabIcon,
+#swimMenu .menuEntry#feedbacks:hover:not(.selected) .tabIcon{
+	background-image: url('resources/icon/feedbacks-dark.png');
+}
+
+#swimMenu .menuEntry#friends.selected .tabIcon,
+#swimMenu .menuEntry#friends:hover:not(.selected) .tabIcon{
+	background-image: url('resources/icon/friends-dark.png');
+}
+
+
+/*Content*/
+#swimContent{
+	background-color: rgb(247,247,247);
+	border-radius: 0 0 2px 2px;
+	box-shadow: 0 1px 1px 0px rgba(0,0,0,0.5);
+}
+
+#swimContent{
+	min-height: 250px;
+}
+
+#swimContent .text{
+	padding: 20px 30px;
+	line-height: 20px;
+	text-align: justify;
+}
+
+
+#swimContent > .column{
+	display: inline-block;
+	vertical-align: top;
+	margin-top: 7px;
+	position: relative;
+}
+
+#swimContent > #leftColumn{
+	width: 175px;
+	margin-right: -5px;
+	z-index: 5000;
+}
+
+#swimContent > #rightColumn{
+	width: 784px;
+	background-color: white;
+	border-width: 1px 0 0 1px;
+	border-style: solid;
+	border-color: rgba(0,0,0,.15);
+	border-radius: 2px 0;
+	z-index: 20;
+}
+
+#swimSecondaryMenu{
+	width: 168px;
+	margin-left: 7px;
+}
+
+#swimSecondaryMenu .entry .label{
+	display: block;
+	margin: 7px 0 0 0;
+	padding: 10px 14px;
+	font-size: 15px;
+	text-decoration: none;
+	color: #666666;
+	border-radius: 2px 0 0 2px;
+	border-width: 1px 0 1px 1px;
+	border-style: solid;
+	border-color: transparent;
+		z-index: 2000;
+}
+
+#swimSecondaryMenu .entry.selected .label{
+	background-color: white;
+	border-color: rgba(0,0,0,.15);
+	cursor: default;
+}
+
+#swimSecondaryMenu .entry:hover:not(.selected) .label{
+	border-color: rgba(0,0,0,.09);
+	background-color: rgba(255,255,255,.3);
+}
+
+#swimFooter{
+	padding: 8px 0;
+	margin-top: 10px;
+	border-radius: 2px;
+	background-color: rgba(0,0,0,.4);
+	box-shadow: 0 0 2px 0px rgba(0,0,0,0.5) inset;
+	font-size: 13px;
+	font-family: "Droid Sans", verdana;
+	color: white;
+	text-shadow: 0 0 2px rgba(0,0,0,.5);
+}
+
+#copyright{
+	padding: 12px;
+}

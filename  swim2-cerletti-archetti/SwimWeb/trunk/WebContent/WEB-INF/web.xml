@@ -50,6 +50,10 @@
  </servlet>
  <servlet-mapping>
   <servlet-name>PersonalPage</servlet-name>
+  <url-pattern>/home</url-pattern>
+ </servlet-mapping>
+ <servlet-mapping>
+  <servlet-name>PersonalPage</servlet-name>
   <url-pattern>/home/*</url-pattern>
  </servlet-mapping>
  <servlet-mapping>
@@ -57,16 +61,32 @@
   <url-pattern>/friends/*</url-pattern>
  </servlet-mapping>
  <servlet-mapping>
+  <servlet-name>CustomerFriendship</servlet-name>
+  <url-pattern>/friends</url-pattern>
+ </servlet-mapping>
+ <servlet-mapping>
   <servlet-name>WorkRequest</servlet-name>
   <url-pattern>/works/*</url-pattern>
+ </servlet-mapping>
+ <servlet-mapping>
+  <servlet-name>WorkRequest</servlet-name>
+  <url-pattern>/works</url-pattern>
  </servlet-mapping>
  <servlet-mapping>
   <servlet-name>Feedback</servlet-name>
   <url-pattern>/feedbacks/*</url-pattern>
  </servlet-mapping>
  <servlet-mapping>
+  <servlet-name>Feedback</servlet-name>
+  <url-pattern>/feedbacks</url-pattern>
+ </servlet-mapping>
+ <servlet-mapping>
   <servlet-name>Search</servlet-name>
   <url-pattern>/search/*</url-pattern>
+ </servlet-mapping>
+ <servlet-mapping>
+  <servlet-name>Search</servlet-name>
+  <url-pattern>/search</url-pattern>
  </servlet-mapping>
  <servlet-mapping>
   <servlet-name>PasswordReset</servlet-name>
@@ -78,14 +98,9 @@
  </servlet-mapping>
  <servlet-mapping>
   <servlet-name>AuthenticationServlet</servlet-name>
-  <url-pattern>/*</url-pattern>
+  <url-pattern>/landing</url-pattern>
  </servlet-mapping>
  <welcome-file-list>
-  <welcome-file>index.html</welcome-file>
-  <welcome-file>index.htm</welcome-file>
-  <welcome-file>index.jsp</welcome-file>
-  <welcome-file>default.html</welcome-file>
-  <welcome-file>default.htm</welcome-file>
-  <welcome-file>default.jsp</welcome-file>
+  <welcome-file>landing</welcome-file>
  </welcome-file-list>
 </web-app>

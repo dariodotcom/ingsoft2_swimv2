@@ -29,7 +29,7 @@ public class CustomerFriendship extends SwimServlet {
 			}
 		});
 
-		registerGetActionMapping("requests", new ServletAction() {
+		registerGetActionMapping("/requests", new ServletAction() {
 			public void runAction(HttpServletRequest req,
 					HttpServletResponse resp) throws IOException {
 				showFriendshipRequests(req, resp);
@@ -44,10 +44,10 @@ public class CustomerFriendship extends SwimServlet {
 			}
 		};
 
-		registerPostActionMapping("accept", respond);
-		registerPostActionMapping("decline", respond);
+		registerPostActionMapping("/accept", respond);
+		registerPostActionMapping("/decline", respond);
 		
-		registerPostActionMapping("remove", new ServletAction() {
+		registerPostActionMapping("/remove", new ServletAction() {
 			public void runAction(HttpServletRequest req, HttpServletResponse resp)
 					throws IOException {
 				removeFriend(req, resp);
