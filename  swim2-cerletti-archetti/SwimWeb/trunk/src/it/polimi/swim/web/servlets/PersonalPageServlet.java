@@ -2,21 +2,26 @@ package it.polimi.swim.web.servlets;
 
 import java.io.IOException;
 
+import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * Servlet implementation class PersonalPageServlet
+ * Servlet implementation class PersonalPageServlet.
  */
 public class PersonalPageServlet extends SwimServlet {
 	private static final long serialVersionUID = 1L;
 
+	/**
+	 * @see HttpServlet#HttpServlet()
+	 */
 	public PersonalPageServlet() {
 		super();
 
 		setSectionName("home");
 		
-		//GET actions
+		/* GET request actions */
+		
 		registerGetActionMapping("", new ServletAction() {
 			public void runAction(HttpServletRequest req, HttpServletResponse resp)
 					throws IOException {
@@ -38,7 +43,8 @@ public class PersonalPageServlet extends SwimServlet {
 			}
 		});
 		
-		//POST actions
+		/* POST request actions */
+		
 		registerPostActionMapping("changePassword", new ServletAction() {
 			public void runAction(HttpServletRequest req, HttpServletResponse resp)
 					throws IOException {
@@ -68,7 +74,8 @@ public class PersonalPageServlet extends SwimServlet {
 		});
 	}
 
-	// Functionalities
+	/* Methods to respond to different requests */ 
+	
 	private void showInformationPage(HttpServletRequest req,
 			HttpServletResponse resp) {
 		
