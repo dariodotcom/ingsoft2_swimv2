@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * Servlet implementation class CustomerFriendship
+ * Servlet implementation class CustomerFriendshipServlet
  */
 public class CustomerFriendshipServlet extends SwimServlet {
 	private static final long serialVersionUID = 1L;

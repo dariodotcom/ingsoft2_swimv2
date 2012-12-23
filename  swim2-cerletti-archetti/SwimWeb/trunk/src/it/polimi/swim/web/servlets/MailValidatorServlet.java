@@ -5,11 +5,14 @@ import java.io.IOException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class MailValidator extends SwimServlet {
+/**
+ * Servlet implementation class MailValidatorServlet
+ */
+public class MailValidatorServlet extends SwimServlet {
 
 	private static final long serialVersionUID = 3350469906837984940L;
 
-	public MailValidator() {
+	public MailValidatorServlet() {
 		super();
 
 		setSectionName("validatemail");
