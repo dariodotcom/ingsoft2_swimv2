@@ -6,7 +6,6 @@ public class WorkRequest extends SwimServlet{
 
 	public WorkRequest(){
 		super();
-		
 		setSectionName("works");
 	}
 }
