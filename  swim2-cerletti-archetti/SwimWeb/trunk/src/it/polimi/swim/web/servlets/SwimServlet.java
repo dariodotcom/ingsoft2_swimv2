@@ -1,5 +1,7 @@
 package it.polimi.swim.web.servlets;
 
+import it.polimi.swim.web.pagesupport.ErrorType;
+
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.HashMap;
@@ -85,9 +87,8 @@ public abstract class SwimServlet extends HttpServlet {
 
 	// Stub methods:
 	private void sendError(HttpServletRequest req, HttpServletResponse resp)
-			throws IOException {
-		resp.setContentType("text/html");
-		PrintWriter w = resp.getWriter();
-		w.println("bad request: " + req.getAttribute("error"));
+			throws IOException, ServletException {
+		req.setAttribute("errorType", ErrorType.BAD_REQUEST);
+		req.getRequestDispatcher("error.jsp").forward(req, resp);
 	}
 }
