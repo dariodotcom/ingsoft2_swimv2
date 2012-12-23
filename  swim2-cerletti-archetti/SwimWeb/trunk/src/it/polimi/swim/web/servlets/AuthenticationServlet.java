@@ -13,12 +13,16 @@ public class AuthenticationServlet extends SwimServlet {
 
 	private static final long serialVersionUID = 2253528507384097557L;
 
+	/**
+	 * Class constructor.
+	 */
 	public AuthenticationServlet() {
 		super();
 
 		setSectionName("landing");
 
-		// GET request actions
+		/* GET request actions */
+		
 		registerGetActionMapping("", new ServletAction() {
 			public void runAction(HttpServletRequest req,
 					HttpServletResponse resp) throws IOException, ServletException {
@@ -26,7 +30,8 @@ public class AuthenticationServlet extends SwimServlet {
 			}
 		});
 
-		// POST request actions
+		/* POST request actions */
+		
 		registerPostActionMapping("login", new ServletAction() {
 			public void runAction(HttpServletRequest req,
 					HttpServletResponse resp) {
@@ -41,7 +46,7 @@ public class AuthenticationServlet extends SwimServlet {
 			}
 		});
 
-		registerPostActionMapping("create", new ServletAction() {
+		registerPostActionMapping("register", new ServletAction() {
 			public void runAction(HttpServletRequest req,
 					HttpServletResponse resp) {
 				doCreateUser(req, resp);
