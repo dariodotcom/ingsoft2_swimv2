@@ -3,18 +3,19 @@ package it.polimi.swim.web.servlets;
 import java.io.IOException;
 
 import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * Servlet implementation class AuthenticationServlet
+ * Servlet implementation class AuthenticationServlet.
  */
 public class AuthenticationServlet extends SwimServlet {
 
 	private static final long serialVersionUID = 2253528507384097557L;
 
 	/**
-	 * Class constructor.
+	 * @see HttpServlet#HttpServlet()
 	 */
 	public AuthenticationServlet() {
 		super();
@@ -54,11 +55,7 @@ public class AuthenticationServlet extends SwimServlet {
 		});
 	}
 
-	private void showPage(HttpServletRequest req, HttpServletResponse resp)
-			throws IOException, ServletException {
-		req.getRequestDispatcher("landing.jsp").forward(req, resp);
-	}
-
+	/* Methods to respond to different requests */
 	private void doLogin(HttpServletRequest req, HttpServletResponse resp) {
 	}
 
@@ -68,4 +65,8 @@ public class AuthenticationServlet extends SwimServlet {
 	private void doCreateUser(HttpServletRequest req, HttpServletResponse resp) {
 	}
 
+	private void showPage(HttpServletRequest req, HttpServletResponse resp)
+			throws IOException, ServletException {
+		req.getRequestDispatcher("landing.jsp").forward(req, resp);
+	}
 }

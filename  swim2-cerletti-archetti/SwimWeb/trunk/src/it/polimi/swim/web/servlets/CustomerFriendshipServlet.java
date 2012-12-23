@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * Servlet implementation class CustomerFriendshipServlet
+ * Servlet implementation class CustomerFriendshipServlet.
  */
 public class CustomerFriendshipServlet extends SwimServlet {
 	private static final long serialVersionUID = 1L;
@@ -21,7 +21,8 @@ public class CustomerFriendshipServlet extends SwimServlet {
 
 		setSectionName("friends");
 
-		// GET Actions
+		/* GET request actions */
+		
 		registerGetActionMapping("", new ServletAction() {
 			public void runAction(HttpServletRequest req,
 					HttpServletResponse resp) throws IOException {
@@ -36,7 +37,8 @@ public class CustomerFriendshipServlet extends SwimServlet {
 			}
 		});
 
-		// POST Actions
+		/* POST request actions */
+		
 		ServletAction respond = new ServletAction() {
 			public void runAction(HttpServletRequest req,
 					HttpServletResponse resp) throws IOException {
@@ -55,7 +57,8 @@ public class CustomerFriendshipServlet extends SwimServlet {
 		});
 	}
 
-	// Implementations of methods to respond to different requests
+	/* Methods to respond to different requests */
+	
 	private void respondToFriendshipRequest(HttpServletRequest req,
 			HttpServletResponse resp) throws IOException {
 		// Respond to friendship request

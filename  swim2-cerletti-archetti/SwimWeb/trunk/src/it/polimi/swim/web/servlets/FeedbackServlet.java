@@ -3,23 +3,28 @@ package it.polimi.swim.web.servlets;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * Servlet implementation class FeedbackServlet
+ * Servlet implementation class FeedbackServlet.
  */
 public class FeedbackServlet extends SwimServlet {
 
 	private static final long serialVersionUID = 5352393029820748102L;
 
+	/**
+	 * @see HttpServlet#HttpServlet()
+	 */
 	public FeedbackServlet() {
 		super();
 
 		setSectionName("feedbacks");
 
-		/* GET actions */
-		// Received feedback
+		/* GET request actions */
+		
+		/* Received feedbacks */
 		registerGetActionMapping("", new ServletAction() {
 			public void runAction(HttpServletRequest req,
 					HttpServletResponse resp) throws IOException {
@@ -27,7 +32,7 @@ public class FeedbackServlet extends SwimServlet {
 			}
 		});
 
-		// Sent feedback
+		/* Sent feedbacks */
 		registerGetActionMapping("/sent", new ServletAction() {
 			public void runAction(HttpServletRequest req,
 					HttpServletResponse resp) throws IOException {
@@ -35,7 +40,7 @@ public class FeedbackServlet extends SwimServlet {
 			}
 		});
 
-		/* POST actions */
+		/* POST request actions */
 
 		registerPostActionMapping("/respond", new ServletAction() {
 			public void runAction(HttpServletRequest req,
@@ -46,7 +51,8 @@ public class FeedbackServlet extends SwimServlet {
 
 	}
 
-	// Implementations of methods to respond to different requests
+	/* Methods to respond to different requests */
+	
 	private void respondToReceivedFeedback(HttpServletRequest req,
 			HttpServletResponse resp) throws IOException {
 
