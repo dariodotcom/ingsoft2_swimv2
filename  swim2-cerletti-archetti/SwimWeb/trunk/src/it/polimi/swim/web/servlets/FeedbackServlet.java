@@ -36,12 +36,6 @@ public class FeedbackServlet extends SwimServlet {
 		});
 
 		/* POST actions */
-		ServletAction respond = new ServletAction() {
-			public void runAction(HttpServletRequest req,
-					HttpServletResponse resp) throws IOException {
-				respondToReceivedFeedback(req, resp);
-			}
-		};
 
 		registerPostActionMapping("/respond", new ServletAction() {
 			public void runAction(HttpServletRequest req,

@@ -6,12 +6,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * Servlet implementation class PersonalPage
+ * Servlet implementation class PersonalPageServlet
  */
-public class PersonalPage extends SwimServlet {
+public class PersonalPageServlet extends SwimServlet {
 	private static final long serialVersionUID = 1L;
 
-	public PersonalPage() {
+	public PersonalPageServlet() {
 		super();
 
 		setSectionName("home");
