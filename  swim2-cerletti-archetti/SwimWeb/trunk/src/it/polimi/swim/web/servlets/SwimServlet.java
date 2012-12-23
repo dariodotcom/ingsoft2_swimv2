@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  * SwimServlet is an abstract class which provides a framework to easily
- * implement all other servlets of the swim platform.
+ * implement all other servlets of the Swim platform.
  */
 public abstract class SwimServlet extends HttpServlet {
 
