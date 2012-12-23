@@ -69,9 +69,7 @@
 					ornare ornare ultricies.</div>
 			</div>
 		</div>
-		<div id="swimFooter" class="topWidthElement">
-			<span id="copyright">&copy; 2012 - Swim network</span>
-		</div>
+		<%@include file="shared/footer.jsp" %>
 	</div>
 </body>
 </html>
