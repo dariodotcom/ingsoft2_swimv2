@@ -3,7 +3,6 @@ package it.polimi.swim.web.servlets;
 import it.polimi.swim.web.pagesupport.ErrorType;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -13,19 +12,24 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * SwimServlet provides a framework to easily implement all other servlets of
- * the swim platform.
+ * SwimServlet is an abstract class which provides a framework to easily
+ * implement all other servlets of the swim platform.
  */
 public abstract class SwimServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
 
-	// Stuff set by subclasses
+	/*
+	 * Mapping between the name of a functionality and the object which executes
+	 * it in the subclass
+	 */
 	private Map<String, ServletAction> getActionMappings = new HashMap<String, ServletAction>();
 	private Map<String, ServletAction> postActionMappings = new HashMap<String, ServletAction>();
 	private String sectionName;
 
-	// Default constructor
+	/**
+	 * Default constructor.
+	 */
 	public SwimServlet() {
 		super();
 	}
@@ -35,17 +39,17 @@ public abstract class SwimServlet extends HttpServlet {
 			throws ServletException, IOException {
 		if (getActionMappings == null) {
 			req.setAttribute("error", "No mappings set.");
-			sendError(req, resp);
+			sendError(req, resp, ErrorType.BAD_REQUEST);
 		}
 
 		String identifier = getActionIdentifier(req);
 		if (getActionMappings.containsKey(identifier)) {
-			// The action identifier has been mapped to an action to perform
+			/* The action identifier has been mapped to an action to perform */
 			getActionMappings.get(identifier).runAction(req, resp);
 		} else {
 			req.setAttribute("error", "No mapping for identifier '"
 					+ identifier + "'");
-			sendError(req, resp);
+			sendError(req, resp, ErrorType.BAD_REQUEST);
 		}
 	}
 
@@ -53,27 +57,54 @@ public abstract class SwimServlet extends HttpServlet {
 	protected final void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 		if (postActionMappings == null) {
-			sendError(req, resp);
+			sendError(req, resp, ErrorType.BAD_REQUEST);
 		}
 
 		String identifier = getActionIdentifier(req);
 		if (postActionMappings.containsKey(identifier)) {
-			// The action identifier has been mapped to an action to perform
+			/* The action identifier has been mapped to an action to perform */
 			postActionMappings.get(identifier).runAction(req, resp);
 		} else {
-			sendError(req, resp);
+			sendError(req, resp, ErrorType.BAD_REQUEST);
 		}
 	}
 
+	/**
+	 * Setter method implemented in order to provide a name to the section (i.e.
+	 * context of the request).
+	 * 
+	 * @param name
+	 *            the name of the section.
+	 */
 	protected void setSectionName(String name) {
 		this.sectionName = name;
 	}
 
+	/**
+	 * This method appends a getActionMapping to the existing set.
+	 * 
+	 * @param identifier
+	 *            a String which is the name of the get action that has been
+	 *            added to the set.
+	 * @param action
+	 *            a ServletAction which is the object that executes the get
+	 *            action which has been added to the set.
+	 */
 	protected void registerGetActionMapping(String identifier,
 			ServletAction action) {
 		this.getActionMappings.put(identifier, action);
 	}
 
+	/**
+	 * This method appends a postActionMapping to the existing set.
+	 * 
+	 * @param identifier
+	 *            a String which is the name of the post action that has been
+	 *            added to the set.
+	 * @param action
+	 *            a ServletAction which is the object that executes the post
+	 *            action which has been added to the set.
+	 */
 	protected void registerPostActionMapping(String identifier,
 			ServletAction action) {
 		this.postActionMappings.put(identifier, action);
@@ -85,10 +116,23 @@ public abstract class SwimServlet extends HttpServlet {
 		return request.getRequestURI().replace(prefix, "");
 	}
 
-	// Stub methods:
-	private void sendError(HttpServletRequest req, HttpServletResponse resp)
-			throws IOException, ServletException {
-		req.setAttribute("errorType", ErrorType.BAD_REQUEST);
+	/**
+	 * This method is useful to send error after bad HTTP requests.
+	 * 
+	 * @param req
+	 *            an HttpServletRequest which is the HTTP request.
+	 * @param resp
+	 *            an HttpServletRequest which is the response to the HTTP
+	 *            request.
+	 * @throws IOException
+	 *             an exception generated because of a bad input.
+	 * @throws ServletException
+	 *             an exception a servlet can throw when it encounters
+	 *             difficulty.
+	 */
+	protected void sendError(HttpServletRequest req, HttpServletResponse resp,
+			ErrorType err) throws IOException, ServletException {
+		req.setAttribute("errorType", err);
 		req.getRequestDispatcher("error.jsp").forward(req, resp);
 	}
 }
