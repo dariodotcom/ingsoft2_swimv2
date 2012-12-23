@@ -10,13 +10,13 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * Servlet implementation class CustomerFriendship
  */
-public class CustomerFriendship extends SwimServlet {
+public class CustomerFriendshipServlet extends SwimServlet {
 	private static final long serialVersionUID = 1L;
 
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
-	public CustomerFriendship() {
+	public CustomerFriendshipServlet() {
 		super();
 
 		setSectionName("friends");
