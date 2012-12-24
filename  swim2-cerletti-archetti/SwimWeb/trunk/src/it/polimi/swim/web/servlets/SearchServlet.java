@@ -28,16 +28,24 @@ public class SearchServlet extends SwimServlet {
 			public void runAction(HttpServletRequest req,
 					HttpServletResponse resp) throws IOException,
 					ServletException {
-				showSearch(req, resp);
+				showSearchPage(req, resp);
+			}
+		});
+		
+		registerGetActionMapping("", new ServletAction() {
+			public void runAction(HttpServletRequest req,
+					HttpServletResponse resp) throws IOException,
+					ServletException {
+				showSearchResultPage(req, resp);
 			}
 		});
 
 		/* POST request actions */
 		
-		registerPostActionMapping("login", new ServletAction() {
+		registerPostActionMapping("search", new ServletAction() {
 			public void runAction(HttpServletRequest req,
 					HttpServletResponse resp) {
-				doSubmit(req, resp);
+				doPerformSearch(req, resp);
 			}
 		});
 
@@ -45,10 +53,15 @@ public class SearchServlet extends SwimServlet {
 	
 	/* Methods to respond to different requests */ 
 	
-	private void doSubmit(HttpServletRequest req, HttpServletResponse resp) {
+	private void doPerformSearch(HttpServletRequest req, HttpServletResponse resp) {
 	}
 
-	private void showSearch(HttpServletRequest req, HttpServletResponse resp)
+	private void showSearchPage(HttpServletRequest req, HttpServletResponse resp)
+			throws IOException, ServletException {
+		req.getRequestDispatcher("search.jsp").forward(req, resp);
+	}
+	
+	private void showSearchResultPage(HttpServletRequest req, HttpServletResponse resp)
 			throws IOException, ServletException {
 		req.getRequestDispatcher("search.jsp").forward(req, resp);
 	}
