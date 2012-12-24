@@ -1,3 +1,4 @@
+<%@page import="it.polimi.swim.web.servlets.AuthenticationServlet"%>
 <%@page import="it.polimi.swim.web.pagesupport.MenuDescriptor"%>
 <%@page import="it.polimi.swim.web.pagesupport.UnloggedMenu"%>
 <%@page import="it.polimi.swim.web.pagesupport.AdminMenu"%>
@@ -6,12 +7,14 @@
 	pageEncoding="ISO-8859-1"%>
 <%
 	MenuDescriptor[] menuElements = null;
-	Object logged = session.getAttribute("loggedIn");
+	Object logged = session
+			.getAttribute(AuthenticationServlet.LOGGED_ATTRIBUTE);
 	Boolean userLoggedIn = (logged != null) && (Boolean) logged;
 
 	if (userLoggedIn) {
-		String type = (String) session.getAttribute("usertype");
-		if (type.equalsIgnoreCase("admin")) {
+		String type = (String) session
+				.getAttribute(AuthenticationServlet.LOGGED_USERTYPE);
+		if (type.equalsIgnoreCase(AuthenticationServlet.USERTYPE_ADMIN)) {
 			menuElements = AdminMenu.values();
 		} else {
 			menuElements = CustomerMenu.values();
@@ -19,6 +22,9 @@
 	} else {
 		menuElements = UnloggedMenu.values();
 	}
+
+	MenuDescriptor selectedTab = (MenuDescriptor) request
+			.getAttribute("selectedTab");
 %>
 <div id="swimHeaderContainer">
 	<div id="swimHeader" class="headerContent topWidthElement">
@@ -43,7 +49,7 @@
 				//Display form to login
 		%>
 		<form name="login" id="loginForm"
-			action="<%=request.getContextPath() + "/landing/login"%>">
+			action="<%=request.getContextPath() + "/login"%>" method="post">
 			<div class="loginInputContainer">
 				<label for="username" class="label">Username</label><br /> <input
 					type="text" id="username" class="textinput" name="username"
@@ -70,8 +76,9 @@
 			<%
 				if (menuElements != null) {
 					for (MenuDescriptor m : menuElements) {
+						String selClass = (m.equals(selectedTab) ? " selected" : "");
 			%>
-			<li class="menuEntry" id="<%=m.getElementId()%>"><a
+			<li class="menuEntry<%=selClass%>" id="<%=m.getElementId()%>"><a
 				class="tabLink"
 				href="<%=request.getContextPath() + m.getTabLink()%>"> <img
 					class="tabIcon" src="resources/icon-blank.png" alt="icon" /> <span
