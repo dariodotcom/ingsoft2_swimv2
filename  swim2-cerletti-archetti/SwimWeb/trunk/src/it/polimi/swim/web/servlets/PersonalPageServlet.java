@@ -25,90 +25,90 @@ public class PersonalPageServlet extends SwimServlet {
 		registerGetActionMapping("", new ServletAction() {
 			public void runAction(HttpServletRequest req, HttpServletResponse resp)
 					throws IOException {
-				showInformationPage(req, resp);
+				showPersonalPage(req, resp);
 			}
 		});
 		
 		registerGetActionMapping("editAccount", new ServletAction() {
 			public void runAction(HttpServletRequest req, HttpServletResponse resp)
 					throws IOException {
-				showEditAccount(req, resp);
+				showAccountEditPage(req, resp);
 			}
 		});
 		
 		registerGetActionMapping("editProfile", new ServletAction() {
 			public void runAction(HttpServletRequest req, HttpServletResponse resp)
 					throws IOException {
-				showEditProfile(req, resp);
+				showProfileEditPage(req, resp);
 			}
 		});
 		
 		/* POST request actions */
 		
+		registerPostActionMapping("editProfile", new ServletAction() {
+			public void runAction(HttpServletRequest req, HttpServletResponse resp)
+					throws IOException {
+				doChangeUserInformations(req, resp);
+			}
+		});
+		
 		registerPostActionMapping("changePassword", new ServletAction() {
 			public void runAction(HttpServletRequest req, HttpServletResponse resp)
 					throws IOException {
-				changePassword(req, resp);
+				doChangePassword(req, resp);
 			}
 		});
 		
 		registerPostActionMapping("changeEmail", new ServletAction() {
 			public void runAction(HttpServletRequest req, HttpServletResponse resp)
 					throws IOException {
-				changeEmail(req, resp);
-			}
-		});
-		
-		registerPostActionMapping("editProfile", new ServletAction() {
-			public void runAction(HttpServletRequest req, HttpServletResponse resp)
-					throws IOException {
-				editProfile(req, resp);
+				doChangeEmail(req, resp);
 			}
 		});
 		
 		registerPostActionMapping("addAbility", new ServletAction() {
 			public void runAction(HttpServletRequest req, HttpServletResponse resp)
 					throws IOException {
-				addAbility(req, resp);
+				doAddAbilityToDeclaredSet(req, resp);
 			}
 		});
 	}
 
 	/* Methods to respond to different requests */ 
 	
-	private void showInformationPage(HttpServletRequest req,
+	private void doChangePassword(HttpServletRequest req,
 			HttpServletResponse resp) {
 		
 	}
 	
-	private void showEditAccount(HttpServletRequest req,
+	private void doChangeEmail(HttpServletRequest req,
 			HttpServletResponse resp) {
 		
 	}
 	
-	private void showEditProfile(HttpServletRequest req,
+	private void doChangeUserInformations(HttpServletRequest req,
 			HttpServletResponse resp) {
 		
 	}
 	
-	private void changePassword(HttpServletRequest req,
+	private void doAddAbilityToDeclaredSet(HttpServletRequest req,
 			HttpServletResponse resp) {
 		
 	}
 	
-	private void changeEmail(HttpServletRequest req,
+	private void showPersonalPage(HttpServletRequest req,
 			HttpServletResponse resp) {
-		
+		req.getRequestDispatcher("home.jsp").forward(req, resp);
 	}
 	
-	private void editProfile(HttpServletRequest req,
+	private void showAccountEditPage(HttpServletRequest req,
 			HttpServletResponse resp) {
-		
+		req.getRequestDispatcher("home.jsp").forward(req, resp);
 	}
 	
-	private void addAbility(HttpServletRequest req,
+	private void showProfileEditPage(HttpServletRequest req,
 			HttpServletResponse resp) {
-		
+		req.getRequestDispatcher("home.jsp").forward(req, resp);
 	}
 	
 }
