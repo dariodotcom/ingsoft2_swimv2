@@ -31,7 +31,7 @@ public class MailValidationServlet extends SwimServlet {
 			}
 		});
 		
-		registerGetActionMapping("", new ServletAction() {
+		registerGetActionMapping("landing", new ServletAction() {
 			public void runAction(HttpServletRequest req,
 					HttpServletResponse resp) throws IOException, ServletException {
 				showMailValidationLanding(req, resp);
