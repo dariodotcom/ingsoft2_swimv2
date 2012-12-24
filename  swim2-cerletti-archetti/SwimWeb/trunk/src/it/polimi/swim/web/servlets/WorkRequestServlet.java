@@ -42,10 +42,18 @@ public class WorkRequestServlet extends SwimServlet{
 		
 		/* POST request actions */
 		
-		
+		registerPostActionMapping("select", new ServletAction() {
+			public void runAction(HttpServletRequest req,
+					HttpServletResponse resp) {
+				doSelect(req, resp);
+			}
+		});
 	}
 	
 	/* Methods to respond to different requests */ 
+	
+	private void doSelect(HttpServletRequest req, HttpServletResponse resp) {
+	}
 	
 	private void showActiveWorkRequest(HttpServletRequest req, HttpServletResponse resp)
 			throws IOException, ServletException {
