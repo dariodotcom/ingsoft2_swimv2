@@ -10,6 +10,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  * SwimServlet is an abstract class which provides a framework to easily
@@ -132,7 +133,13 @@ public abstract class SwimServlet extends HttpServlet {
 	 */
 	protected void sendError(HttpServletRequest req, HttpServletResponse resp,
 			ErrorType err) throws IOException, ServletException {
+
 		req.setAttribute("errorType", err);
 		req.getRequestDispatcher("error.jsp").forward(req, resp);
+	}
+
+	protected boolean isUserLoggedIn(HttpSession session) {
+		Object logged = session.getAttribute("loggedIn");
+		return logged != null && (Boolean) logged;
 	}
 }

@@ -10,7 +10,11 @@ public enum ErrorType {
 			"Bad Request",
 			"C'è un errore nella tua richiesta. Se hai digitato l'url controlla di non aver fatto errori."), GENERIC(
 			"Unknown Error",
-			"Sembra che uno degli sviluppatori sia stato pigro nel trattare questo errore...");
+			"Sembra che uno degli sviluppatori sia stato pigro nel trattare questo errore..."),
+	LOGIN_REQUIRED(
+			"Login Required",
+			"Non puoi accedere alla funzionalità che hai richiesto perchè essa è disponibile solo per gli utenti registrati."
+			);
 
 	private String errorName, errorDescription;
 

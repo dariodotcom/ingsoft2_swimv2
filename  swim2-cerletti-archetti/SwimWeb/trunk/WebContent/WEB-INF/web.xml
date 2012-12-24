@@ -4,101 +4,25 @@
  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
  <display-name>SwimWeb</display-name>
  <servlet>
-  <display-name>AuthenticationServlet</display-name>
-  <servlet-name>AuthenticationServlet</servlet-name>
+  <display-name>Authentication</display-name>
+  <servlet-name>Authentication</servlet-name>
   <servlet-class>it.polimi.swim.web.servlets.AuthenticationServlet</servlet-class>
  </servlet>
- <servlet>
-  <display-name>CustomerFriendship</display-name>
-  <servlet-name>CustomerFriendship</servlet-name>
-  <servlet-class>it.polimi.swim.web.servlets.CustomerFriendship</servlet-class>
- </servlet>
- <servlet>
-  <display-name>PersonalPage</display-name>
-  <servlet-name>PersonalPage</servlet-name>
-  <servlet-class>it.polimi.swim.web.servlets.PersonalPage</servlet-class>
- </servlet>
- <servlet>
-  <display-name>SwimServlet</display-name>
-  <servlet-name>SwimServlet</servlet-name>
-  <servlet-class>it.polimi.swim.web.servlets.SwimServlet</servlet-class>
- </servlet>
- <servlet>
-  <display-name>MailValidator</display-name>
-  <servlet-name>MailValidator</servlet-name>
-  <servlet-class>it.polimi.swim.web.servlets.MailValidator</servlet-class>
- </servlet>
- <servlet>
-  <display-name>WorkRequest</display-name>
-  <servlet-name>WorkRequest</servlet-name>
-  <servlet-class>it.polimi.swim.web.servlets.WorkRequest</servlet-class>
- </servlet>
- <servlet>
-  <display-name>Feedback</display-name>
-  <servlet-name>Feedback</servlet-name>
-  <servlet-class>it.polimi.swim.web.servlets.Feedback</servlet-class>
- </servlet>
- <servlet>
-  <display-name>Search</display-name>
-  <servlet-name>Search</servlet-name>
-  <servlet-class>it.polimi.swim.web.servlets.Search</servlet-class>
- </servlet>
- <servlet>
-  <display-name>PasswordReset</display-name>
-  <servlet-name>PasswordReset</servlet-name>
-  <servlet-class>it.polimi.swim.web.servlets.PasswordReset</servlet-class>
- </servlet>
  <servlet-mapping>
-  <servlet-name>PersonalPage</servlet-name>
-  <url-pattern>/home</url-pattern>
- </servlet-mapping>
- <servlet-mapping>
-  <servlet-name>PersonalPage</servlet-name>
-  <url-pattern>/home/*</url-pattern>
- </servlet-mapping>
- <servlet-mapping>
-  <servlet-name>CustomerFriendship</servlet-name>
-  <url-pattern>/friends/*</url-pattern>
- </servlet-mapping>
- <servlet-mapping>
-  <servlet-name>CustomerFriendship</servlet-name>
-  <url-pattern>/friends</url-pattern>
- </servlet-mapping>
- <servlet-mapping>
-  <servlet-name>WorkRequest</servlet-name>
-  <url-pattern>/works/*</url-pattern>
- </servlet-mapping>
- <servlet-mapping>
-  <servlet-name>WorkRequest</servlet-name>
-  <url-pattern>/works</url-pattern>
- </servlet-mapping>
- <servlet-mapping>
-  <servlet-name>Feedback</servlet-name>
-  <url-pattern>/feedbacks/*</url-pattern>
- </servlet-mapping>
- <servlet-mapping>
-  <servlet-name>Feedback</servlet-name>
-  <url-pattern>/feedbacks</url-pattern>
- </servlet-mapping>
- <servlet-mapping>
-  <servlet-name>Search</servlet-name>
-  <url-pattern>/search/*</url-pattern>
- </servlet-mapping>
- <servlet-mapping>
-  <servlet-name>Search</servlet-name>
-  <url-pattern>/search</url-pattern>
- </servlet-mapping>
- <servlet-mapping>
-  <servlet-name>PasswordReset</servlet-name>
-  <url-pattern>/resetpassword/*</url-pattern>
- </servlet-mapping>
- <servlet-mapping>
-  <servlet-name>MailValidator</servlet-name>
-  <url-pattern>/validatemail/*</url-pattern>
- </servlet-mapping>
- <servlet-mapping>
-  <servlet-name>AuthenticationServlet</servlet-name>
+  <servlet-name>Authentication</servlet-name>
   <url-pattern>/landing</url-pattern>
+ </servlet-mapping>
+ <servlet-mapping>
+  <servlet-name>Authentication</servlet-name>
+  <url-pattern>/login</url-pattern>
+ </servlet-mapping>
+ <servlet-mapping>
+  <servlet-name>Authentication</servlet-name>
+  <url-pattern>/logout</url-pattern>
+ </servlet-mapping>
+ <servlet-mapping>
+  <servlet-name>Authentication</servlet-name>
+  <url-pattern>/retry</url-pattern>
  </servlet-mapping>
  <welcome-file-list>
   <welcome-file>landing</welcome-file>
