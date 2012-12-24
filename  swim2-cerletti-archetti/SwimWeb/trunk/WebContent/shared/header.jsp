@@ -29,7 +29,8 @@
 <div id="swimHeaderContainer">
 	<div id="swimHeader" class="headerContent topWidthElement">
 		<div id="swimLogoContainer">
-			<a href="/" id="swimLogo"><img src="resources/icon-blank.png"
+			<a href="/" id="swimLogo"><img
+				src="<%=request.getContextPath()%>/resources/icon-blank.png"
 				alt="Swim Network" /></a>
 		</div>
 		<%
@@ -38,7 +39,7 @@
 		%>
 		<div id="swimUserAwareness">
 			<div id="userImageFrame">
-				<img src="resources/user-img.png" alt="user image" />
+				<img src="<%=request.getContextPath()%>/resources/user-img.png" alt="user image" />
 			</div>
 			<span id="userControl"> <span id="userName">Dario
 					Archetti</span><br /> <a id="userLogout" href="./.">Esci</a>
@@ -81,8 +82,9 @@
 			<li class="menuEntry<%=selClass%>" id="<%=m.getElementId()%>"><a
 				class="tabLink"
 				href="<%=request.getContextPath() + m.getTabLink()%>"> <img
-					class="tabIcon" src="resources/icon-blank.png" alt="icon" /> <span
-					class="tabTitle"><%=m.getTabName()%></span>
+					class="tabIcon"
+					src="<%=request.getContextPath()%>/resources/icon-blank.png"
+					alt="icon" /> <span class="tabTitle"><%=m.getTabName()%></span>
 			</a></li>
 			<%
 				}

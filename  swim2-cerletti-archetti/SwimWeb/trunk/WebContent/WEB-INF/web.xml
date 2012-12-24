@@ -8,6 +8,42 @@
   <servlet-name>Authentication</servlet-name>
   <servlet-class>it.polimi.swim.web.servlets.AuthenticationServlet</servlet-class>
  </servlet>
+ <servlet>
+  <display-name>PersonalPage</display-name>
+  <servlet-name>PersonalPage</servlet-name>
+  <servlet-class>it.polimi.swim.web.servlets.PersonalPageServlet</servlet-class>
+ </servlet>
+ <servlet>
+  <display-name>CustomerFeedbacks</display-name>
+  <servlet-name>CustomerFeedbacks</servlet-name>
+  <servlet-class>it.polimi.swim.web.servlets.CustomerFeedbackServlet</servlet-class>
+ </servlet>
+ <servlet>
+  <display-name>CustomerWorkRequests</display-name>
+  <servlet-name>CustomerWorkRequests</servlet-name>
+  <servlet-class>it.polimi.swim.web.servlets.CustomerWorkrequestServlet</servlet-class>
+ </servlet>
+ <servlet>
+  <display-name>CustomerFriendship</display-name>
+  <servlet-name>CustomerFriendship</servlet-name>
+  <servlet-class>it.polimi.swim.web.servlets.CustomerFriendshipServlet</servlet-class>
+ </servlet>
+ <servlet-mapping>
+  <servlet-name>PersonalPage</servlet-name>
+  <url-pattern>/home/*</url-pattern>
+ </servlet-mapping>
+ <servlet-mapping>
+  <servlet-name>CustomerFeedbacks</servlet-name>
+  <url-pattern>/feedbacks/*</url-pattern>
+ </servlet-mapping>
+ <servlet-mapping>
+  <servlet-name>CustomerWorkRequests</servlet-name>
+  <url-pattern>/works/*</url-pattern>
+ </servlet-mapping>
+ <servlet-mapping>
+  <servlet-name>CustomerFriendship</servlet-name>
+  <url-pattern>/friends/*</url-pattern>
+ </servlet-mapping>
  <servlet-mapping>
   <servlet-name>Authentication</servlet-name>
   <url-pattern>/landing</url-pattern>
