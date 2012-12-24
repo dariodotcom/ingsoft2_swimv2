@@ -48,7 +48,9 @@
 						if (showLanding || retryRegistration) {
 					%>
 					<h2>Registrati! &Egrave gratis, e lo sarà sempre.</h2>
-					<form id="regForm" action="" class="welcomeForm">
+					<form id="regForm"
+						action="<%=request.getContextPath() + "/register"%>" method="post"
+						class="welcomeForm">
 						<div class="inputLine">
 							<label class="inputLabel" for="username">Username</label> <input
 								type="text" id="username" name="username" class="inputtext" />
@@ -83,14 +85,15 @@
 					%>
 					<p class="error">I dati inseriti non sono corretti, per favore
 						riprova.</p>
-					<form id="secLoginForm" action="" class="welcomeForm">
+					<form id="secLoginForm"
+						action="<%=request.getContextPath() + "/login"%>" method="post"
+						class="welcomeForm">
 						<div class="inputLine">
-							<label class="inputLabel" for="secUsername">Password</label> <input
+							<label class="inputLabel" for="secUsername">Username</label> <input
 								type="text" id="secUsername" name="username" class="inputtext" />
 						</div>
 						<div class="inputLine">
-							<label class="inputLabel" for="secPassword">Ripeti
-								password</label> <input type="password" id="secPassword" name="password"
+							<label class="inputLabel" for="secPassword">Password</label> <input type="password" id="secPassword" name="password"
 								class="inputtext" />
 						</div>
 						<div class="inputLine">
