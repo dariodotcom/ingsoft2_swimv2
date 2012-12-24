@@ -1,7 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
 <%
 	String retry = (String) session.getAttribute("retry");
 	Boolean showLanding = false, retryLogin = false, retryRegistration = false;
@@ -42,7 +43,6 @@
 				<%
 					}
 				%>
-
 				<div id="formContainer" class="welcomeColumn">
 					<%
 						if (showLanding || retryRegistration) {
@@ -93,7 +93,8 @@
 								type="text" id="secUsername" name="username" class="inputtext" />
 						</div>
 						<div class="inputLine">
-							<label class="inputLabel" for="secPassword">Password</label> <input type="password" id="secPassword" name="password"
+							<label class="inputLabel" for="secPassword">Password</label> <input
+								type="password" id="secPassword" name="password"
 								class="inputtext" />
 						</div>
 						<div class="inputLine">

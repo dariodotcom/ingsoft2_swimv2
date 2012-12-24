@@ -1,6 +1,7 @@
 package it.polimi.swim.web.servlets;
 
 import it.polimi.swim.web.pagesupport.ErrorType;
+import it.polimi.swim.web.pagesupport.Misc;
 
 import java.io.IOException;
 
@@ -80,7 +81,6 @@ public class AuthenticationServlet extends SwimServlet {
 			String password = (String) req.getParameter("password");
 
 			if (username == null || password == null) {
-				System.out.println("wrong login!");
 				sendError(req, resp, ErrorType.BAD_REQUEST);
 				return;
 			}
@@ -99,7 +99,7 @@ public class AuthenticationServlet extends SwimServlet {
 		}
 
 		// Forward request to /home servlet
-		resp.sendRedirect(req.getContextPath() + "/home");
+		resp.sendRedirect(req.getContextPath() + "/home/");
 	}
 
 	private void doLogout(HttpServletRequest req, HttpServletResponse resp)
@@ -125,6 +125,6 @@ public class AuthenticationServlet extends SwimServlet {
 
 	private void showPage(HttpServletRequest req, HttpServletResponse resp)
 			throws IOException, ServletException {
-		req.getRequestDispatcher("landing.jsp").forward(req, resp);
+		req.getRequestDispatcher(Misc.LANDING_JSP).forward(req, resp);
 	}
 }
