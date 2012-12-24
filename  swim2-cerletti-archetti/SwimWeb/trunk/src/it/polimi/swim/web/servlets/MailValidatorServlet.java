@@ -30,6 +30,7 @@ public class MailValidatorServlet extends SwimServlet {
 		});
 		
 		/*POST request actions*/
+		
 	}
 
 	/* Methods to respond to different requests */ 

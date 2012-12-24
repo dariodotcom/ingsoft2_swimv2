@@ -23,16 +23,17 @@ public class AuthenticationServlet extends SwimServlet {
 		setSectionName("landing");
 
 		/* GET request actions */
-		
+
 		registerGetActionMapping("", new ServletAction() {
 			public void runAction(HttpServletRequest req,
-					HttpServletResponse resp) throws IOException, ServletException {
+					HttpServletResponse resp) throws IOException,
+					ServletException {
 				showPage(req, resp);
 			}
 		});
 
 		/* POST request actions */
-		
+
 		registerPostActionMapping("login", new ServletAction() {
 			public void runAction(HttpServletRequest req,
 					HttpServletResponse resp) {
@@ -56,6 +57,7 @@ public class AuthenticationServlet extends SwimServlet {
 	}
 
 	/* Methods to respond to different requests */
+
 	private void doLogin(HttpServletRequest req, HttpServletResponse resp) {
 	}
 
