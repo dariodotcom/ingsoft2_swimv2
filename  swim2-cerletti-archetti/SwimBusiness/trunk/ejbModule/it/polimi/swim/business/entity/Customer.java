@@ -9,12 +9,36 @@ import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+/**
+ * Customer is an entity which represents a registered user on the platform
+ * SWIMv2, whether a professional or a hypothetical employer.
+ */
 @Entity
 @Table(name = "customer")
 public class Customer extends User {
-	
-	public Customer() {}
-	
+
+	/**
+	 * Class contructor.
+	 */
+	public Customer() {
+	}
+
+	/**
+	 * Class constructor.
+	 * 
+	 * @param username
+	 *            a String which contains the username of the customer.
+	 * @param passwordHash
+	 *            a String which contains the hash value of the password set by
+	 *            the customer.
+	 * @param email
+	 *            a String which contains the e-mail address set by the
+	 *            customer.
+	 * @param name
+	 *            a String which contains the name of the customer.
+	 * @param surname
+	 *            a String which contains the surname of the customer.
+	 */
 	public Customer(String username, String passwordHash, String email,
 			String name, String surname) {
 		super(username, passwordHash);
@@ -46,96 +70,185 @@ public class Customer extends User {
 	@Column(name = "emailactive", nullable = false)
 	private Boolean emailConfirmed;
 
-	/*Relationship*/
-	@OneToMany(mappedBy="sender")
+	/* Relationship */
+	
+	@OneToMany(mappedBy = "sender")
 	List<Friendship> sentFriendship;
-	
-	@OneToMany(mappedBy="receiver")
+
+	@OneToMany(mappedBy = "receiver")
 	List<Friendship> receivedFriendship;
-	
-	/* Setters and Getters */
+
+	/**
+	 * Getter method.
+	 * 
+	 * @return a String which contains the customer e-mail address.
+	 */
 	public String getEmail() {
 		return email;
 	}
 
+	/**
+	 * Setter method.
+	 * 
+	 * @param email
+	 *            a String which contains the customer e-mail address.
+	 */
 	public void setEmail(String email) {
 		this.email = email;
 	}
 
+	/**
+	 * Getter method.
+	 * 
+	 * @return a String which contains the customer name.
+	 */
 	public String getName() {
 		return name;
 	}
 
+	/**
+	 * Setter method.
+	 * 
+	 * @param name
+	 *            a String which contains the customer name.
+	 */
 	public void setName(String name) {
 		this.name = name;
 	}
 
+	/**
+	 * Getter method.
+	 * 
+	 * @return a String which contains the customer surname.
+	 */
 	public String getSurname() {
 		return surname;
 	}
 
+	/**
+	 * Setter method.
+	 * 
+	 * @param surname
+	 *            a String which contains the customer surname.
+	 */
 	public void setSurname(String surname) {
 		this.surname = surname;
 	}
 
+	/**
+	 * Getter method.
+	 * 
+	 * @return a Date which contains the customer birthdate.
+	 */
 	public Date getBirthDate() {
 		return birthDate;
 	}
 
+	/**
+	 * Setter method.
+	 * 
+	 * @param birthDate
+	 *            a Date which contains the customer birthdate.
+	 */
 	public void setBirthDate(Date birthDate) {
 		this.birthDate = birthDate;
 	}
 
+	/**
+	 * Getter method.
+	 * 
+	 * @return a String which contains the customer residence location.
+	 */
 	public String getLocation() {
 		return location;
 	}
 
+	/**
+	 * Setter method.
+	 * 
+	 * @param location
+	 *            a String which contains the customer residence location.
+	 */
 	public void setLocation(String location) {
 		this.location = location;
 	}
 
+	/**
+	 * Getter method.
+	 * 
+	 * @return a String which contains the url of the customer photo-profile.
+	 */
 	public String getPhotourl() {
 		return photourl;
 	}
 
+	/**
+	 * Setter method.
+	 * 
+	 * @param photourl
+	 *            a String which contains the url of the customer photo-profile.
+	 */
 	public void setPhotourl(String photourl) {
 		this.photourl = photourl;
 	}
-	
-	public boolean isEmailConfirmed(){
+
+	/**
+	 * Getter method.
+	 * 
+	 * @return true if the customer e-mail has been confirmed, false otherwise.
+	 */
+	public boolean isEmailConfirmed() {
 		return emailConfirmed;
 	}
-	
-	public void setEmailConfirmed(Boolean confirmed){
+
+	/**
+	 * Setter method.
+	 * 
+	 * @param confirmed
+	 *            true if the customer e-mail has been confirmed, false
+	 *            otherwise.
+	 */
+	public void setEmailConfirmed(Boolean confirmed) {
 		this.emailConfirmed = confirmed;
 	}
-	
-	public List<Customer> getFriends(){
+
+	/**
+	 * Getter method.
+	 * 
+	 * @return a List of Customer which contains the customer friend list.
+	 */
+	public List<Customer> getFriends() {
 		List<Customer> friends = new ArrayList<Customer>();
-		
-		for(Friendship f : sentFriendship){
-			if(f.isConfirmed()){
+
+		for (Friendship f : sentFriendship) {
+			if (f.isConfirmed()) {
 				friends.add(f.getReceiver());
 			}
 		}
-		
-		for(Friendship f : receivedFriendship){
-			if(f.isConfirmed()){
+
+		for (Friendship f : receivedFriendship) {
+			if (f.isConfirmed()) {
 				friends.add(f.getSender());
 			}
 		}
-		
+
 		return friends;
 	}
 
-	public Boolean getEmailConfirmed() {
-		return emailConfirmed;
-	}
-
+	/**
+	 * Getter method.
+	 * 
+	 * @return the List of Friendship requests that the customer has sent.
+	 */
 	public List<Friendship> getSentFriendship() {
 		return sentFriendship;
 	}
 
+	/**
+	 * Getter method.
+	 * 
+	 * @return the List of Friendship requests that the customer has received.
+	 */
 	public List<Friendship> getReceivedFriendship() {
 		return receivedFriendship;
 	}

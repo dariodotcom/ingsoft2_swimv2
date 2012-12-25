@@ -13,13 +13,28 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+/**
+ * WorkRequest is an entity which represents an employment relationship between
+ * two users.
+ */
 @Entity
 @Table(name = "workrequests")
 public class WorkRequest {
 
+	/**
+	 * Class constructor.
+	 */
 	public WorkRequest() {
 	}
 
+	/**
+	 * Class constructor.
+	 * 
+	 * @param sender
+	 *            the Customer which has sent the work request.
+	 * @param receiver
+	 *            the Customer which has received the work request.
+	 */
 	public WorkRequest(Customer sender, Customer receiver) {
 		this.sender = sender;
 		this.receiver = receiver;
@@ -69,118 +84,274 @@ public class WorkRequest {
 	@OneToMany(mappedBy = "linkedRequest")
 	private Set<Message> relatedMessages;
 
-	@OneToOne(mappedBy="linkedRequest")
+	@OneToOne(mappedBy = "linkedRequest")
 	@JoinColumn(name = "feedback")
 	private Feedback feedback;
 
+	/**
+	 * Getter method.
+	 * 
+	 * @return the Customer which has sent the work request.
+	 */
 	public Customer getSender() {
 		return sender;
 	}
 
+	/**
+	 * Setter method.
+	 * 
+	 * @param sender
+	 *            the Customer which has sent the work request.
+	 */
 	public void setSender(Customer sender) {
 		this.sender = sender;
 	}
 
+	/**
+	 * Getter method.
+	 * 
+	 * @return the Customer which has received the work request.
+	 */
 	public Customer getReceiver() {
 		return receiver;
 	}
 
+	/**
+	 * Setter method.
+	 * 
+	 * @param receiver
+	 *            the Customer which has received the work request.
+	 */
 	public void setReceiver(Customer receiver) {
 		this.receiver = receiver;
 	}
 
+	/**
+	 * Getter method.
+	 * 
+	 * @return true if the user who has sent the work request has confirmed it,
+	 *         false otherwise.
+	 */
 	public Boolean getSenderConfirmed() {
 		return senderConfirmed;
 	}
 
+	/**
+	 * Setter method.
+	 * 
+	 * @param senderConfirmed
+	 *            true if the user who has sent the work request has confirmed
+	 *            it, false otherwise.
+	 */
 	public void setSenderConfirmed(Boolean senderConfirmed) {
 		this.senderConfirmed = senderConfirmed;
 	}
 
+	/**
+	 * Getter method.
+	 * 
+	 * @return true if the user who has received the work request has confirmed
+	 *         it, false otherwise.
+	 */
 	public Boolean getReceiverConfirmed() {
 		return receiverConfirmed;
 	}
 
+	/**
+	 * Setter method.
+	 * 
+	 * @param receiverConfirmed
+	 *            true if the user who has received the work request has
+	 *            confirmed it, false otherwise.
+	 */
 	public void setReceiverConfirmed(Boolean receiverConfirmed) {
 		this.receiverConfirmed = receiverConfirmed;
 	}
 
+	/**
+	 * Getter method.
+	 * 
+	 * @return true if the user who has sent the work request has confirmed its
+	 *         finish, false otherwise.
+	 */
 	public Boolean getSenderCompleted() {
 		return senderCompleted;
 	}
 
+	/**
+	 * Setter method.
+	 */
 	public void setSenderCompleted() {
 		this.senderCompleted = true;
 	}
 
+	/**
+	 * Getter method.
+	 * 
+	 * @return true if the user who has received the work request has confirmed
+	 *         its finish, false otherwise.
+	 */
 	public Boolean getReceiverCompleted() {
 		return receiverCompleted;
 	}
 
+	/**
+	 * Setter method.
+	 */
 	public void setReceiverCompleted() {
 		this.receiverCompleted = true;
 	}
 
+	/**
+	 * Getter method.
+	 * 
+	 * @return a String which contains a brief description about what is the
+	 *         work request.
+	 */
 	public String getDescription() {
 		return description;
 	}
 
+	/**
+	 * Setter method.
+	 * 
+	 * @param description
+	 *            a String which contains a brief description about what is the
+	 *            work request.
+	 */
 	public void setDescription(String description) {
 		this.description = description;
 	}
 
+	/**
+	 * Getter method.
+	 * 
+	 * @return a String which contains the location of the work request.
+	 */
 	public String getLocation() {
 		return location;
 	}
 
+	/**
+	 * Setter method.
+	 * 
+	 * @param location
+	 *            a String which contains the location of the work request.
+	 */
 	public void setLocation(String location) {
 		this.location = location;
 	}
 
+	/**
+	 * Getter method.
+	 * 
+	 * @return the Date in which the work request starts.
+	 */
 	public Date getStartDate() {
 		return startDate;
 	}
 
+	/**
+	 * Setter method.
+	 * 
+	 * @param startDate
+	 *            the Date in which the work request starts.
+	 */
 	public void setStartDate(Date startDate) {
 		this.startDate = startDate;
 	}
 
+	/**
+	 * Getter method.
+	 * 
+	 * @return the Date in which the work request ends.
+	 */
 	public Date getEndDate() {
 		return endDate;
 	}
 
+	/**
+	 * Setter method.
+	 * 
+	 * @param endDate
+	 *            the Date in which the work request starts.
+	 */
 	public void setEndDate(Date endDate) {
 		this.endDate = endDate;
 	}
 
+	/**
+	 * Getter method.
+	 * 
+	 * @return the Ability required by the receiver for the work request.
+	 */
 	public Ability getRequiredAbility() {
 		return requiredAbility;
 	}
 
+	/**
+	 * Setter method.
+	 * 
+	 * @param requiredAbility
+	 *            the Ability required by the receiver for the work request.
+	 */
 	public void setRequiredAbility(Ability requiredAbility) {
 		this.requiredAbility = requiredAbility;
 	}
 
+	/**
+	 * Getter method.
+	 * 
+	 * @return a Set of Message related to the work request.
+	 */
 	public Set<Message> getRelatedMessages() {
 		return relatedMessages;
 	}
 
+	/**
+	 * Getter method.
+	 * 
+	 * @return the Feedback associated to the work request.
+	 */
 	public Feedback getFeedback() {
 		return feedback;
 	}
 
+	/**
+	 * Setter method.
+	 * 
+	 * @param feedback
+	 *            the Feedback associated to the work request.
+	 */
 	public void setFeedback(Feedback feedback) {
 		this.feedback = feedback;
 	}
 
+	/**
+	 * Getter method.
+	 * 
+	 * @return the Integer value which identifies the work request.
+	 */
 	public int getId() {
 		return id;
 	}
 
+	/**
+	 * Getter method.
+	 * 
+	 * @return true if the work request is set completed by both sender and
+	 *         receiver, false otherwise.
+	 */
 	public boolean isCompleted() {
 		return receiverCompleted && senderCompleted;
 	}
 
+	/**
+	 * Getter method.
+	 * 
+	 * @return true if the work request is set confirmed by both sender and
+	 *         receiver, false otherwise.
+	 */
 	public boolean isConfirmed() {
 		return receiverConfirmed && senderConfirmed;
 	}
