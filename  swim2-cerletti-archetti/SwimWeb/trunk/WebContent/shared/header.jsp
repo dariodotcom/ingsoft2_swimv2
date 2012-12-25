@@ -29,7 +29,7 @@
 <div id="swimHeaderContainer">
 	<div id="swimHeader" class="headerContent topWidthElement">
 		<div id="swimLogoContainer">
-			<a href="/" id="swimLogo"><img
+			<a href="<%=request.getContextPath()%>/" id="swimLogo"><img
 				src="<%=request.getContextPath()%>/resources/icon-blank.png"
 				alt="Swim Network" /></a>
 		</div>
