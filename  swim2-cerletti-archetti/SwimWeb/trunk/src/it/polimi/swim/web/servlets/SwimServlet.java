@@ -140,12 +140,7 @@ public abstract class SwimServlet extends HttpServlet {
 		req.setAttribute("errorType", err);
 		req.getRequestDispatcher("/error.jsp").forward(req, resp);
 	}
-
-	protected boolean isUserLoggedIn(HttpSession session) {
-		Object logged = session.getAttribute("loggedIn");
-		return logged != null && (Boolean) logged;
-	}
-
+	
 	protected <T> T lookupBean(Class<T> beanClass, String beanName)
 			throws NamingException {
 		Hashtable<String, String> env = new Hashtable<String, String>();
@@ -155,5 +150,10 @@ public abstract class SwimServlet extends HttpServlet {
 		InitialContext jndiContext = new InitialContext(env);
 
 		return beanClass.cast(jndiContext.lookup(beanName));
+	}
+	
+	public static boolean isUserLoggedIn(HttpSession session) {
+		Object logged = session.getAttribute("loggedIn");
+		return logged != null && (Boolean) logged;
 	}
 }

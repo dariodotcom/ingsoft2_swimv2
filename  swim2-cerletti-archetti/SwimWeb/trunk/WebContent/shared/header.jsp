@@ -1,3 +1,4 @@
+<%@page import="it.polimi.swim.web.servlets.SwimServlet"%>
 <%@page import="it.polimi.swim.web.servlets.PersonalPageServlet"%>
 <%@page
 	import="it.polimi.swim.business.bean.remote.AuthenticationControllerRemote"%>
@@ -12,9 +13,7 @@
 	pageEncoding="ISO-8859-1"%>
 <%
 	MenuDescriptor[] menuElements = null;
-	Object logged = session
-			.getAttribute(AuthenticationServlet.LOGGED_ATTRIBUTE);
-	Boolean userLoggedIn = (logged != null) && (Boolean) logged;
+	Boolean userLoggedIn = SwimServlet.isUserLoggedIn(session);
 
 	UserType type = (UserType) session
 			.getAttribute(AuthenticationServlet.LOGGED_USERTYPE);
@@ -65,7 +64,7 @@
 					alt="user image" />
 			</div>
 			<span id="userControl"> <span id="userName"><%=userIdentity%></span><br />
-				<a id="userLogout" href="./.">Esci</a>
+				<a id="userLogout" href="<%=request.getContextPath()%>/logout">Esci</a>
 			</span>
 		</div>
 		<%
