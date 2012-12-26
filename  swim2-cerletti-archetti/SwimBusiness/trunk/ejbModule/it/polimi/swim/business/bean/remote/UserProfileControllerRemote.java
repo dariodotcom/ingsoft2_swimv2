@@ -13,6 +13,16 @@ import javax.ejb.Remote;
  */
 @Remote
 public interface UserProfileControllerRemote {
+
+	/**
+	 * Getter method useful to provide the profile associated to a given
+	 * username.
+	 * 
+	 * @param username
+	 *            a String that contains the username of the user we want to
+	 *            retrieve the profile.
+	 * @return the Customer associated to the given username
+	 */
 	public Customer getByUsername(String username);
 
 	/**
