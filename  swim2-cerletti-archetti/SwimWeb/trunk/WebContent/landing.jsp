@@ -47,7 +47,7 @@
 					<%
 						if (showLanding || retryRegistration) {
 					%>
-					<h2>Registrati! &Egrave gratis, e lo sarà sempre.</h2>
+					<h2>Registrati! &Egrave; gratis, e lo sarà sempre.</h2>
 					<form id="regForm"
 						action="<%=request.getContextPath()%>/register" method="post"
 						class="welcomeForm">
