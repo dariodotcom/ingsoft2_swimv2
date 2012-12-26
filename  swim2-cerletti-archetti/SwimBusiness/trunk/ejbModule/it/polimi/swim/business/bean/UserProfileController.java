@@ -55,4 +55,8 @@ public class UserProfileController implements UserProfileControllerRemote {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	public Customer getByUsername(String username) {
+		return manager.find(Customer.class, username);
+	}
 }

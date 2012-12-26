@@ -9,6 +9,8 @@ import javax.ejb.Remote;
 
 @Remote
 public interface UserProfileControllerRemote {
+	public Customer getByUsername(String username);
+	
 	public List<Customer> getFriendList();
 
 	public List<Friendship> getFriendshipRequest();
