@@ -10,7 +10,7 @@
 	<%@include file="shared/header.jsp"%>
 	<div id="swimContentContainer">
 		<div id="swimContent" class="topWidthElement">
-			<div id="formContainer"class"">
+			<div id="formContainer">
 				<form id="searchForm"
 					action="<%=request.getContextPath() + "/perform"%>" method="post">
 					<div class="inputLine">
