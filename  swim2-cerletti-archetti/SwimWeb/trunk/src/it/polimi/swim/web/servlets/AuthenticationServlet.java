@@ -52,6 +52,14 @@ public class AuthenticationServlet extends SwimServlet {
 		registerGetActionMapping("landing", showPage);
 		registerGetActionMapping("retry", showPage);
 
+		registerGetActionMapping("logout", new ServletAction() {
+			public void runAction(HttpServletRequest req,
+					HttpServletResponse resp) throws IOException,
+					ServletException {
+				doLogout(req, resp);
+			}
+		});
+		
 		/* POST request actions */
 
 		registerPostActionMapping("login", new ServletAction() {
@@ -61,15 +69,7 @@ public class AuthenticationServlet extends SwimServlet {
 				doLogin(req, resp);
 			}
 		});
-
-		registerPostActionMapping("logout", new ServletAction() {
-			public void runAction(HttpServletRequest req,
-					HttpServletResponse resp) throws IOException,
-					ServletException {
-				doLogout(req, resp);
-			}
-		});
-
+		
 		registerPostActionMapping("register", new ServletAction() {
 			public void runAction(HttpServletRequest req,
 					HttpServletResponse resp) throws IOException {

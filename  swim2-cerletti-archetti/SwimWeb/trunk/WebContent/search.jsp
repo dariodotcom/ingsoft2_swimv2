@@ -1,3 +1,4 @@
+<%@page import="it.polimi.swim.web.servlets.SwimServlet"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
@@ -12,7 +13,8 @@
 		<div id="swimContent" class="topWidthElement">
 			<div class="formContainer">
 				<form id="searchForm"
-					action="<%=request.getContextPath() + "/search/perform"%>" method="post">
+					action="<%=request.getContextPath() + "/search/perform"%>"
+					method="post">
 					<div class="inputLine">
 						<label class="inputLabel" for="name">Nome</label> <input
 							type="text" id="name" name="name" class="inputtext" />
@@ -30,10 +32,16 @@
 							richiesta</label> <input type="text" id="ability" name="ability"
 							class="inputtext" />
 					</div>
+					<%
+						if (SwimServlet.isUserLoggedIn(session)) {
+					%>
 					<div class="inputLine">
-						<label class="inputLabel" for="filter">Filtra la ricerca
-							tra gli amici</label> <input type="checkbox" name="filter" value="filter" />
+						<input type="checkbox" name="filter" value="filter" /><label
+							for="filter">Cerca solo tra gli amici</label>
 					</div>
+					<%
+						}
+					%>
 					<div class="inputLine">
 						<input type="submit" value="Cerca" class="inputsubmit" />
 					</div>
