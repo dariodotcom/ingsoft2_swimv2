@@ -38,7 +38,7 @@ public class AuthenticationController implements AuthenticationControllerRemote 
 	}
 
 	public UserType authenticateUser(String username, String password)
-			throws UserNotFoundException, AuthenticationFailedException {
+			throws AuthenticationFailedException {
 		String queryString = "FROM User u WHERE username=:username";
 		Query query = manager.createQuery(queryString);
 		query.setParameter("username", username);
@@ -47,9 +47,9 @@ public class AuthenticationController implements AuthenticationControllerRemote 
 		try {
 			user = (User) query.getSingleResult();
 		} catch (EntityNotFoundException enf) {
-			throw new UserNotFoundException();
+			throw new AuthenticationFailedException();
 		} catch (NoResultException nre) {
-			throw new UserNotFoundException();
+			throw new AuthenticationFailedException();
 		}
 
 		if (!user.matchPassword(password)) {
