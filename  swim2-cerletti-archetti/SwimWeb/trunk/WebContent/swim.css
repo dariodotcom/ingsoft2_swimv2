@@ -385,6 +385,7 @@ h1.pageTitle{
 /* - WELCOME - */
 body.welcome .welcomeColumn{
 	display: inline-block;
+	vertical-align: top;
 }
 
 body.welcome #welcomeImage{
@@ -394,20 +395,21 @@ body.welcome #welcomeImage{
 	margin-right: 40px;
 }
 
-#formContainer{
+body.welcome formContainer,
+body.retry formContainer{
 	width: 335px;
 	vertical-align: top;
 }
 
-#formContainer .welcomeForm{
+.formContainer .welcomeForm{
 	margin-top: 30px;
 }
 
-body.retry #formContainer {
+body.retry .formContainer {
 	margin: 0 auto;
 }
 
-body.welcome #formContainer h2{
+body.welcome .formContainer h2{
 	font-size: 20px;
 }
 
@@ -447,4 +449,11 @@ p.error{
 #profileHeader .userControls{
 	float: right;
 	margin: 39px 5px;
+}
+
+/*SEARCH*/
+body.search .formContainer{
+    width: 335px;
+    margin: 0 auto;
+    padding: 10px 20px;
 }

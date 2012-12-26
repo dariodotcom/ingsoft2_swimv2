@@ -75,17 +75,17 @@
 		<form name="login" id="loginForm"
 			action="<%=request.getContextPath() + "/login"%>" method="post">
 			<div class="loginInputContainer">
-				<label for="username" class="label">Username</label><br /> <input
-					type="text" id="username" class="textinput" name="username"
+				<label for="logUsername" class="label">Username</label><br /> <input
+					type="text" id="logUsername" class="textinput" name="username"
 					tabindex="1" />
 			</div>
 			<div class="loginInputContainer">
-				<label for="password" class="label">Password</label><br /> <input
-					type="password" id="password" class="textinput" name="password"
+				<label for="logPassword" class="label">Password</label><br /> <input
+					type="password" id="logPassword" class="textinput" name="password"
 					tabindex="2" />
 			</div>
 			<div class="loginInputContainer">
-				<input type="submit" id="submit" class="buttoninput" value="Login"
+				<input type="submit" class="buttoninput" value="Login"
 					tabindex="3" />
 			</div>
 		</form>

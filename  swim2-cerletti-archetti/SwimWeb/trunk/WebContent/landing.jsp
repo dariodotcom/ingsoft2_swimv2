@@ -43,7 +43,7 @@
 				<%
 					}
 				%>
-				<div id="formContainer" class="welcomeColumn">
+				<div class="formContainer welcomeColumn">
 					<%
 						if (showLanding || retryRegistration) {
 					%>
