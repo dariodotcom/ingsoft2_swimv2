@@ -1,3 +1,7 @@
+<%@page import="it.polimi.swim.web.servlets.PersonalPageServlet"%>
+<%@page
+	import="it.polimi.swim.business.bean.remote.AuthenticationControllerRemote"%>
+<%@page import="it.polimi.swim.business.entity.Customer"%>
 <%@page import="it.polimi.swim.business.bean.UserType"%>
 <%@page import="it.polimi.swim.web.servlets.AuthenticationServlet"%>
 <%@page import="it.polimi.swim.web.pagesupport.MenuDescriptor"%>
@@ -15,6 +19,8 @@
 	UserType type = (UserType) session
 			.getAttribute(AuthenticationServlet.LOGGED_USERTYPE);
 
+	String userIdentity = null;
+
 	if (type == null) {
 		menuElements = UnloggedMenu.values();
 	} else {
@@ -25,6 +31,17 @@
 		case CUSTOMER:
 			menuElements = CustomerMenu.values();
 			break;
+		}
+	}
+
+	if (userLoggedIn) {
+		Customer c = (Customer) request
+				.getAttribute(PersonalPageServlet.USER_ATTR);
+
+		if (c != null) {
+			userIdentity = c.getName() + " " + c.getSurname();
+		} else {
+			userIdentity = "customer not set :(";
 		}
 	}
 
@@ -47,8 +64,8 @@
 				<img src="<%=request.getContextPath()%>/resources/user-img.png"
 					alt="user image" />
 			</div>
-			<span id="userControl"> <span id="userName">Dario
-					Archetti</span><br /> <a id="userLogout" href="./.">Esci</a>
+			<span id="userControl"> <span id="userName"><%=userIdentity%></span><br />
+				<a id="userLogout" href="./.">Esci</a>
 			</span>
 		</div>
 		<%

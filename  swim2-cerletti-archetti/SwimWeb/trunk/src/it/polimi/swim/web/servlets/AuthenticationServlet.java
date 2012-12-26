@@ -185,7 +185,7 @@ public class AuthenticationServlet extends SwimServlet {
 		}
 
 		// Redirect user to home for the moment //TODO
-		resp.sendRedirect("/home/");
+		resp.sendRedirect(req.getContextPath() + "/landing");
 	}
 
 	private void showPage(HttpServletRequest req, HttpServletResponse resp)
