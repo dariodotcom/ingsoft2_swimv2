@@ -14,10 +14,11 @@ import javax.ejb.Remote;
 @Remote
 public interface UserProfileControllerRemote {
 	public Customer getByUsername(String username);
-	
+
 	/**
+	 * Getter method useful to provide the list of friendships involving a user.
 	 * 
-	 * @return
+	 * @return a List of Customer that are present in a user friend list.
 	 */
 	public List<Customer> getFriendList();
 
