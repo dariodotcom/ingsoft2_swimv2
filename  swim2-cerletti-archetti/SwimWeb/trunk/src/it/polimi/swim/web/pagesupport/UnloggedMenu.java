@@ -8,7 +8,7 @@ package it.polimi.swim.web.pagesupport;
 public enum UnloggedMenu implements MenuDescriptor {
 
 	HOME("Benvenuto", "/", "landing"), ABOUT("Cos'è Swim", "/about/", "about"), SEARCH(
-			"Search", "/search/", "search");
+			"Ricerca", "/search/", "search");
 
 	private String tabName, tabLink, elemId;
 

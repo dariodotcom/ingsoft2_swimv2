@@ -7,7 +7,7 @@ package it.polimi.swim.web.pagesupport;
  */
 public enum CustomerMenu implements MenuDescriptor {
 
-	HOME("Home", "/home/", "home"), SEARCH("Search", "/search/", "search"), WORKS(
+	HOME("Home", "/home/", "home"), SEARCH("Ricerca", "/search/", "search"), WORKS(
 			"Lavori", "/works/", "works"), FEEDBACKS("Feedback", "/feedbacks/",
 			"feedbacks"), FRIENDS("Amici", "/friends/", "friends");
 
