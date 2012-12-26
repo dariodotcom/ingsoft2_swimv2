@@ -13,7 +13,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 /**
- * Session Bean implementation class FeedbackController
+ * Session Bean implementation class FeedbackController.
  */
 @Stateless
 public class FeedbackController implements FeedbackControllerRemote {

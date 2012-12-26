@@ -12,7 +12,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 /**
- * Session Bean implementation class WorkRequestControl
+ * Session Bean implementation class WorkRequestController.
  */
 @Stateless
 public class WorkRequestController implements WorkRequestControllerRemote {
