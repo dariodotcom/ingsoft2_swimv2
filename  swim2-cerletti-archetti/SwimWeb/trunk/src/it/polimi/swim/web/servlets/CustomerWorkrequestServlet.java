@@ -17,8 +17,8 @@ public class CustomerWorkrequestServlet extends SwimServlet {
 
 	private static final long serialVersionUID = -4086600990410926694L;
 
-	public static final String CONTEXT_NAME="works";
-	
+	public static final String CONTEXT_NAME = "works";
+
 	public enum CustomerWorkRequestSection {
 		ACTIVE_REQUESTS("Richieste attive", ""), ARCHIVED_REQUESTS(
 				"Richieste archiviate", "archived");

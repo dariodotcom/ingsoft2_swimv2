@@ -6,11 +6,16 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
+import java.util.Hashtable;
 
 /**
  * SwimServlet is an abstract class which provides a framework to easily
@@ -139,5 +144,16 @@ public abstract class SwimServlet extends HttpServlet {
 	protected boolean isUserLoggedIn(HttpSession session) {
 		Object logged = session.getAttribute("loggedIn");
 		return logged != null && (Boolean) logged;
+	}
+
+	protected <T> T lookupBean(Class<T> beanClass, String beanName)
+			throws NamingException {
+		Hashtable<String, String> env = new Hashtable<String, String>();
+		env.put(Context.INITIAL_CONTEXT_FACTORY,
+				"org.jnp.interfaces.NamingContextFactory");
+		env.put(Context.PROVIDER_URL, "localhost:1099");
+		InitialContext jndiContext = new InitialContext(env);
+
+		return beanClass.cast(jndiContext.lookup(beanName));
 	}
 }

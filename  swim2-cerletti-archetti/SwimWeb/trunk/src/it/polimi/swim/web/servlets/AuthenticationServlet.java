@@ -1,10 +1,18 @@
 package it.polimi.swim.web.servlets;
 
+import it.polimi.swim.business.bean.UserType;
+import it.polimi.swim.business.bean.remote.AuthenticationControllerRemote;
+import it.polimi.swim.business.exceptions.AuthenticationFailedException;
+import it.polimi.swim.business.exceptions.EmailAlreadyTakenException;
+import it.polimi.swim.business.exceptions.UsernameAlreadyTakenException;
 import it.polimi.swim.web.pagesupport.ErrorType;
 import it.polimi.swim.web.pagesupport.Misc;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
+import javax.naming.NamingException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -64,7 +72,7 @@ public class AuthenticationServlet extends SwimServlet {
 
 		registerPostActionMapping("register", new ServletAction() {
 			public void runAction(HttpServletRequest req,
-					HttpServletResponse resp) {
+					HttpServletResponse resp) throws IOException {
 				doCreateUser(req, resp);
 			}
 		});
@@ -74,6 +82,17 @@ public class AuthenticationServlet extends SwimServlet {
 	private void doLogin(HttpServletRequest req, HttpServletResponse resp)
 			throws IOException, ServletException {
 		HttpSession session = req.getSession();
+
+		AuthenticationControllerRemote auth;
+
+		// Retrieve the bean used for authentication
+		try {
+			auth = lookupBean(AuthenticationControllerRemote.class,
+					"AuthenticationController/remote");
+		} catch (NamingException e) {
+			// TODO
+			return;
+		}
 
 		// Check user is not already logged in
 		if (!isUserLoggedIn(session)) {
@@ -85,13 +104,18 @@ public class AuthenticationServlet extends SwimServlet {
 				return;
 			}
 
-			// Check user login details are valid TODO
-			if (username.equals("dario") && password.equals("password")) {
+			// Check user login details are valid
+
+			try {
+				UserType loggedUserType = auth.authenticateUser(username,
+						password);
+
 				// Log in user
 				session.setAttribute(LOGGED_ATTRIBUTE, true);
-				session.setAttribute(LOGGED_USERNAME, "test123"); // TODO
-				session.setAttribute(LOGGED_USERTYPE, "123"); // TODO
-			} else {
+				session.setAttribute(LOGGED_USERNAME, username);
+				session.setAttribute(LOGGED_USERTYPE, loggedUserType);
+
+			} catch (AuthenticationFailedException e) {
 				session.setAttribute("retry", "login");
 				resp.sendRedirect(req.getContextPath() + "/retry");
 				return;
@@ -120,11 +144,53 @@ public class AuthenticationServlet extends SwimServlet {
 		resp.sendRedirect(req.getContextPath() + "/landing");
 	}
 
-	private void doCreateUser(HttpServletRequest req, HttpServletResponse resp) {
+	private void doCreateUser(HttpServletRequest req, HttpServletResponse resp)
+			throws IOException {
+		String[] fields = { "username", "password", "email", "name", "surname" };
+		Map<String, String> values = new HashMap<String, String>();
+
+		for (String fieldName : fields) {
+			String value = req.getParameter(fieldName);
+
+			if (value != null) {
+				values.put(fieldName, value);
+			} else {
+				req.getSession().setAttribute("retry", "registration");
+				resp.sendRedirect(req.getContextPath() + "/retry");
+				return;
+			}
+		}
+
+		// Retrieve bean used for registration
+		AuthenticationControllerRemote auth;
+
+		try {
+			auth = lookupBean(AuthenticationControllerRemote.class,
+					"AuthenticationController/remote");
+		} catch (NamingException e) {
+			// TODO
+			return;
+		}
+
+		try {
+			auth.createUser(values.get("username"), values.get("password"),
+					values.get("email"), values.get("name"),
+					values.get("surname"));
+		} catch (UsernameAlreadyTakenException e) {
+			// TODO Auto-generated catch block
+			return;
+		} catch (EmailAlreadyTakenException e) {
+			// TODO Auto-generated catch block
+			return;
+		}
+
+		// Redirect user to home for the moment //TODO
+		resp.sendRedirect("/home/");
 	}
 
 	private void showPage(HttpServletRequest req, HttpServletResponse resp)
 			throws IOException, ServletException {
 		req.getRequestDispatcher(Misc.LANDING_JSP).forward(req, resp);
 	}
+
 }

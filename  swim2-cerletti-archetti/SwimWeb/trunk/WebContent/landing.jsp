@@ -49,7 +49,7 @@
 					%>
 					<h2>Registrati! &Egrave gratis, e lo sarà sempre.</h2>
 					<form id="regForm"
-						action="<%=request.getContextPath() + "/register"%>" method="post"
+						action="<%=request.getContextPath()%>/register" method="post"
 						class="welcomeForm">
 						<div class="inputLine">
 							<label class="inputLabel" for="username">Username</label> <input

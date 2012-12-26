@@ -11,7 +11,7 @@
 	<div id="swimContentContainer">
 		<div id="swimContent" class="topWidthElement">
 			<form id="searchForm"
-				action="<%=request.getContextPath() + "/search"%>" method="post">
+				action="<%=request.getContextPath() + "/perform"%>" method="post">
 				<div class="inputLine">
 					<label class="inputLabel" for="name">Nome</label> 
 					<input type="text" id="name" name="name" class="inputtext" />

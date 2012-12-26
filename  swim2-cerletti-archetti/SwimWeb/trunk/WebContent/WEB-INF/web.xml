@@ -28,6 +28,16 @@
   <servlet-name>CustomerFriendship</servlet-name>
   <servlet-class>it.polimi.swim.web.servlets.CustomerFriendshipServlet</servlet-class>
  </servlet>
+ <servlet>
+  <display-name>GenericProfile</display-name>
+  <servlet-name>GenericProfile</servlet-name>
+  <servlet-class>it.polimi.swim.web.servlets.GenericProfileServlet</servlet-class>
+ </servlet>
+ <servlet>
+  <display-name>Search</display-name>
+  <servlet-name>Search</servlet-name>
+  <servlet-class>it.polimi.swim.web.servlets.SearchServlet</servlet-class>
+ </servlet>
  <servlet-mapping>
   <servlet-name>PersonalPage</servlet-name>
   <url-pattern>/home/*</url-pattern>
@@ -45,6 +55,10 @@
   <url-pattern>/friends/*</url-pattern>
  </servlet-mapping>
  <servlet-mapping>
+  <servlet-name>GenericProfile</servlet-name>
+  <url-pattern>/user/*</url-pattern>
+ </servlet-mapping>
+ <servlet-mapping>
   <servlet-name>Authentication</servlet-name>
   <url-pattern>/landing</url-pattern>
  </servlet-mapping>
@@ -59,6 +73,14 @@
  <servlet-mapping>
   <servlet-name>Authentication</servlet-name>
   <url-pattern>/retry</url-pattern>
+ </servlet-mapping>
+ <servlet-mapping>
+  <servlet-name>Authentication</servlet-name>
+  <url-pattern>/register</url-pattern>
+ </servlet-mapping>
+ <servlet-mapping>
+  <servlet-name>Search</servlet-name>
+  <url-pattern>/search/*</url-pattern>
  </servlet-mapping>
  <welcome-file-list>
   <welcome-file>landing</welcome-file>
