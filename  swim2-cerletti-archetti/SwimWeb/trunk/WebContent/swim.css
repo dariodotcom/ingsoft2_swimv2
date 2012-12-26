@@ -347,6 +347,24 @@ h1.pageTitle{
 	font-weight: bold;
 }
 
+#swimContent .inputLine{
+	margin-top: 10px;
+}
+
+#swimContent .inputLabel{
+	display: inline-block;
+	width: 140px;
+}
+
+#swimContent .inputtext{
+	width: 170px;
+}
+
+#swimContent .inputsubmit{
+	display: block;
+	margin: 25px auto 0;
+}
+
 /*Footer*/
 #swimFooter{
 	padding: 8px 0;
@@ -389,19 +407,6 @@ body.retry #formContainer {
 	margin: 0 auto;
 }
 
-#formContainer .inputLine{
-	margin-top: 10px;
-}
-
-#formContainer .inputLabel{
-	display: inline-block;
-	width: 140px;
-}
-
-#formContainer .inputtext{
-	width: 170px;
-}
-
 body.welcome #formContainer h2{
 	font-size: 20px;
 }
@@ -415,8 +420,31 @@ p.error{
 	box-shadow: 0 -1px 0 rgba(255,255,255,.4) inset;
 }
 
-#formContainer .inputsubmit{
-	display: block;
-	margin: 25px auto 0;
+/*USER PROFILE*/
+#profileHeader{
+	padding: 35px 50px;
+}
+
+#profileHeader .imageContainer,
+#profileHeader .headerElem{
+	display: inline-block;
+	vertical-align: middle;
+}
 	
+#profileHeader .imageContainer{
+	padding: 4px;
+	border-radius: 1px;
+	box-shadow: 0 0 2px 0 rgba(0,0,0,.6);
+}
+
+#profileHeader .username{
+	font-size: 40px;
+	font-weight: bold;
+	color: #444444;
+	margin: 0 75px 0 35px;
+}
+
+#profileHeader .userControls{
+	float: right;
+	margin: 39px 5px;
 }

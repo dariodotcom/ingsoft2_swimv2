@@ -1,3 +1,4 @@
+<%@page import="it.polimi.swim.business.bean.UserType"%>
 <%@page import="it.polimi.swim.web.servlets.AuthenticationServlet"%>
 <%@page import="it.polimi.swim.web.pagesupport.MenuDescriptor"%>
 <%@page import="it.polimi.swim.web.pagesupport.UnloggedMenu"%>
@@ -11,16 +12,20 @@
 			.getAttribute(AuthenticationServlet.LOGGED_ATTRIBUTE);
 	Boolean userLoggedIn = (logged != null) && (Boolean) logged;
 
-	if (userLoggedIn) {
-		String type = (String) session
-				.getAttribute(AuthenticationServlet.LOGGED_USERTYPE);
-		if (type.equalsIgnoreCase(AuthenticationServlet.USERTYPE_ADMIN)) {
-			menuElements = AdminMenu.values();
-		} else {
-			menuElements = CustomerMenu.values();
-		}
-	} else {
+	UserType type = (UserType) session
+			.getAttribute(AuthenticationServlet.LOGGED_USERTYPE);
+
+	if (type == null) {
 		menuElements = UnloggedMenu.values();
+	} else {
+		switch (type) {
+		case ADMINISTRATOR:
+			menuElements = AdminMenu.values();
+			break;
+		case CUSTOMER:
+			menuElements = CustomerMenu.values();
+			break;
+		}
 	}
 
 	MenuDescriptor selectedTab = (MenuDescriptor) request
@@ -39,7 +44,8 @@
 		%>
 		<div id="swimUserAwareness">
 			<div id="userImageFrame">
-				<img src="<%=request.getContextPath()%>/resources/user-img.png" alt="user image" />
+				<img src="<%=request.getContextPath()%>/resources/user-img.png"
+					alt="user image" />
 			</div>
 			<span id="userControl"> <span id="userName">Dario
 					Archetti</span><br /> <a id="userLogout" href="./.">Esci</a>

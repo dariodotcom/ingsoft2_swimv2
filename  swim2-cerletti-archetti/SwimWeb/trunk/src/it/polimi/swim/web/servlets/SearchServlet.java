@@ -1,5 +1,7 @@
 package it.polimi.swim.web.servlets;
 
+import it.polimi.swim.web.pagesupport.Misc;
+
 import java.io.IOException;
 
 import javax.servlet.ServletException;
@@ -42,7 +44,7 @@ public class SearchServlet extends SwimServlet {
 
 		/* POST request actions */
 		
-		registerPostActionMapping("/search", new ServletAction() {
+		registerPostActionMapping("/perform", new ServletAction() {
 			public void runAction(HttpServletRequest req,
 					HttpServletResponse resp) {
 				doPerformSearch(req, resp);
@@ -58,11 +60,11 @@ public class SearchServlet extends SwimServlet {
 
 	private void showSearchPage(HttpServletRequest req, HttpServletResponse resp)
 			throws IOException, ServletException {
-		req.getRequestDispatcher("search.jsp").forward(req, resp);
+		req.getRequestDispatcher(Misc.SEARCH_JSP).forward(req, resp);
 	}
 	
 	private void showSearchResultPage(HttpServletRequest req, HttpServletResponse resp)
 			throws IOException, ServletException {
-		req.getRequestDispatcher("search.jsp").forward(req, resp);
+		req.getRequestDispatcher(Misc.SEARCH_JSP).forward(req, resp);
 	}
 }
