@@ -16,7 +16,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 /**
- * Session Bean implementation class AbilityController
+ * Session Bean implementation class AbilityController.
  */
 @Stateless
 public class AbilityController implements AbilityControllerRemote {
@@ -24,6 +24,9 @@ public class AbilityController implements AbilityControllerRemote {
 	@PersistenceContext(unitName = "swim")
 	EntityManager manager;
 
+	/**
+	 * Class constructor.
+	 */
 	public AbilityController() {
 		// TODO Auto-generated constructor stub
 	}

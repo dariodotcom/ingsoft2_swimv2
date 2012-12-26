@@ -14,7 +14,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 /**
- * Session Bean implementation class FriendshipController
+ * Session Bean implementation class FriendshipController.
  */
 @Stateless
 public class FriendshipController implements FriendshipControllerRemote {

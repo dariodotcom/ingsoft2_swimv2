@@ -20,7 +20,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 /**
- * Session Bean implementation class AuthenticationControl
+ * Session Bean implementation class AuthenticationController.
  */
 @Stateless
 public class AuthenticationController implements AuthenticationControllerRemote {

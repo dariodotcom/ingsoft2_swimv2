@@ -12,7 +12,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 /**
- * Session Bean implementation class UserProfileController
+ * Session Bean implementation class UserProfileController.
  */
 @Stateless
 public class UserProfileController implements UserProfileControllerRemote {
