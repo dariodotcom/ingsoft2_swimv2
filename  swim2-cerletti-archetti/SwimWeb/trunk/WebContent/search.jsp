@@ -25,7 +25,7 @@
 					<input type="text" id="location" name="location" class="inputtext" />
 				</div>
 				<div class="inputLine">
-					<label class="inputLabel" for="ability">Abilita' richiesta</label> 
+					<label class="inputLabel" for="ability">Abilit&agrave; richiesta</label> 
 					<input type="text" id="ability" name="ability" class="inputtext" />
 				</div>
 				<div class="inputLine">
