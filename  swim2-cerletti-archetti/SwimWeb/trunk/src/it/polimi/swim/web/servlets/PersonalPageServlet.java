@@ -167,8 +167,6 @@ public class PersonalPageServlet extends SwimServlet {
 
 		Customer c = profile.getByUsername(username);
 		
-		System.out.println("surname: " + c.getSurname());
-		
 		//Put user informations in request
 		req.setAttribute(USER_ATTR, c);
 		

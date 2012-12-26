@@ -6,13 +6,13 @@
 <head>
 <%@ include file="shared/head.jsp"%>
 </head>
-<body class="swim">
+<body class="swim search">
 	<%@include file="shared/header.jsp"%>
 	<div id="swimContentContainer">
 		<div id="swimContent" class="topWidthElement">
-			<div id="formContainer">
+			<div class="formContainer">
 				<form id="searchForm"
-					action="<%=request.getContextPath() + "/perform"%>" method="post">
+					action="<%=request.getContextPath() + "/search/perform"%>" method="post">
 					<div class="inputLine">
 						<label class="inputLabel" for="name">Nome</label> <input
 							type="text" id="name" name="name" class="inputtext" />
