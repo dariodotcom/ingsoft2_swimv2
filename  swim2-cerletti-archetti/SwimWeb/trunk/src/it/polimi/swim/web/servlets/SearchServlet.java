@@ -42,7 +42,7 @@ public class SearchServlet extends SwimServlet {
 
 		/* POST request actions */
 		
-		registerPostActionMapping("search", new ServletAction() {
+		registerPostActionMapping("/search", new ServletAction() {
 			public void runAction(HttpServletRequest req,
 					HttpServletResponse resp) {
 				doPerformSearch(req, resp);
