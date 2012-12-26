@@ -32,7 +32,7 @@ public class SearchServlet extends SwimServlet {
 			}
 		});
 		
-		registerGetActionMapping("", new ServletAction() {
+		registerGetActionMapping("results", new ServletAction() {
 			public void runAction(HttpServletRequest req,
 					HttpServletResponse resp) throws IOException,
 					ServletException {
