@@ -41,6 +41,7 @@ public class AuthenticationServlet extends SwimServlet {
 		setSectionName("");
 
 		/* GET request actions */
+		
 		ServletAction showPage = new ServletAction() {
 			public void runAction(HttpServletRequest req,
 					HttpServletResponse resp) throws IOException,
@@ -50,6 +51,7 @@ public class AuthenticationServlet extends SwimServlet {
 		};
 
 		registerGetActionMapping("landing", showPage);
+		
 		registerGetActionMapping("retry", showPage);
 
 		registerGetActionMapping("logout", new ServletAction() {
@@ -59,6 +61,8 @@ public class AuthenticationServlet extends SwimServlet {
 				doLogout(req, resp);
 			}
 		});
+		
+		registerGetActionMapping("about", showAbout);
 		
 		/* POST request actions */
 
@@ -191,6 +195,11 @@ public class AuthenticationServlet extends SwimServlet {
 	private void showPage(HttpServletRequest req, HttpServletResponse resp)
 			throws IOException, ServletException {
 		req.getRequestDispatcher(Misc.LANDING_JSP).forward(req, resp);
+	}
+	
+	private void showAbout(HttpServletRequest req, HttpServletResponse resp)
+			throws IOException, ServletException {
+		req.getRequestDispatcher(Misc.ABOUT_JSP).forward(req, resp);
 	}
 
 }
