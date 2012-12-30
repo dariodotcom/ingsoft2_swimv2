@@ -141,15 +141,19 @@ public abstract class SwimServlet extends HttpServlet {
 		req.getRequestDispatcher("/error.jsp").forward(req, resp);
 	}
 	
-	protected <T> T lookupBean(Class<T> beanClass, String beanName)
-			throws NamingException {
+	protected <T> T lookupBean(Class<T> beanClass, String beanName){
 		Hashtable<String, String> env = new Hashtable<String, String>();
 		env.put(Context.INITIAL_CONTEXT_FACTORY,
 				"org.jnp.interfaces.NamingContextFactory");
 		env.put(Context.PROVIDER_URL, "localhost:1099");
-		InitialContext jndiContext = new InitialContext(env);
-
-		return beanClass.cast(jndiContext.lookup(beanName));
+		
+		try{
+			InitialContext jndiContext = new InitialContext(env);
+			return beanClass.cast(jndiContext.lookup(beanName));
+		}catch (NamingException e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 	
 	public static boolean isUserLoggedIn(HttpSession session) {

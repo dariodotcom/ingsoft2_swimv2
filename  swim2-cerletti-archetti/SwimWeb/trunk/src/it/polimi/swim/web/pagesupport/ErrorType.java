@@ -14,6 +14,26 @@ public enum ErrorType {
 	LOGIN_REQUIRED(
 			"Login Required",
 			"Non puoi accedere alla funzionalità che hai richiesto perchè essa è disponibile solo per gli utenti registrati."
+			),
+	BAD_EMAIL(
+			"Email non valida",
+			"L'indirizzo email inserito non è valido."
+			),
+	INCORRECT_PASSWORD(
+			"Password non corretta",
+			"La password corrente inserita non è corretta."
+			),
+	INVALID_PASSWORD(
+			"Password non valida",
+			"La nuova password inserita inserita non è valida."
+			),
+	EMAIL_NOT_AVAILABLE(
+			"Email non libera",
+			"L'indirizzo email inserito è già in uso."
+			),
+	EMPTY_FIELDS(
+			"Empty Fields",
+			"Alcuni campi obbligatori sono vuoti."
 			);
 
 	private String errorName, errorDescription;

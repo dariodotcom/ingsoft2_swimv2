@@ -1,8 +1,11 @@
+<%@page import="it.polimi.swim.web.pagesupport.ErrorType"%>
+<%@page import="it.polimi.swim.web.pagesupport.NotificationMessages"%>
 <%@page import="it.polimi.swim.web.servlets.PersonalPageServlet"%>
 <%@page
 	import="it.polimi.swim.web.servlets.PersonalPageServlet.PersonalPageSection"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -13,6 +16,14 @@
 
 	request.setAttribute(Misc.PAGE_TITLE_ATTR,
 			selectedSection.getSectionName());
+
+	Customer customer = (Customer) request
+			.getAttribute(Misc.USER_TO_SHOW);
+
+	NotificationMessages notification = (NotificationMessages) request
+			.getAttribute(Misc.NOTIFICATION_ATTR);
+
+	ErrorType error = (ErrorType) request.getAttribute(Misc.ERROR_ATTR);
 %>
 <%@ include file="shared/head.jsp"%>
 <body class="swim">
@@ -36,54 +47,168 @@
 				</ul>
 			</div>
 			<div id="rightColumn" class="column">
-				<%
-					switch (selectedSection) {
-					case HOME:
-				%>
-				<div class="text">Quisque congue auctor magna sed egestas.
-					Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec
-					facilisis, felis vel iaculis commodo, tellus tellus euismod mi,
-					eget volutpat quam massa id nunc. Sed eget urna a metus luctus
-					molestie quis dictum enim. Nulla facilisis tortor vel velit
-					volutpat malesuada. Pellentesque pellentesque ligula ac neque
-					tincidunt lobortis. Sed malesuada leo et enim scelerisque sed
-					congue orci imperdiet. Curabitur id arcu neque. Sed lacinia
-					dignissim eros in molestie. Maecenas vehicula iaculis adipiscing.
-					Nam mattis, massa nec accumsan imperdiet, nibh tortor feugiat
-					neque, vel tincidunt nisl mauris et libero. Vestibulum eget
-					imperdiet quam. Nulla facilisi. Donec ut libero tellus. Praesent
-					ullamcorper elit diam, sed euismod orci. Integer vel sem lacus.</div>
+				<div class="profilePage">
 
-				<%
-					break;
-					case EDIT_PROFILE:
-				%>
-				<div class="text">Quisque congue auctor magna sed egestas.
-					Vivamus leo arcu, ornare elementum imperdiet a, commodo sit amet
-					diam. Pellentesque consequat, quam sit amet commodo dictum, mauris
-					lectus fringilla metus, ac tempor mi enim at tellus. Duis in felis
-					erat, vel dictum leo. Maecenas semper justo eget dolor ultrices ac
-					malesuada sapien commodo. Duis diam elit, placerat ut vestibulum
-					vitae, sagittis id velit. In fringilla tincidunt urna vehicula
-					porttitor. Nam et quam quis risus faucibus sollicitudin. Ut
-					bibendum, ipsum et vulputate faucibus, odio diam blandit enim, at
-					pellentesque eros eros ut turpis. Cras hendrerit, augue vitae
-					ullamcorper aliquam, risus erat egestas leo, at congue ipsum ipsum
-					in ligula. Fusce sapien mauris, consectetur at semper sit amet,
-					convallis vel metus. Donec vestibulum justo vel quam laoreet
-					imperdiet sed facilisis augue. Nunc ornare augue non sem rhoncus
-					condimentum sit amet sit amet lacus. Aenean eget orci hendrerit
-					quam fermentum elementum. Etiam nec orci purus, quis dictum nulla.
+					<%
+						if (notification != null) {
+					%>
+					<p class="notification">
+						<%=notification.getDescription()%>
+					</p>
+					<%
+						}
+
+						if (error != null) {
+					%>
+					<p class="error">
+						<%=error.getErrorDescription()%>
+					</p>
+					<%
+						}
+					%>
+
+					<div class="pageHeading">
+						<h1 class="pageTitle"><%=selectedSection.getSectionName()%></h1>
+					</div>
+					<div class="monoPageContent">
+						<%
+							switch (selectedSection) {
+							case HOME:
+						%>
+						<%@include file="shared/userProfileDetails.jsp"%>
+						<%
+							break;
+							case EDIT_PROFILE:
+						%>
+						<form action="<%=request.getContextPath()%>/home/editProfile"
+							method="post">
+							<div class="detail">
+								<div class="detailName">
+									<label for="editName">Nome</label>
+								</div>
+								<div class="detailValue">
+									<input type="text" name="name" value="<%=customer.getName()%>"
+										id="editName" class="inputtext" />
+								</div>
+							</div>
+
+							<div class="detail">
+								<div class="detailName">
+									<label for="editSurname">Cognome</label>
+								</div>
+								<div class="detailValue">
+									<input type="text" name="surname"
+										value="<%=customer.getSurname()%>" id="editSurname"
+										class="inputtext" />
+								</div>
+							</div>
+
+							<div class="detail">
+								<div class="detailName">
+									<label for="editBirthdate">Data di nascita (gg/mm/aaaa)</label>
+								</div>
+								<div class="detailValue">
+									<input type="text" name="birthdate"
+										value="<%=Misc.parseDate(customer.getBirthDate())%>"
+										id="editBirthdate" class="inputtext" />
+								</div>
+							</div>
+
+							<div class="detail">
+								<div class="detailName">
+									<label for="editLocation">Luogo di residenza</label>
+								</div>
+								<div class="detailValue">
+									<input type="text" name="location"
+										value="<%=Misc.nullfix(customer.getLocation())%>"
+										id="editName" class="inputtext" />
+								</div>
+							</div>
+							<div class="submitLine">
+								<input type="submit" class="inputsubmit" value="Salva" />
+							</div>
+						</form>
+						<%
+							break;
+							case EDIT_ACCOUNT:
+						%>
+						<h2 class="partTitle">Modifica email</h2>
+						<div class="part">
+							<form action="<%=request.getContextPath()%>/home/changePassword"
+								method="post">
+
+								<div class="detail">
+									<div class="detailName">
+										<label for="currentPassword">Password corrente</label>
+									</div>
+									<div class="detailValue">
+										<input type="password" name="currentpassword"
+											id="currentPassword" class="inputtext" />
+									</div>
+								</div>
+
+								<div class="detail">
+									<div class="detailName">
+										<label for="editPassword">Password</label>
+									</div>
+									<div class="detailValue">
+										<input type="password" name="password" id="editPassword"
+											class="inputtext" />
+									</div>
+								</div>
+
+								<div class="detail">
+									<div class="detailName">
+										<label for="editPasswordRepeat">Ripeti password</label>
+									</div>
+									<div class="detailValue">
+										<input type="password" name="passwordrepeat"
+											id="editPasswordRepeat" class="inputtext" />
+									</div>
+								</div>
+
+								<div class="submitLine">
+									<input type="submit" class="inputsubmit"
+										value="Modifica password" />
+								</div>
+							</form>
+						</div>
+
+						<h2 class="partTitle">Modifica email</h2>
+						<div class="part">
+							<form action="<%=request.getContextPath()%>/home/changeEmail"
+								method="post">
+
+								<div class="detail">
+									<div class="detailName">
+										<label for="currentPassword2">Password corrente</label>
+									</div>
+									<div class="detailValue">
+										<input type="password" name="currentpassword"
+											id="currentPassword2" class="inputtext" />
+									</div>
+								</div>
+
+								<div class="detail">
+									<div class="detailName">
+										<label for="editEmail">Email</label>
+									</div>
+									<div class="detailValue">
+										<input type="text" name="newemail" id="editEmail"
+											class="inputtext" value="<%=customer.getEmail()%>" />
+									</div>
+								</div>
+								<div class="submitLine">
+									<input type="submit" class="inputsubmit" value="Modifica email" />
+								</div>
+							</form>
+						</div>
+						<%
+							break;
+							}
+						%>
+					</div>
 				</div>
-				<%
-					break;
-					case EDIT_ACCOUNT:
-				%>
-				<div class="text"></div>
-				<%
-					break;
-					}
-				%>
 			</div>
 		</div>
 	</div>

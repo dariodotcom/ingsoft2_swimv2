@@ -1,13 +1,22 @@
 package it.polimi.swim.web.servlets;
 
+import it.polimi.swim.business.bean.remote.AuthenticationControllerRemote;
 import it.polimi.swim.business.bean.remote.UserProfileControllerRemote;
 import it.polimi.swim.business.entity.Customer;
+import it.polimi.swim.business.exceptions.AuthenticationFailedException;
+import it.polimi.swim.business.exceptions.EmailAlreadyTakenException;
 import it.polimi.swim.web.pagesupport.CustomerMenu;
+import it.polimi.swim.web.pagesupport.ErrorType;
 import it.polimi.swim.web.pagesupport.Misc;
+import it.polimi.swim.web.pagesupport.NotificationMessages;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
-import javax.naming.NamingException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -21,7 +30,6 @@ public class PersonalPageServlet extends SwimServlet {
 	private static final long serialVersionUID = 1L;
 
 	public static final String CONTEXT_NAME = "home";
-
 	public static final String USER_ATTR = "user";
 
 	public enum PersonalPageSection {
@@ -88,21 +96,24 @@ public class PersonalPageServlet extends SwimServlet {
 
 		registerPostActionMapping("editProfile", new ServletAction() {
 			public void runAction(HttpServletRequest req,
-					HttpServletResponse resp) throws IOException {
+					HttpServletResponse resp) throws IOException,
+					ServletException {
 				doChangeUserInformations(req, resp);
 			}
 		});
 
 		registerPostActionMapping("changePassword", new ServletAction() {
 			public void runAction(HttpServletRequest req,
-					HttpServletResponse resp) throws IOException {
+					HttpServletResponse resp) throws IOException,
+					ServletException {
 				doChangePassword(req, resp);
 			}
 		});
 
 		registerPostActionMapping("changeEmail", new ServletAction() {
 			public void runAction(HttpServletRequest req,
-					HttpServletResponse resp) throws IOException {
+					HttpServletResponse resp) throws IOException,
+					ServletException {
 				doChangeEmail(req, resp);
 			}
 		});
@@ -118,17 +129,124 @@ public class PersonalPageServlet extends SwimServlet {
 	/* Methods to respond to different requests */
 
 	private void doChangePassword(HttpServletRequest req,
-			HttpServletResponse resp) {
+			HttpServletResponse resp) throws IOException, ServletException {
 
+		String currentPassword = req.getParameter("currentpassword");
+		String newPassword = req.getParameter("password");
+
+		if (currentPassword == null || newPassword == null) {
+			req.setAttribute(Misc.ERROR_ATTR, ErrorType.EMPTY_FIELDS);
+			showSection(PersonalPageSection.EDIT_ACCOUNT, req, resp);
+			return;
+		}
+
+		HttpSession session = req.getSession();
+		String username = (String) session
+				.getAttribute(AuthenticationServlet.LOGGED_USERNAME);
+
+		// Check password length
+		if (newPassword.length() < Misc.MIN_PASSWORD_LENGTH) {
+			req.setAttribute(Misc.ERROR_ATTR, ErrorType.INVALID_PASSWORD);
+			showSection(PersonalPageSection.EDIT_ACCOUNT, req, resp);
+			return;
+		}
+
+		// Authenticate request
+		if (!authenticateRequest(currentPassword, req)) {
+			req.setAttribute(Misc.ERROR_ATTR, ErrorType.INCORRECT_PASSWORD);
+			showSection(PersonalPageSection.EDIT_ACCOUNT, req, resp);
+			return;
+		}
+
+		// Now request is authenticated. Update password!
+		UserProfileControllerRemote profile = lookupBean(
+				UserProfileControllerRemote.class, Misc.BeanNames.PROFILE);
+
+		profile.changePassword(username, newPassword);
+
+		req.setAttribute(Misc.NOTIFICATION_ATTR,
+				NotificationMessages.PASSWORD_CHANGED);
+		showSection(PersonalPageSection.EDIT_ACCOUNT, req, resp);
 	}
 
-	private void doChangeEmail(HttpServletRequest req, HttpServletResponse resp) {
+	private void doChangeEmail(HttpServletRequest req, HttpServletResponse resp)
+			throws ServletException, IOException {
+		String currentPassword = req.getParameter("currentpassword");
+		HttpSession session = req.getSession();
+		String newEmail = req.getParameter("newemail");
 
+		// Check email
+
+		// Authenticate request
+		if (!authenticateRequest(currentPassword, req)) {
+			// Send error
+			req.setAttribute(Misc.ERROR_ATTR, ErrorType.INCORRECT_PASSWORD);
+			showSection(PersonalPageSection.EDIT_ACCOUNT, req, resp);
+			return;
+		}
+
+		String username = (String) session
+				.getAttribute(AuthenticationServlet.LOGGED_USERNAME);
+
+		UserProfileControllerRemote profile = lookupBean(
+				UserProfileControllerRemote.class, Misc.BeanNames.PROFILE);
+
+		try {
+			profile.changeEmail(username, newEmail);
+		} catch (EmailAlreadyTakenException e) {
+			req.setAttribute(Misc.ERROR_ATTR, ErrorType.EMAIL_NOT_AVAILABLE);
+			showSection(PersonalPageSection.EDIT_ACCOUNT, req, resp);
+			return;
+		}
+
+		req.setAttribute(Misc.NOTIFICATION_ATTR,
+				NotificationMessages.EMAIL_CHANGED);
+		showSection(PersonalPageSection.EDIT_ACCOUNT, req, resp);
 	}
 
 	private void doChangeUserInformations(HttpServletRequest req,
-			HttpServletResponse resp) {
+			HttpServletResponse resp) throws ServletException, IOException {
 
+		HttpSession session = req.getSession();
+		String username = (String) session
+				.getAttribute(AuthenticationServlet.LOGGED_USERNAME);
+
+		String[] fields = { "name", "surname", "birthdate", "location" };
+		String[] nonNullableFields = { "name", "surname" };
+		Map<String, Object> values = new HashMap<String, Object>();
+
+		for (String field : fields) {
+			String value = req.getParameter(field);
+
+			if (Misc.isStringEmpty(value)
+					&& Arrays.asList(nonNullableFields).contains(field)) {
+				req.setAttribute(Misc.ERROR_ATTR, ErrorType.EMPTY_FIELDS);
+				showSection(PersonalPageSection.EDIT_PROFILE, req, resp);
+				return;
+			}
+
+			// For the field birthdate, convert it into a date.
+			if (field.equals("birthdate")) {
+				try {
+					Date d = Misc.DATE_FORMAT.parse(value);
+					values.put(field, d);
+				} catch (ParseException e) {
+					// Error in parsing date
+					return;
+				}
+			} else {
+				values.put(field, value);
+			}
+		}
+
+		// lookup bean to retrieve user informations
+		UserProfileControllerRemote profile = lookupBean(
+				UserProfileControllerRemote.class, Misc.BeanNames.PROFILE);
+		profile.updateCustomerDetails(username, values);
+
+		req.setAttribute(Misc.NOTIFICATION_ATTR,
+				NotificationMessages.DETAILS_CHANGED);
+		showSection(PersonalPageSection.EDIT_PROFILE, req, resp);
 	}
 
 	private void doAddAbilityToDeclaredSet(HttpServletRequest req,
@@ -156,24 +274,34 @@ public class PersonalPageServlet extends SwimServlet {
 				.getAttribute(AuthenticationServlet.LOGGED_USERNAME));
 
 		// lookup bean to retrieve user informations
-		UserProfileControllerRemote profile;
-		try {
-			profile = lookupBean(UserProfileControllerRemote.class,
-					"UserProfileController/remote");
-		} catch (NamingException e) {
-			e.printStackTrace(); // TODO
-			return;
-		}
+		UserProfileControllerRemote profile = lookupBean(
+				UserProfileControllerRemote.class, Misc.BeanNames.PROFILE);
 
 		Customer c = profile.getByUsername(username);
-		
-		//Put user informations in request
-		req.setAttribute(USER_ATTR, c);
-		
-		//Set section to show
+
+		// Put user informations in request
+		req.setAttribute(Misc.USER_TO_SHOW, c);
+
+		// Set section to show
 		req.setAttribute(Misc.SELECTED_TAB_ATTR, CustomerMenu.HOME);
 		req.setAttribute(Misc.SELECTED_SECTION_ATTR, section);
 		req.getRequestDispatcher(Misc.HOME_JSP).forward(req, resp);
 		return;
+	}
+
+	private Boolean authenticateRequest(String password, HttpServletRequest req) {
+		AuthenticationControllerRemote auth = lookupBean(
+				AuthenticationControllerRemote.class,
+				Misc.BeanNames.AUTHENTICATION);
+		HttpSession session = req.getSession();
+		String username = (String) session
+				.getAttribute(AuthenticationServlet.LOGGED_USERNAME);
+
+		try {
+			auth.authenticateUser(username, password);
+			return true;
+		} catch (AuthenticationFailedException e) {
+			return false;
+		}
 	}
 }
