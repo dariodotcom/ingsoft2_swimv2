@@ -91,7 +91,7 @@ public class AuthenticationController implements AuthenticationControllerRemote 
 	//TODO eventuale documentazione se non si mette il metodo nella classe remota
 	public void confirmUserEmailAddress(String username)
 			throws UserNotFoundException {
-		findCustomerByUsername(username).setEmailConfirmed(true);
+		findCustomerByUsername(username).setEmailConfirmed();
 	}
 
 	//TODO eventuale documentazione se non si mette il metodo nella classe remota
