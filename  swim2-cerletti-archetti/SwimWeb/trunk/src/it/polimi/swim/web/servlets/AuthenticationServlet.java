@@ -49,6 +49,14 @@ public class AuthenticationServlet extends SwimServlet {
 				showPage(req, resp);
 			}
 		};
+		
+		ServletAction showAbout = new ServletAction() {
+			public void runAction(HttpServletRequest req,
+					HttpServletResponse resp) throws IOException,
+					ServletException {
+				showAbout(req, resp);
+			}
+		};
 
 		registerGetActionMapping("landing", showPage);
 		
