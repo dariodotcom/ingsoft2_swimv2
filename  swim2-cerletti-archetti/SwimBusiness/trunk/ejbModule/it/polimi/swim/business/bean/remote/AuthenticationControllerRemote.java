@@ -55,4 +55,10 @@ public interface AuthenticationControllerRemote {
 	public void createUser(String username, String password, String email,
 			String name, String surname) throws UsernameAlreadyTakenException,
 			EmailAlreadyTakenException;
+
+	// TODO Metodo public void confirmUserEmailAddress(String username) presente
+	// in AuthenticationController.
+
+	// TODO Metodo public String resetUserPassword(String username) presente in
+	// AuthenticationController.
 }

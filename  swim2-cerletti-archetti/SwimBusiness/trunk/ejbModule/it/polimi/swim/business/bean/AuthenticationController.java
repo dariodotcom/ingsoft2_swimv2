@@ -37,6 +37,9 @@ public class AuthenticationController implements AuthenticationControllerRemote 
 		// TODO Auto-generated constructor stub
 	}
 
+	/**
+	 * @see AuthenticationControllerRemote
+	 */
 	public UserType authenticateUser(String username, String password)
 			throws AuthenticationFailedException {
 		String queryString = "FROM User u WHERE username=:username";
@@ -65,6 +68,9 @@ public class AuthenticationController implements AuthenticationControllerRemote 
 		}
 	}
 
+	/**
+	 * @see AuthenticationControllerRemote
+	 */
 	public void createUser(String username, String password, String email,
 			String name, String surname) throws EmailAlreadyTakenException,
 			UsernameAlreadyTakenException {
@@ -82,11 +88,13 @@ public class AuthenticationController implements AuthenticationControllerRemote 
 		manager.persist(c);
 	}
 
+	//TODO eventuale documentazione se non si mette il metodo nella classe remota
 	public void confirmUserEmailAddress(String username)
 			throws UserNotFoundException {
 		findCustomerByUsername(username).setEmailConfirmed(true);
 	}
 
+	//TODO eventuale documentazione se non si mette il metodo nella classe remota
 	public String resetUserPassword(String username)
 			throws UserNotFoundException {
 		Customer c = findCustomerByUsername(username);
@@ -96,6 +104,7 @@ public class AuthenticationController implements AuthenticationControllerRemote 
 	}
 
 	/* Helpers */
+	
 	private boolean isEmailAvailable(String email) {
 		Query q = manager.createQuery("FROM Customer c WHERE c.email=:email");
 		q.setParameter("email", email);

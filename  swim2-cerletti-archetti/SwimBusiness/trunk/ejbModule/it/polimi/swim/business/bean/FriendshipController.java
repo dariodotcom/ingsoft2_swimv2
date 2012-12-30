@@ -29,6 +29,9 @@ public class FriendshipController implements FriendshipControllerRemote {
 		// TODO Auto-generated constructor stub
 	}
 
+	/**
+	 * @see FriendshipControllerRemote
+	 */
 	public void addFriendshipRequest(String senderUsr, String receiverUsr)
 			throws BadRequestException, InvalidStateException {
 		Customer sender = Helpers.getEntityChecked(manager, Customer.class,
@@ -45,6 +48,9 @@ public class FriendshipController implements FriendshipControllerRemote {
 		manager.persist(f);
 	}
 
+	/**
+	 * @see FriendshipControllerRemote
+	 */
 	public void respondToRequest(String responseAuthorUsr, int requestId,
 			boolean accepted) throws BadRequestException,
 			InvalidStateException, UnauthorizedRequestException {
@@ -69,17 +75,22 @@ public class FriendshipController implements FriendshipControllerRemote {
 		}
 	}
 
+	/**
+	 * @see FriendshipControllerRemote
+	 */
 	public void removeFriendship(String requestAuthorUsr, int requestId)
-			throws BadRequestException, InvalidStateException, UnauthorizedRequestException {
+			throws BadRequestException, InvalidStateException,
+			UnauthorizedRequestException {
 		Friendship friendship = Helpers.getEntityChecked(manager,
 				Friendship.class, requestId);
 		Customer author = Helpers.getEntityChecked(manager, Customer.class,
 				requestAuthorUsr);
-		
-		if(!(author.equals(friendship.getSender()) || author.equals(friendship.getReceiver()))){
+
+		if (!(author.equals(friendship.getSender()) || author.equals(friendship
+				.getReceiver()))) {
 			throw new UnauthorizedRequestException();
 		}
-		
+
 		manager.remove(friendship);
 	}
 }
