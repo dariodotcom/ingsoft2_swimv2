@@ -45,7 +45,7 @@
 					<%
 						}
 					%>
-					<div class="inputLine">
+					<div class="submitLine">
 						<input type="submit" value="Cerca" class="inputsubmit" />
 					</div>
 				</form>

@@ -12,7 +12,6 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.naming.NamingException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -41,7 +40,7 @@ public class AuthenticationServlet extends SwimServlet {
 		setSectionName("");
 
 		/* GET request actions */
-		
+
 		ServletAction showPage = new ServletAction() {
 			public void runAction(HttpServletRequest req,
 					HttpServletResponse resp) throws IOException,
@@ -49,7 +48,7 @@ public class AuthenticationServlet extends SwimServlet {
 				showPage(req, resp);
 			}
 		};
-		
+
 		ServletAction showAbout = new ServletAction() {
 			public void runAction(HttpServletRequest req,
 					HttpServletResponse resp) throws IOException,
@@ -58,8 +57,10 @@ public class AuthenticationServlet extends SwimServlet {
 			}
 		};
 
-		registerGetActionMapping("landing", showPage);
+		registerGetActionMapping("", showPage);
 		
+		registerGetActionMapping("landing", showPage);
+
 		registerGetActionMapping("retry", showPage);
 
 		registerGetActionMapping("logout", new ServletAction() {
@@ -69,9 +70,9 @@ public class AuthenticationServlet extends SwimServlet {
 				doLogout(req, resp);
 			}
 		});
-		
+
 		registerGetActionMapping("about", showAbout);
-		
+
 		/* POST request actions */
 
 		registerPostActionMapping("login", new ServletAction() {
@@ -81,7 +82,7 @@ public class AuthenticationServlet extends SwimServlet {
 				doLogin(req, resp);
 			}
 		});
-		
+
 		registerPostActionMapping("register", new ServletAction() {
 			public void runAction(HttpServletRequest req,
 					HttpServletResponse resp) throws IOException {
@@ -95,16 +96,10 @@ public class AuthenticationServlet extends SwimServlet {
 			throws IOException, ServletException {
 		HttpSession session = req.getSession();
 
-		AuthenticationControllerRemote auth;
-
 		// Retrieve the bean used for authentication
-		try {
-			auth = lookupBean(AuthenticationControllerRemote.class,
-					"AuthenticationController/remote");
-		} catch (NamingException e) {
-			// TODO
-			return;
-		}
+		AuthenticationControllerRemote auth = lookupBean(
+				AuthenticationControllerRemote.class,
+				Misc.BeanNames.AUTHENTICATION);
 
 		// Check user is not already logged in
 		if (!isUserLoggedIn(session)) {
@@ -174,15 +169,9 @@ public class AuthenticationServlet extends SwimServlet {
 		}
 
 		// Retrieve bean used for registration
-		AuthenticationControllerRemote auth;
-
-		try {
-			auth = lookupBean(AuthenticationControllerRemote.class,
-					"AuthenticationController/remote");
-		} catch (NamingException e) {
-			// TODO
-			return;
-		}
+		AuthenticationControllerRemote auth = lookupBean(
+				AuthenticationControllerRemote.class,
+				Misc.BeanNames.AUTHENTICATION);
 
 		try {
 			auth.createUser(values.get("username"), values.get("password"),
@@ -202,9 +191,14 @@ public class AuthenticationServlet extends SwimServlet {
 
 	private void showPage(HttpServletRequest req, HttpServletResponse resp)
 			throws IOException, ServletException {
+		if(isUserLoggedIn(req.getSession())){
+			resp.sendRedirect(req.getContextPath() + "/home/");
+			return;
+		}
+		
 		req.getRequestDispatcher(Misc.LANDING_JSP).forward(req, resp);
 	}
-	
+
 	private void showAbout(HttpServletRequest req, HttpServletResponse resp)
 			throws IOException, ServletException {
 		req.getRequestDispatcher(Misc.ABOUT_JSP).forward(req, resp);

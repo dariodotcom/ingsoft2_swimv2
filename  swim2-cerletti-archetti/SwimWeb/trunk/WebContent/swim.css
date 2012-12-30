@@ -239,6 +239,26 @@ body.swim{
 /*Content Layout*/
 
 /*Page Title*/
+p.notification,
+p.error{
+	margin: 30px 40px 0;
+	padding: 10px;
+	border-radius: 2px;
+	box-shadow: 0 -1px 0 rgba(255,255,255,.4) inset;
+}
+
+p.notification{
+	background-color: #72ed78;
+	border: 1px solid #2a572c;
+	color: #2a572c;
+}
+
+p.error{
+	background-color: #ed7272;
+	border: 1px solid #572a2a;
+	color: #572a2a;
+}
+
 .pageHeading{
 	padding: 30px 40px 0;
 }
@@ -252,13 +272,23 @@ h1.pageTitle{
 	border-bottom: 1px solid #bbbbbb;
 }
 
+#swimContent .part:not(:last-child){
+	margin-bottom: 35px;
+}
+
+h2.partTitle{
+	font-size: 20px;
+	color: #333333;
+	line-height: 35px;
+	vertical-align: middle;
+	margin-bottom: 25px;
+}
+
 /*MonoColumn*/
 .monoPageContent{
 	padding: 40px;
 	text-align: justify;
 }
-
-
 
 /*BiColumn*/
 #swimContent > .column{
@@ -346,10 +376,15 @@ h1.pageTitle{
 	box-shadow: 0 -1px 0 rgba(255,255,255,.3) inset;
 	text-shadow: 0 0 1px  #154869;
 	font-weight: bold;
+	display: block;
 }
 
 #swimContent .inputLine{
 	margin-top: 10px;
+}
+
+#swimContent .submitLine .inputsubmit{
+	margin: 25px auto 0;
 }
 
 #swimContent .inputLabel{
@@ -359,11 +394,6 @@ h1.pageTitle{
 
 #swimContent .inputtext{
 	width: 170px;
-}
-
-#swimContent .inputsubmit{
-	display: block;
-	margin: 25px auto 0;
 }
 
 /*Footer*/
@@ -414,42 +444,67 @@ body.welcome .formContainer h2{
 	font-size: 20px;
 }
 
-p.error{
-	padding: 10px;
-	background-color: #ed7272;
-	border-radius: 2px;
-	border: 1px solid #572a2a;
-	color: #572a2a;
-	box-shadow: 0 -1px 0 rgba(255,255,255,.4) inset;
+/* - USER PROFILE - */
+.profilePage .column{
+    display: inline-block;
+    vertical-align: top;
 }
 
-/*USER PROFILE*/
+.profilePage .imageFrame{
+    border-radius: 1px 1px 1px 1px;
+    box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.6);
+    padding: 4px;
+}
+
+.profilePage #detailColumn{
+    margin-left: 40px;
+}
+
+.profilePage .detail{
+    border-bottom: 1px solid #e1e1e1;
+    padding: 5px 3px;
+    margin-bottom: 20px;
+}
+
+.profilePage .detailName,
+.profilePage .detailValue{
+    display: inline-block;
+}
+
+.profilePage .detailName{
+    width: 250px;
+}
+
+.profilePage .detailValue:not(.unset){
+    font-weight: bold;
+}
+
+.profilePage .detailValue.unset{
+    color: #acacac
+}
+
 #profileHeader{
-	padding: 35px 50px;
-}
-
-#profileHeader .imageContainer,
-#profileHeader .headerElem{
-	display: inline-block;
-	vertical-align: middle;
-}
-	
-#profileHeader .imageContainer{
-	padding: 4px;
-	border-radius: 1px;
-	box-shadow: 0 0 2px 0 rgba(0,0,0,.6);
-}
-
-#profileHeader .username{
-	font-size: 40px;
-	font-weight: bold;
-	color: #444444;
-	margin: 0 75px 0 35px;
+	padding: 35px 30px 25px;
+	height: 30px;
 }
 
 #profileHeader .userControls{
 	float: right;
-	margin: 39px 5px;
+	margin-left: 25px;
+}
+
+#profileHeader .username{
+	float: left;
+}
+
+#profileHeader .username{
+	font-size: 30px;
+	color: #444444;
+	font-weight: 100;
+}
+
+#profileHeader .username .bold{
+	font-weight: bold;
 }
 
 /*SEARCH*/

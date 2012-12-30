@@ -76,7 +76,7 @@
 								password</label> <input type="password" id="passwordrepeat"
 								name="passwordrepeat" class="inputtext" />
 						</div>
-						<div class="inputLine">
+						<div class="submitLine">
 							<input type="submit" value="Registrati" class="inputsubmit" />
 						</div>
 					</form>
@@ -97,7 +97,7 @@
 								type="password" id="secPassword" name="password"
 								class="inputtext" />
 						</div>
-						<div class="inputLine">
+						<div class="submitLine">
 							<input type="submit" value="Login" class="inputsubmit" />
 						</div>
 					</form>
