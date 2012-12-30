@@ -19,4 +19,5 @@ public class Misc {
 	public static final String FRIENDS_JSP = "/friends.jsp";
 	public static final String USER_JSP = "/user.jsp";
 	public static final String SEARCH_JSP = "/search.jsp";
+	public static final String ABOUT_JSP = "/whatisswim.jsp";
 }
