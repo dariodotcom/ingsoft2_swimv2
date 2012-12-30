@@ -2,8 +2,10 @@ package it.polimi.swim.business.bean.remote;
 
 import it.polimi.swim.business.entity.Customer;
 import it.polimi.swim.business.entity.Friendship;
+import it.polimi.swim.business.exceptions.EmailAlreadyTakenException;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.ejb.Remote;
 
@@ -30,6 +32,7 @@ public interface UserProfileControllerRemote {
 	 * 
 	 * @return a List of Customer that are present in a user friend list.
 	 */
+
 	public List<Customer> getFriendList();
 
 	/**
@@ -71,4 +74,12 @@ public interface UserProfileControllerRemote {
 	 * @return the List of the user received feedbacks.
 	 */
 	public List<?> getReceivedFeedacks(String username);
+
+	public void updateCustomerDetails(String username,
+			Map<String, Object> values);
+
+	public void changePassword(String username, String password);
+
+	public void changeEmail(String username, String email)
+			throws EmailAlreadyTakenException;
 }

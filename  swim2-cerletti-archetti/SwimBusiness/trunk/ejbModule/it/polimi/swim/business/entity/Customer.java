@@ -95,6 +95,7 @@ public class Customer extends User {
 	 */
 	public void setEmail(String email) {
 		this.email = email;
+		this.emailConfirmed = false;
 	}
 
 	/**
@@ -202,14 +203,10 @@ public class Customer extends User {
 	}
 
 	/**
-	 * Setter method.
-	 * 
-	 * @param confirmed
-	 *            true if the customer e-mail has been confirmed, false
-	 *            otherwise.
-	 */
-	public void setEmailConfirmed(Boolean confirmed) {
-		this.emailConfirmed = confirmed;
+	 * Sets user email as confirmed.
+	 * */
+	public void setEmailConfirmed(){
+		this.emailConfirmed = true;
 	}
 
 	/**
