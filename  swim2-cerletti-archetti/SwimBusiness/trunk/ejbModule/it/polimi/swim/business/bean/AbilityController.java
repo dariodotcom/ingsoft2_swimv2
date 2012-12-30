@@ -31,6 +31,9 @@ public class AbilityController implements AbilityControllerRemote {
 		// TODO Auto-generated constructor stub
 	}
 
+	/**
+	 * @see AbilityControllerRemote
+	 */
 	public void addAbilityRequest(String authorUsr, String name,
 			String description) throws BadRequestException,
 			InvalidStateException {
@@ -49,6 +52,9 @@ public class AbilityController implements AbilityControllerRemote {
 		manager.persist(r);
 	}
 
+	/**
+	 * @see AbilityControllerRemote
+	 */
 	public void reviewAbilityRequest(String administratorUsr, int requestId,
 			Boolean response, String comment) throws BadRequestException,
 			InvalidStateException {
@@ -74,6 +80,9 @@ public class AbilityController implements AbilityControllerRemote {
 
 	}
 
+	/**
+	 * @see AbilityControllerRemote
+	 */
 	public void addNewAbility(String administratorUsr, String name,
 			String description) throws BadRequestException,
 			InvalidStateException {
@@ -81,25 +90,29 @@ public class AbilityController implements AbilityControllerRemote {
 		if (!isValidString(name) || !isValidString(description)) {
 			throw new BadRequestException();
 		}
-		
+
 		Administrator admin = getEntity(manager, Administrator.class,
 				administratorUsr);
-		
+
 		if (!isAbilityNameAvailable(name)) {
 			throw new InvalidStateException();
 		}
-		
+
 		Ability ab = new Ability(name, description, admin);
 		manager.persist(ab);
 
 	}
 
+	/**
+	 * @see AbilityControllerRemote
+	 */
 	public List<?> getAvailableAbilityList() {
 		Query q = manager.createQuery("FROM Ability");
 		return q.getResultList();
 	}
 
 	/* Helpers */
+
 	private boolean isValidString(String input) {
 		return input != null && input.length() > 0;
 	}
