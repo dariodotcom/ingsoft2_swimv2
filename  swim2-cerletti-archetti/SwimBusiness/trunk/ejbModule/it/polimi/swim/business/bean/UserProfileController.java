@@ -27,11 +27,17 @@ public class UserProfileController implements UserProfileControllerRemote {
 		// TODO Auto-generated constructor stub
 	}
 
+	/**
+	 * @see UserProfileControllerRemote
+	 */
 	public List<Customer> getFriendList() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
+	/**
+	 * @see UserProfileControllerRemote
+	 */
 	public List<?> getFriendshipRequest(String username) {
 		Query q = manager
 				.createQuery("FROM Friendship f WHERE f.receiver.username=:username AND f.confirmed=false");
@@ -39,23 +45,35 @@ public class UserProfileController implements UserProfileControllerRemote {
 		return q.getResultList();
 	}
 	
+	/**
+	 * @see UserProfileControllerRemote
+	 */
 	public List<?>	getSentFeedbacks(String username){
 		Query q = manager.createQuery("SELECT f FROM Feedback f JOIN (f.linkedRequest) r WHERE r.sender.username=:username");
 		q.setParameter("username", username);
 		return q.getResultList();
 	}
 	
+	/**
+	 * @see UserProfileControllerRemote
+	 */
 	public List<?> getReceivedFeedacks(String username){
 		Query q = manager.createQuery("SELECT f FROM Feedback f JOIN (f.linkedRequest) r WHERE r.receiver.username=:username");
 		q.setParameter("username", username);
 		return q.getResultList();
 	}
 
+	/**
+	 * @see UserProfileControllerRemote
+	 */
 	public List<Friendship> getFriendshipRequest() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
+	/**
+	 * @see UserProfileControllerRemote
+	 */
 	public Customer getByUsername(String username) {
 		return manager.find(Customer.class, username);
 	}

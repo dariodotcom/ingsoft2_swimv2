@@ -21,6 +21,9 @@ public class FeedbackController implements FeedbackControllerRemote {
 	@PersistenceContext(unitName = "swim")
 	EntityManager manager;
 
+	/**
+	 * @see FeedbackControllerRemote
+	 */
 	public void createFeedback(int workRequestId, String authorUsr, int mark,
 			String review) throws UnauthorizedRequestException,
 			BadRequestException, InvalidStateException {
@@ -52,6 +55,9 @@ public class FeedbackController implements FeedbackControllerRemote {
 		manager.persist(f);
 	}
 
+	/**
+	 * @see FeedbackControllerRemote
+	 */
 	public void replyToFeedback(int workRequestId, String authorUsr,
 			String reply) throws UnauthorizedRequestException,
 			BadRequestException, InvalidStateException {
@@ -76,7 +82,8 @@ public class FeedbackController implements FeedbackControllerRemote {
 		f.setReply(reply);
 	}
 
-	// Helpers
+	/* Helpers */
+	
 	private WorkRequest getWorkRequest(int id) throws BadRequestException {
 		WorkRequest request = manager.find(WorkRequest.class, id);
 		if(request == null){

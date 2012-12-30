@@ -27,6 +27,9 @@ public class WorkRequestController implements WorkRequestControllerRemote {
 		// TODO Auto-generated constructor stub
 	}
 
+	/**
+	 * @see WorkRequestControllerRemote
+	 */
 	public int createWorkRequest(String senderUsr, String receiverUsr)
 			throws BadRequestException {
 		Customer sender = getCustomer(senderUsr), receiver = getCustomer(receiverUsr);
@@ -39,6 +42,9 @@ public class WorkRequestController implements WorkRequestControllerRemote {
 		return w.getId();
 	}
 
+	/**
+	 * @see WorkRequestControllerRemote
+	 */
 	public void respondToWorkRequest(String responseAuthorUsr,
 			Boolean responseDescriptor, int workRequestId)
 			throws UnauthorizedRequestException, BadRequestException {
@@ -67,6 +73,9 @@ public class WorkRequestController implements WorkRequestControllerRemote {
 		}
 	}
 
+	/**
+	 * @see WorkRequestControllerRemote
+	 */
 	public void markRequestAsCompleted(String responseAuthorUsr,
 			int workRequestId) throws UnauthorizedRequestException,
 			BadRequestException {
@@ -91,6 +100,9 @@ public class WorkRequestController implements WorkRequestControllerRemote {
 		}
 	}
 
+	/**
+	 * @see WorkRequestControllerRemote
+	 */
 	public void sendMessage(String messageAuthorUsr, String text,
 			int workRequestId) throws UnauthorizedRequestException,
 			BadRequestException {
@@ -113,6 +125,7 @@ public class WorkRequestController implements WorkRequestControllerRemote {
 	}
 
 	/* Helpers */
+	
 	private Customer getCustomer(String username) throws BadRequestException {
 		Customer customer = manager.find(Customer.class, username);
 		if (customer == null) {
