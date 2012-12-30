@@ -255,6 +255,7 @@ h1.pageTitle{
 /*MonoColumn*/
 .monoPageContent{
 	padding: 40px;
+	text-align: justify;
 }
 
 
