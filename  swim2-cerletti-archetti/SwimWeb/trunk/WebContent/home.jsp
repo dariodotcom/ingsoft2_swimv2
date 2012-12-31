@@ -48,26 +48,24 @@
 			</div>
 			<div id="rightColumn" class="column">
 				<div class="profilePage">
-
-					<%
-						if (notification != null) {
-					%>
-					<p class="notification">
-						<%=notification.getDescription()%>
-					</p>
-					<%
-						}
-
-						if (error != null) {
-					%>
-					<p class="error">
-						<%=error.getErrorDescription()%>
-					</p>
-					<%
-						}
-					%>
-
 					<div class="pageHeading">
+						<%
+							if (notification != null) {
+						%>
+						<p class="notification">
+							<%=notification.getDescription()%>
+						</p>
+						<%
+							}
+
+							if (error != null) {
+						%>
+						<p class="error">
+							<%=error.getErrorDescription()%>
+						</p>
+						<%
+							}
+						%>
 						<h1 class="pageTitle"><%=selectedSection.getSectionName()%></h1>
 					</div>
 					<div class="monoPageContent">

@@ -236,12 +236,20 @@ body.swim{
 	min-height: 250px;
 }
 
+p.paragraph:not(:last-child){
+	margin-bottom: 25px;
+}
+
+p.paragraph{
+	line-height: 25px;
+}
+
 /*Content Layout*/
 
 /*Page Title*/
 p.notification,
 p.error{
-	margin: 30px 40px 0;
+	margin-bottom: 20px;
 	padding: 10px;
 	border-radius: 2px;
 	box-shadow: 0 -1px 0 rgba(255,255,255,.4) inset;
@@ -432,16 +440,13 @@ body.retry formContainer{
 	vertical-align: top;
 }
 
-.formContainer .welcomeForm{
-	margin-top: 30px;
-}
-
 body.retry .formContainer {
 	margin: 0 auto;
 }
 
 body.welcome .formContainer h2{
 	font-size: 20px;
+	margin-bottom: 30px;
 }
 
 /* - USER PROFILE - */

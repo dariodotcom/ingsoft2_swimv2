@@ -5,39 +5,40 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <%@ include file="shared/head.jsp"%>
-<body>
+<body class="swim">
 	<%@include file="shared/header.jsp"%>
 	<div id="swimContentContainer">
 		<div id="swimContent" class="topWidthElement">
-			<h1 id="pageTitle" class="pageTitle">Benvenuto sulla piattaforma
-				SWIM!</h1>
+			<div class="pageHeading">
+				<h1 class="pageTitle">Benvenuto sulla piattaforma SWIM!</h1>
+			</div>
 			<div id="pageContent" class="monoPageContent">
-				<p>Ogni giorno sempre piu' professionisti decidono di entrare a
-					far parte della rete professionale che offre maggiori possibilita'
-					in Italia: SWIM!</p>
-				<p>
+				<p class="paragraph">Ogni giorno sempre piu' professionisti
+					decidono di entrare a far parte della rete professionale che offre
+					maggiori possibilita' in Italia: SWIM!</p>
+				<p class="paragraph">
 					Il tuo profilo mostra le tue passate esperienze professionali e
 					formative, le raccomandazioni delle persone che hanno lavorato con
 					te o per le quali tu hai lavorato in passato e molto altro. <br />
 					Queste informazioni vengono condivise con le persone di cui ti fidi
 					e che a loro volta si fidano di te.
 				</p>
-				<p>Ma SWIM non e' soltanto costruire una rete di contatti
-					professionali, e' soprattutto aiutarti a convertire i contatti
-					nella tua rete in opportunita' per i tuoi affari.</p>
-				<p>Come certo saprai, connetterti con le giuste persone e'
-					fondamentale per raggiungere i tuoi obiettivi, ma nella vita reale
-					e' molto difficile. La ragione e' che non puoi avere sotto
-					controllo tutte le connessioni che sono intorno a te, come ad
-					esempio i contatti dei tuoi contatti: "chi conosce chi?". Senza una
-					mappa chiara e' come guidare senza destinazione, e cosi' e' molto
-					difficile, se non impossibile, raggiungere i propri obiettivi. SWIM
-					risolve questo problema rendendo visibili le reti di contatti
-					intorno a te: questo ti permettera' di pianificare le tue strategie
-					e raggiungere facilmente le persone che possono aiutartia crescere
-					nel tuo settore. Avrai cosi' la possibilita' di chiedere alle
-					giuste persone ottenendo le migliori indicazioni.</p>
-				<p>
+				<p class="paragraph">Ma SWIM non e' soltanto costruire una rete
+					di contatti professionali, e' soprattutto aiutarti a convertire i
+					contatti nella tua rete in opportunita' per i tuoi affari.</p>
+				<p class="paragraph">Come certo saprai, connetterti con le
+					giuste persone e' fondamentale per raggiungere i tuoi obiettivi, ma
+					nella vita reale e' molto difficile. La ragione e' che non puoi
+					avere sotto controllo tutte le connessioni che sono intorno a te,
+					come ad esempio i contatti dei tuoi contatti: "chi conosce chi?".
+					Senza una mappa chiara e' come guidare senza destinazione, e cosi'
+					e' molto difficile, se non impossibile, raggiungere i propri
+					obiettivi. SWIM risolve questo problema rendendo visibili le reti
+					di contatti intorno a te: questo ti permettera' di pianificare le
+					tue strategie e raggiungere facilmente le persone che possono
+					aiutartia crescere nel tuo settore. Avrai cosi' la possibilita' di
+					chiedere alle giuste persone ottenendo le migliori indicazioni.</p>
+				<p class="paragraph">
 					Vediamolo in pratica!<br /> Questa e' la storia di Laura, una
 					piccola imprenditrice che da molto tempo e' membro di SWIM. Laura
 					ha molti contatti, ma non ha mai pensato di sfruttarli per la sua
@@ -67,9 +68,9 @@
 					storia di Laura, ma come lei ci sono milioni di professionisti che
 					trovano in SWIM uno strumento indispensabile!
 				</p>
-				<p>E tu? Che aspetti? Non importa che livello di educazione hai
-					o che tipo di lavoro svolgi, tutto e' basato su conscenze. Tramite
-					SWIM ti connetterai con le giuste persone.</p>
+				<p class="paragraph">E tu? Che aspetti? Non importa che livello
+					di educazione hai o che tipo di lavoro svolgi, tutto e' basato su
+					conscenze. Tramite SWIM ti connetterai con le giuste persone.</p>
 			</div>
 		</div>
 	</div>

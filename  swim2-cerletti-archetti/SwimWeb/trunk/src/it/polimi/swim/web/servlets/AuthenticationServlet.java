@@ -7,6 +7,7 @@ import it.polimi.swim.business.exceptions.EmailAlreadyTakenException;
 import it.polimi.swim.business.exceptions.UsernameAlreadyTakenException;
 import it.polimi.swim.web.pagesupport.ErrorType;
 import it.polimi.swim.web.pagesupport.Misc;
+import it.polimi.swim.web.pagesupport.UnloggedMenu;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -58,7 +59,7 @@ public class AuthenticationServlet extends SwimServlet {
 		};
 
 		registerGetActionMapping("", showPage);
-		
+
 		registerGetActionMapping("landing", showPage);
 
 		registerGetActionMapping("retry", showPage);
@@ -106,13 +107,14 @@ public class AuthenticationServlet extends SwimServlet {
 			String username = (String) req.getParameter("username");
 			String password = (String) req.getParameter("password");
 
-			if (username == null || password == null) {
-				sendError(req, resp, ErrorType.BAD_REQUEST);
+			if (Misc.isStringEmpty(password) || Misc.isStringEmpty(username)) {
+				session.setAttribute(Misc.ERROR_ATTR, ErrorType.EMPTY_FIELDS);
+				session.setAttribute("retry", "login");
+				resp.sendRedirect(req.getContextPath() + "/retry");
 				return;
 			}
 
 			// Check user login details are valid
-
 			try {
 				UserType loggedUserType = auth.authenticateUser(username,
 						password);
@@ -124,6 +126,8 @@ public class AuthenticationServlet extends SwimServlet {
 
 			} catch (AuthenticationFailedException e) {
 				session.setAttribute("retry", "login");
+				session.setAttribute(Misc.ERROR_ATTR,
+						ErrorType.INVALID_CREDENTIALS);
 				resp.sendRedirect(req.getContextPath() + "/retry");
 				return;
 			}
@@ -155,17 +159,19 @@ public class AuthenticationServlet extends SwimServlet {
 			throws IOException {
 		String[] fields = { "username", "password", "email", "name", "surname" };
 		Map<String, String> values = new HashMap<String, String>();
+		HttpSession session = req.getSession();
 
 		for (String fieldName : fields) {
 			String value = req.getParameter(fieldName);
 
-			if (value != null) {
-				values.put(fieldName, value);
-			} else {
-				req.getSession().setAttribute("retry", "registration");
+			if (Misc.isStringEmpty(value)) {
+				session.setAttribute("retry", "registration");
+				session.setAttribute(Misc.ERROR_ATTR, ErrorType.EMPTY_FIELDS);
 				resp.sendRedirect(req.getContextPath() + "/retry");
 				return;
 			}
+
+			values.put(fieldName, value);
 		}
 
 		// Retrieve bean used for registration
@@ -178,10 +184,15 @@ public class AuthenticationServlet extends SwimServlet {
 					values.get("email"), values.get("name"),
 					values.get("surname"));
 		} catch (UsernameAlreadyTakenException e) {
-			// TODO Auto-generated catch block
+			session.setAttribute("retry", "registration");
+			session.setAttribute(Misc.ERROR_ATTR,
+					ErrorType.USERNAME_NOT_AVAILABLE);
+			resp.sendRedirect(req.getContextPath() + "/retry");
 			return;
 		} catch (EmailAlreadyTakenException e) {
-			// TODO Auto-generated catch block
+			session.setAttribute("retry", "registration");
+			session.setAttribute(Misc.ERROR_ATTR, ErrorType.EMAIL_NOT_AVAILABLE);
+			resp.sendRedirect(req.getContextPath() + "/retry");
 			return;
 		}
 
@@ -191,16 +202,17 @@ public class AuthenticationServlet extends SwimServlet {
 
 	private void showPage(HttpServletRequest req, HttpServletResponse resp)
 			throws IOException, ServletException {
-		if(isUserLoggedIn(req.getSession())){
+		if (isUserLoggedIn(req.getSession())) {
 			resp.sendRedirect(req.getContextPath() + "/home/");
 			return;
 		}
-		
+
 		req.getRequestDispatcher(Misc.LANDING_JSP).forward(req, resp);
 	}
 
 	private void showAbout(HttpServletRequest req, HttpServletResponse resp)
 			throws IOException, ServletException {
+		req.setAttribute(Misc.SELECTED_TAB_ATTR, UnloggedMenu.ABOUT);
 		req.getRequestDispatcher(Misc.ABOUT_JSP).forward(req, resp);
 	}
 
