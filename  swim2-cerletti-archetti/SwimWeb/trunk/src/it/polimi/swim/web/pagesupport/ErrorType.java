@@ -34,6 +34,14 @@ public enum ErrorType {
 	EMPTY_FIELDS(
 			"Empty Fields",
 			"Alcuni campi obbligatori sono vuoti."
+			),
+	USERNAME_NOT_AVAILABLE(
+			"Username non disponibile",
+			"Lo username che hai scelto non è disponibile."
+			),
+	INVALID_CREDENTIALS(
+			"Credenziali non valide",
+			"Le credenziali inserite non sono valide"
 			);
 
 	private String errorName, errorDescription;

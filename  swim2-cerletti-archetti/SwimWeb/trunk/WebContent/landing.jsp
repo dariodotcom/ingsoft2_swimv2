@@ -1,3 +1,4 @@
+<%@page import="it.polimi.swim.web.pagesupport.ErrorType"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
@@ -18,23 +19,35 @@
 
 	String bodyClass = (showLanding ? "welcome" : "retry");
 	request.setAttribute("selectedTab", UnloggedMenu.HOME);
+
+	ErrorType error = (ErrorType) session.getAttribute(Misc.ERROR_ATTR);
+
+	if (error != null) {
+		session.removeAttribute(Misc.ERROR_ATTR);
+	}
 %>
-
-
 <%@ include file="shared/head.jsp"%>
 <body class="swim <%=bodyClass%>">
 	<%@include file="shared/header.jsp"%>
 	<div id="swimContentContainer">
 		<div id="swimContent" class="topWidthElement">
-			<%
-				if (showLanding) {
-			%>
 			<div class="pageHeading">
+				<%
+					if (showLanding) {
+				%>
 				<h1 class="pageTitle">Benvenuto su Swim</h1>
+				<%
+					}
+
+					if (error != null) {
+				%>
+				<p class="error">
+					<%=error.getErrorDescription()%>
+				</p>
+				<%
+					}
+				%>
 			</div>
-			<%
-				}
-			%>
 			<div class="monoPageContent">
 				<%
 					if (showLanding) {
@@ -45,12 +58,16 @@
 				%>
 				<div class="formContainer welcomeColumn">
 					<%
-						if (showLanding || retryRegistration) {
+						if (showLanding) {
 					%>
 					<h2>Registrati! &Egrave; gratis, e lo sarà sempre.</h2>
-					<form id="regForm"
-						action="<%=request.getContextPath()%>/register" method="post"
-						class="welcomeForm">
+					<%
+						}
+
+						if (showLanding || retryRegistration) {
+					%>
+					<form id="regForm" action="<%=request.getContextPath()%>/register"
+						method="post" class="welcomeForm">
 						<div class="inputLine">
 							<label class="inputLabel" for="username">Username</label> <input
 								type="text" id="username" name="username" class="inputtext" />
@@ -83,8 +100,6 @@
 					<%
 						} else if (retryLogin) {
 					%>
-					<p class="error">I dati inseriti non sono corretti, per favore
-						riprova.</p>
 					<form id="secLoginForm"
 						action="<%=request.getContextPath() + "/login"%>" method="post"
 						class="welcomeForm">
