@@ -1,7 +1,9 @@
 package it.polimi.swim.web.servlets;
 
+import it.polimi.swim.business.bean.remote.AbilityControllerRemote;
 import it.polimi.swim.business.bean.remote.AuthenticationControllerRemote;
 import it.polimi.swim.business.bean.remote.UserProfileControllerRemote;
+import it.polimi.swim.business.entity.Ability;
 import it.polimi.swim.business.entity.Customer;
 import it.polimi.swim.business.exceptions.AuthenticationFailedException;
 import it.polimi.swim.business.exceptions.EmailAlreadyTakenException;
@@ -11,10 +13,12 @@ import it.polimi.swim.web.pagesupport.Misc;
 import it.polimi.swim.web.pagesupport.NotificationMessages;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.text.ParseException;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.ServletException;
@@ -91,6 +95,14 @@ public class PersonalPageServlet extends SwimServlet {
 						showSection(PersonalPageSection.EDIT_PROFILE, req, resp);
 					}
 				});
+
+		registerGetActionMapping("abilityList", new ServletAction() {
+			public void runAction(HttpServletRequest req,
+					HttpServletResponse resp) throws IOException,
+					ServletException {
+				getAbilityList(req, resp);
+			}
+		});
 
 		/* POST request actions */
 
@@ -302,5 +314,29 @@ public class PersonalPageServlet extends SwimServlet {
 		} catch (AuthenticationFailedException e) {
 			return false;
 		}
+	}
+
+	private void getAbilityList(HttpServletRequest req, HttpServletResponse resp)
+			throws IOException {
+		resp.setContentType("application/json");
+
+		PrintWriter respWriter = resp.getWriter();
+
+		// Retrieve ability list
+		AbilityControllerRemote ability = lookupBean(
+				AbilityControllerRemote.class, Misc.BeanNames.ABILITY);
+
+		List<?> abilityList = ability.getAvailableAbilityList();
+		int size = abilityList.size();
+
+		respWriter.println("[");
+
+		for (int i = 0; i < size; i++) {
+			Ability a = (Ability) abilityList.get(i);
+			respWriter.printf("{%s,%s}%s", a.getName(), a.getDescription(),
+					(i < size - 1 ? "," : ""));
+		}
+
+		respWriter.println("]");
 	}
 }

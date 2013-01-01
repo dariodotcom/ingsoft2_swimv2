@@ -61,6 +61,7 @@ public class Misc {
 		public final static String AUTHENTICATION = "AuthenticationController/remote";
 		public final static String PROFILE = "UserProfileController/remote";
 		public static final String FRIENDSHIP = "FriendshipController/remote";
+		public static final String ABILITY = "AbilityController/remote";
 	}
 
 	// Enums
