@@ -20,12 +20,12 @@ public class AdministrationServlet extends SwimServlet {
 
 	private static final long serialVersionUID = -1318042817980004978L;
 
-	public enum administrationSection {
+	public enum AdministrationSection {
 		REQUEST("Richieste", ""), MANAGEMENT("Gestione", "manage");
 
 		private String sectionName, sectionIdentifier;
 
-		private administrationSection(String sectionName,
+		private AdministrationSection(String sectionName,
 				String sectionIdentifier) {
 			this.sectionIdentifier = sectionIdentifier;
 			this.sectionName = sectionName;
@@ -51,22 +51,22 @@ public class AdministrationServlet extends SwimServlet {
 		/* GET request actions */
 
 		registerGetActionMapping(
-				administrationSection.REQUEST.getSectionIdentifier(),
+				AdministrationSection.REQUEST.getSectionIdentifier(),
 				new ServletAction() {
 					public void runAction(HttpServletRequest req,
 							HttpServletResponse resp) throws IOException,
 							ServletException {
-						showSection(administrationSection.REQUEST, req, resp);
+						showSection(AdministrationSection.REQUEST, req, resp);
 					}
 				});
 
 		registerGetActionMapping(
-				administrationSection.MANAGEMENT.getSectionIdentifier(),
+				AdministrationSection.MANAGEMENT.getSectionIdentifier(),
 				new ServletAction() {
 					public void runAction(HttpServletRequest req,
 							HttpServletResponse resp) throws IOException,
 							ServletException {
-						showSection(administrationSection.MANAGEMENT, req, resp);
+						showSection(AdministrationSection.MANAGEMENT, req, resp);
 					}
 				});
 
@@ -108,7 +108,7 @@ public class AdministrationServlet extends SwimServlet {
 			HttpServletResponse resp) {
 	}
 
-	private void showSection(administrationSection section,
+	private void showSection(AdministrationSection section,
 			HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 		HttpSession session = req.getSession();
