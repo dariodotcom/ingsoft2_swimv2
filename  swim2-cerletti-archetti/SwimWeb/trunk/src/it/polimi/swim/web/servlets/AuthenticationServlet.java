@@ -142,7 +142,7 @@ public class AuthenticationServlet extends SwimServlet {
 		HttpSession session = req.getSession();
 
 		// Check that user is logged in
-		if (!isCustomerLoggedIn(session)) {
+		if (!isUserLoggedIn(session)) {
 			sendError(req, resp, ErrorType.LOGIN_REQUIRED);
 		}
 
