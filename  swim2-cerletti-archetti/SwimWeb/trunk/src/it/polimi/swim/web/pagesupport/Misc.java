@@ -24,6 +24,8 @@ public class Misc {
 	public static final String LOGGED_USERNAME = "loggedUsername";
 	public static final String LOGGED_USERTYPE = "loggedUserType";
 	
+	public static final String ABILITY_LIST = "abilityList";
+	
 	// JSP list
 	public static final String HOME_JSP = "/home.jsp";
 	public static final String ERROR_JSP = "/error.jsp";
@@ -34,6 +36,7 @@ public class Misc {
 	public static final String USER_JSP = "/user.jsp";
 	public static final String SEARCH_JSP = "/search.jsp";
 	public static final String ABOUT_JSP = "/about.jsp";
+	public static final String ADMIN_JSP = "/admin.jsp";
 
 	// Utils
 
