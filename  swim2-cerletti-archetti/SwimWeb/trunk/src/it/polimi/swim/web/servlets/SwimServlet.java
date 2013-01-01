@@ -1,6 +1,8 @@
 package it.polimi.swim.web.servlets;
 
+import it.polimi.swim.business.bean.UserType;
 import it.polimi.swim.web.pagesupport.ErrorType;
+import it.polimi.swim.web.pagesupport.Misc;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -47,11 +49,16 @@ public abstract class SwimServlet extends HttpServlet {
 			sendError(req, resp, ErrorType.BAD_REQUEST);
 		}
 
+		System.out.println("[SWIM] GET dispatcher started.");
+
 		String identifier = getActionIdentifier(req);
 		if (getActionMappings.containsKey(identifier)) {
 			/* The action identifier has been mapped to an action to perform */
 			getActionMappings.get(identifier).runAction(req, resp);
 		} else {
+			System.out.println(String.format(
+					"[SWIM] No GET mapping for action %s in context %s.",
+					identifier, sectionName));
 			sendError(req, resp, ErrorType.BAD_REQUEST);
 		}
 	}
@@ -63,11 +70,16 @@ public abstract class SwimServlet extends HttpServlet {
 			sendError(req, resp, ErrorType.BAD_REQUEST);
 		}
 
+		System.out.println("[SWIM] POST dispatcher started.");
+
 		String identifier = getActionIdentifier(req);
 		if (postActionMappings.containsKey(identifier)) {
 			/* The action identifier has been mapped to an action to perform */
 			postActionMappings.get(identifier).runAction(req, resp);
 		} else {
+			System.out.println(String.format(
+					"[SWIM] No POST mapping for action %s in context %s.",
+					identifier, sectionName));
 			sendError(req, resp, ErrorType.BAD_REQUEST);
 		}
 	}
@@ -140,24 +152,61 @@ public abstract class SwimServlet extends HttpServlet {
 		req.setAttribute("errorType", err);
 		req.getRequestDispatcher("/error.jsp").forward(req, resp);
 	}
-	
-	protected <T> T lookupBean(Class<T> beanClass, String beanName){
+
+	protected <T> T lookupBean(Class<T> beanClass, String beanName) {
 		Hashtable<String, String> env = new Hashtable<String, String>();
 		env.put(Context.INITIAL_CONTEXT_FACTORY,
 				"org.jnp.interfaces.NamingContextFactory");
 		env.put(Context.PROVIDER_URL, "localhost:1099");
-		
-		try{
+
+		try {
 			InitialContext jndiContext = new InitialContext(env);
 			return beanClass.cast(jndiContext.lookup(beanName));
-		}catch (NamingException e) {
+		} catch (NamingException e) {
 			e.printStackTrace();
 			return null;
 		}
 	}
-	
-	public static boolean isUserLoggedIn(HttpSession session) {
-		Object logged = session.getAttribute("loggedIn");
+
+	public static boolean isCustomerLoggedIn(HttpSession session) {
+		return isUserTypeLoggedIn(session, UserType.CUSTOMER);
+	}
+
+	public static boolean isAdministratorLoggedIn(HttpSession session) {
+		return isUserTypeLoggedIn(session, UserType.ADMINISTRATOR);
+	}
+
+	private static boolean isUserTypeLoggedIn(HttpSession session, UserType type) {
+		if (!isUserLoggedIn(session)) {
+			return false;
+		}
+
+		Object loggedUser = session.getAttribute(Misc.LOGGED_USERTYPE);
+		return loggedUser != null && ((UserType) loggedUser).equals(type);
+	}
+
+	public static Boolean isUserLoggedIn(HttpSession session) {
+		Object logged = session.getAttribute(Misc.LOGGED_ATTRIBUTE);
 		return logged != null && (Boolean) logged;
 	}
+
+	public static String getUsername(HttpSession session) {
+		Object o = session.getAttribute(Misc.LOGGED_USERNAME);
+		return (String) o;
+	}
+
+	public static void redirectToRightHome(HttpServletRequest req,
+			HttpServletResponse resp) throws IOException {
+		HttpSession session = req.getSession();
+		String context = req.getContextPath();
+
+		if (isCustomerLoggedIn(session)) {
+			resp.sendRedirect(context + "/home/");
+		} else if (isAdministratorLoggedIn(session)) {
+			resp.sendRedirect(context + "/admin/");
+		} else {
+			resp.sendRedirect(context + "/");
+		}
+	}
+
 }

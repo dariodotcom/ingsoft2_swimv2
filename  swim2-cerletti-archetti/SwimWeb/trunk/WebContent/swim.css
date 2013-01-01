@@ -518,3 +518,34 @@ body.search .formContainer{
     margin: 0 auto;
     padding: 10px 20px;
 }
+
+.list .listEntry{
+    padding: 6px;
+}
+
+.list .listEntry:not(:last-child){
+    border-bottom: 1px solid #e1e1e1;
+}
+
+.list .listEntry:hover{
+    background-color: #f1f1f1;
+}
+
+.list .listEntry .username{
+    line-height: 30px;
+    margin-left: 10px;
+    vertical-align: bottom;
+}
+
+.smallImageFrame{
+    display: inline-block;
+    background-color: white;
+    box-shadow: 0 0 2px 0 #000000;
+    padding: 2px;
+}
+
+form.actionForm{
+    display: inline-block;
+    float: right;
+    margin: 3px 5px;
+}

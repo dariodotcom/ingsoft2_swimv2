@@ -26,21 +26,18 @@
 		switch (type) {
 		case ADMINISTRATOR:
 			menuElements = AdminMenu.values();
+			userIdentity = "Administrator";
 			break;
 		case CUSTOMER:
 			menuElements = CustomerMenu.values();
+			Customer c = (Customer) request
+					.getAttribute(PersonalPageServlet.USER_ATTR);
+			if (c != null) {
+				userIdentity = c.getName() + " " + c.getSurname();
+			} else {
+				userIdentity = "Logged user not set TODO";
+			}
 			break;
-		}
-	}
-
-	if (userLoggedIn) {
-		Customer c = (Customer) request
-				.getAttribute(PersonalPageServlet.USER_ATTR);
-
-		if (c != null) {
-			userIdentity = c.getName() + " " + c.getSurname();
-		} else {
-			userIdentity = "customer not set :(";
 		}
 	}
 
@@ -84,8 +81,7 @@
 					tabindex="2" />
 			</div>
 			<div class="loginInputContainer">
-				<input type="submit" class="buttoninput" value="Login"
-					tabindex="3" />
+				<input type="submit" class="buttoninput" value="Login" tabindex="3" />
 			</div>
 		</form>
 

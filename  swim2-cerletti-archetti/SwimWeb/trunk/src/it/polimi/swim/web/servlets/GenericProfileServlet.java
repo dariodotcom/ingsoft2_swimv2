@@ -1,14 +1,20 @@
 package it.polimi.swim.web.servlets;
 
+import it.polimi.swim.business.bean.remote.FriendshipControllerRemote;
 import it.polimi.swim.business.bean.remote.UserProfileControllerRemote;
 import it.polimi.swim.business.entity.Customer;
+import it.polimi.swim.business.exceptions.BadRequestException;
+import it.polimi.swim.business.exceptions.InvalidStateException;
 import it.polimi.swim.web.pagesupport.CustomerMenu;
 import it.polimi.swim.web.pagesupport.ErrorType;
 import it.polimi.swim.web.pagesupport.MenuDescriptor;
 import it.polimi.swim.web.pagesupport.Misc;
+import it.polimi.swim.web.pagesupport.Misc.FriendshipStatus;
+import it.polimi.swim.web.pagesupport.NotificationMessages;
 import it.polimi.swim.web.pagesupport.UnloggedMenu;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -115,7 +121,8 @@ public class GenericProfileServlet extends SwimServlet {
 
 		registerPostActionMapping("sendfriendship", new ServletAction() {
 			public void runAction(HttpServletRequest req,
-					HttpServletResponse resp) throws IOException {
+					HttpServletResponse resp) throws IOException,
+					ServletException {
 				doSendFriendshipRequest(req, resp);
 			}
 		});
@@ -127,19 +134,19 @@ public class GenericProfileServlet extends SwimServlet {
 			HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 
-		String username = req.getParameter(TARGET_USER_PARAM);
+		String targetUsername = req.getParameter(TARGET_USER_PARAM)
+				.toLowerCase();
 
-		if (Misc.isStringEmpty(username)) {
+		if (Misc.isStringEmpty(targetUsername)) {
 			sendError(req, resp, ErrorType.BAD_REQUEST);
 			return;
 		}
 
 		// Check user isn't asking to view its own profile
 		HttpSession session = req.getSession();
-		String loggedUsername = (String) session
-				.getAttribute(AuthenticationServlet.LOGGED_USERNAME);
+		String loggedUsername = getUsername(session);
 
-		if (username.equals(loggedUsername)) {
+		if (targetUsername.equals(loggedUsername)) {
 			resp.sendRedirect(req.getContextPath() + "/home/");
 			return;
 		}
@@ -147,15 +154,37 @@ public class GenericProfileServlet extends SwimServlet {
 		UserProfileControllerRemote profile = lookupBean(
 				UserProfileControllerRemote.class, Misc.BeanNames.PROFILE);
 
-		Customer c = profile.getByUsername(username);
+		Customer targetCustomer = profile.getByUsername(targetUsername);
 
-		if (c == null) {
+		if (targetCustomer == null) {
 			sendError(req, resp, ErrorType.BAD_REQUEST);
 			return;
 		}
 
-		req.setAttribute(Misc.USER_TO_SHOW, c);
-		MenuDescriptor selectedTab = (isUserLoggedIn(req.getSession()) ? CustomerMenu.SEARCH
+		// Check friendship status between users
+		FriendshipStatus status;
+
+		if (Misc.isStringEmpty(loggedUsername)) {
+			status = FriendshipStatus.FRIENDSHIP_UNAVAILABLE;
+		} else {
+			if (profile
+					.canSendFriendshipRequest(loggedUsername, targetUsername)) {
+				status = FriendshipStatus.NOT_FRIENDS;
+			} else if (profile.areFriends(loggedUsername, targetUsername)) {
+				status = FriendshipStatus.ALREADY_FRIENDS;
+			} else {
+				status = FriendshipStatus.CONFIRMATION_AWAITED;
+			}
+		}
+
+		req.setAttribute(Misc.FRIENDSHIP_STATUS, status);
+
+		// Friend list
+		List<?> friendList = profile.getConfirmedFriendshipList(targetUsername);
+		req.setAttribute(Misc.FRIENDLIST_ATTR, friendList);
+
+		req.setAttribute(Misc.USER_TO_SHOW, targetCustomer);
+		MenuDescriptor selectedTab = (isCustomerLoggedIn(req.getSession()) ? CustomerMenu.SEARCH
 				: UnloggedMenu.SEARCH);
 
 		req.setAttribute(Misc.SELECTED_TAB_ATTR, selectedTab);
@@ -168,7 +197,44 @@ public class GenericProfileServlet extends SwimServlet {
 	}
 
 	private void doSendFriendshipRequest(HttpServletRequest req,
-			HttpServletResponse resp) {
+			HttpServletResponse resp) throws IOException, ServletException {
+
+		HttpSession session = req.getSession();
+
+		// Check logged user
+		if (!isCustomerLoggedIn(session)) {
+			req.setAttribute(Misc.ERROR_ATTR, ErrorType.LOGIN_REQUIRED);
+			req.getRequestDispatcher(Misc.ERROR_JSP).forward(req, resp);
+			return;
+		}
+
+		String loggedUsername = getUsername(session);
+
+		// Retrieve target username from request
+		String targetUsername = req.getParameter(TARGET_USER_PARAM);
+
+		if (Misc.isStringEmpty(targetUsername)) {
+			sendError(req, resp, ErrorType.BAD_REQUEST);
+			return;
+		}
+
+		// Create frienship
+		FriendshipControllerRemote frController = lookupBean(
+				FriendshipControllerRemote.class, Misc.BeanNames.FRIENDSHIP);
+
+		try {
+			frController.addFriendshipRequest(loggedUsername, targetUsername);
+		} catch (BadRequestException e) {
+			sendError(req, resp, ErrorType.BAD_REQUEST);
+			return;
+		} catch (InvalidStateException e) {
+			sendError(req, resp, ErrorType.INVALID_REQUEST);
+			return;
+		}
+
+		req.setAttribute(Misc.NOTIFICATION_ATTR,
+				NotificationMessages.REQUEST_SENT);
+		showSection(GenericProfileSection.PROFILE, req, resp);
 	}
 
 	private void showCreateRequestPage(HttpServletRequest req,
@@ -180,4 +246,7 @@ public class GenericProfileServlet extends SwimServlet {
 			HttpServletResponse resp) throws ServletException, IOException {
 		req.getRequestDispatcher("sendworkrequest.jsp").forward(req, resp);
 	}
+
+	// Helper
+
 }

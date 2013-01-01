@@ -21,13 +21,13 @@
 	details.add(new UserDetail("Email", true, "getEmail"));
 	details.add(new UserDetail("Data di nascita", false, "getBirthDate"));
 	details.add(new UserDetail("Luogo di residenza", false,
-			"getLocation"));
+	"getLocation"));
 
 	Boolean showOwnProfile;
 
-	if (SwimServlet.isUserLoggedIn(session)) {
+	if (SwimServlet.isCustomerLoggedIn(session)) {
 		String loggedUsername = (String) session
-				.getAttribute(AuthenticationServlet.LOGGED_USERNAME);
+		.getAttribute(AuthenticationServlet.LOGGED_USERNAME);
 		showOwnProfile = loggedUsername.equals(cust.getUsername());
 	} else {
 		showOwnProfile = false;
