@@ -39,7 +39,7 @@ public class FriendshipController implements FriendshipControllerRemote {
 		Customer receiver = Helpers.getEntityChecked(manager, Customer.class,
 				receiverUsr);
 
-		if (sender.getFriends().contains(receiver)) {
+		if (!sender.canBeSentFRBy(receiver)) {
 			// Users are already friends
 			throw new InvalidStateException();
 		}
@@ -54,12 +54,14 @@ public class FriendshipController implements FriendshipControllerRemote {
 	public void respondToRequest(String responseAuthorUsr, int requestId,
 			boolean accepted) throws BadRequestException,
 			InvalidStateException, UnauthorizedRequestException {
+
+		Friendship friendship = manager.find(Friendship.class, requestId);
 		Customer responseAuthor = Helpers.getEntityChecked(manager,
 				Customer.class, responseAuthorUsr);
-		Friendship friendship = Helpers.getEntityChecked(manager,
-				Friendship.class, requestId);
 
 		if (!friendship.getReceiver().equals(responseAuthor)) {
+			System.out.println(friendship.getReceiver().getUsername() + " "
+					+ responseAuthorUsr);
 			throw new UnauthorizedRequestException();
 		}
 
@@ -86,8 +88,14 @@ public class FriendshipController implements FriendshipControllerRemote {
 		Customer author = Helpers.getEntityChecked(manager, Customer.class,
 				requestAuthorUsr);
 
-		if (!(author.equals(friendship.getSender()) || author.equals(friendship
-				.getReceiver()))) {
+		Boolean isSender = author.equals(friendship.getSender()), isReceiver = author
+				.equals(friendship.getReceiver());
+
+		if (friendship.isConfirmed() && !(isSender || isReceiver)) {
+			throw new UnauthorizedRequestException();
+		}
+
+		if (!friendship.isConfirmed() && !isSender) {
 			throw new UnauthorizedRequestException();
 		}
 

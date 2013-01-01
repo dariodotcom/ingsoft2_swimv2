@@ -71,12 +71,12 @@ public class Customer extends User {
 	private Boolean emailConfirmed;
 
 	/* Relationship */
-	
+
 	@OneToMany(mappedBy = "sender")
-	List<Friendship> sentFriendship;
+	List<Friendship> sentFriendshipReq;
 
 	@OneToMany(mappedBy = "receiver")
-	List<Friendship> receivedFriendship;
+	List<Friendship> receivedFriendshipReq;
 
 	/**
 	 * Getter method.
@@ -205,7 +205,7 @@ public class Customer extends User {
 	/**
 	 * Sets user email as confirmed.
 	 * */
-	public void setEmailConfirmed(){
+	public void setEmailConfirmed() {
 		this.emailConfirmed = true;
 	}
 
@@ -217,13 +217,13 @@ public class Customer extends User {
 	public List<Customer> getFriends() {
 		List<Customer> friends = new ArrayList<Customer>();
 
-		for (Friendship f : sentFriendship) {
+		for (Friendship f : sentFriendshipReq) {
 			if (f.isConfirmed()) {
 				friends.add(f.getReceiver());
 			}
 		}
 
-		for (Friendship f : receivedFriendship) {
+		for (Friendship f : receivedFriendshipReq) {
 			if (f.isConfirmed()) {
 				friends.add(f.getSender());
 			}
@@ -238,7 +238,7 @@ public class Customer extends User {
 	 * @return the List of Friendship requests that the customer has sent.
 	 */
 	public List<Friendship> getSentFriendship() {
-		return sentFriendship;
+		return sentFriendshipReq;
 	}
 
 	/**
@@ -247,6 +247,35 @@ public class Customer extends User {
 	 * @return the List of Friendship requests that the customer has received.
 	 */
 	public List<Friendship> getReceivedFriendship() {
-		return receivedFriendship;
+		return receivedFriendshipReq;
+	}
+
+	/**
+	 * Method to find out whether this Customer can be friend with another one.
+	 * Two customers can be friend only if there isn't a friendship request
+	 * between them yet.
+	 * 
+	 * @param otherCustomer
+	 *            - The other Customer.
+	 * @return true if friendship is possible.
+	 */
+	public Boolean canBeSentFRBy(Customer otherCustomer) {
+		if (this.equals(otherCustomer)) {
+			return false;
+		}
+
+		for(Friendship f : sentFriendshipReq){
+			if(f.getReceiver().equals(otherCustomer)){
+				return false;
+			}
+		}
+		
+		for(Friendship f : receivedFriendshipReq){
+			if(f.getSender().equals(otherCustomer)){
+				return false;
+			}
+		}
+		
+		return true;
 	}
 }

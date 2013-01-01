@@ -36,7 +36,7 @@ public abstract class User {
 	 *            the user.
 	 */
 	protected User(String username, String password) {
-		this.username = username;
+		this.username = username.toLowerCase();
 		this.passwordHash = hash(password);
 	}
 

@@ -9,11 +9,11 @@ import java.util.Map;
 
 import it.polimi.swim.business.bean.remote.UserProfileControllerRemote;
 import it.polimi.swim.business.entity.Customer;
-import it.polimi.swim.business.entity.Friendship;
 import it.polimi.swim.business.exceptions.EmailAlreadyTakenException;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
@@ -36,9 +36,19 @@ public class UserProfileController implements UserProfileControllerRemote {
 	/**
 	 * @see UserProfileControllerRemote
 	 */
-	public List<Customer> getFriendList() {
-		// TODO Auto-generated method stub
-		return null;
+	public Customer getByUsername(String username) {
+		return manager.find(Customer.class, username);
+	}
+
+	/**
+	 * @see UserProfileControllerRemote
+	 */
+	public List<?> getConfirmedFriendshipList(String username) {
+		Query q = manager
+				.createQuery("FROM Friendship f where (f.receiver.username=:username"
+						+ " OR f.sender.username=:username) AND f.confirmed=true");
+		q.setParameter("username", username);
+		return q.getResultList();
 	}
 
 	/**
@@ -54,8 +64,9 @@ public class UserProfileController implements UserProfileControllerRemote {
 	/**
 	 * @see UserProfileControllerRemote
 	 */
-	public List<?>	getSentFeedbacks(String username){
-		Query q = manager.createQuery("SELECT f FROM Feedback f JOIN (f.linkedRequest) r WHERE r.sender.username=:username");
+	public List<?> getSentFeedbacks(String username) {
+		Query q = manager
+				.createQuery("SELECT f FROM Feedback f JOIN (f.linkedRequest) r WHERE r.sender.username=:username");
 
 		q.setParameter("username", username);
 		return q.getResultList();
@@ -64,26 +75,12 @@ public class UserProfileController implements UserProfileControllerRemote {
 	/**
 	 * @see UserProfileControllerRemote
 	 */
-	public List<?> getReceivedFeedacks(String username){
-		Query q = manager.createQuery("SELECT f FROM Feedback f JOIN (f.linkedRequest) r WHERE r.receiver.username=:username");
+	public List<?> getReceivedFeedacks(String username) {
+		Query q = manager
+				.createQuery("SELECT f FROM Feedback f JOIN (f.linkedRequest) r WHERE r.receiver.username=:username");
 
 		q.setParameter("username", username);
 		return q.getResultList();
-	}
-
-	/**
-	 * @see UserProfileControllerRemote
-	 */
-	public List<Friendship> getFriendshipRequest() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	/**
-	 * @see UserProfileControllerRemote
-	 */
-	public Customer getByUsername(String username) {
-		return manager.find(Customer.class, username);
 	}
 
 	public void updateCustomerDetails(String username,
@@ -107,8 +104,6 @@ public class UserProfileController implements UserProfileControllerRemote {
 			for (String field : setters.keySet()) {
 				if (values.containsKey(field)) {
 					Object value = values.get(field);
-					System.out.println(value instanceof java.util.Date);
-					System.out.println(value.toString());
 					setters.get(field).invoke(c, new Object[] { value });
 				}
 			}
@@ -144,6 +139,39 @@ public class UserProfileController implements UserProfileControllerRemote {
 		c.setEmail(email);
 	}
 
+	public Boolean canSendFriendshipRequest(String u1, String u2) {
+		if (u1.equals(u2)) {
+			return false;
+		}
+
+		Query q = manager
+				.createQuery("FROM Friendship f WHERE "
+						+ "f.sender.username=:firstUser AND f.receiver.username=:secondUser OR "
+						+ "f.sender.username=:secondUser AND f.receiver.username=:firstUser");
+		q.setParameter("firstUser", u1);
+		q.setParameter("secondUser", u2);
+
+		return q.getResultList().size() == 0;
+	}
+
+	public Boolean areFriends(String username1, String username2) {
+		Query q = manager
+				.createQuery("FROM Friendship f WHERE "
+						+ "(f.sender.username=:firstUser AND f.receiver.username=:secondUser OR "
+						+ "f.sender.username=:secondUser AND f.receiver.username=:firstUser) AND "
+						+ "f.confirmed=true");
+		
+		q.setParameter("firstUser", username1);
+		q.setParameter("secondUser", username2);
+		
+		try{
+			q.getSingleResult();
+			return true;
+		}catch(NoResultException e){
+			return false;
+		}
+	}
+
 	/* Helpers */
 	private boolean isEmailAvailable(String email) {
 		Query q = manager.createQuery("FROM Customer c WHERE c.email=:email");
@@ -151,4 +179,5 @@ public class UserProfileController implements UserProfileControllerRemote {
 
 		return q.getResultList().size() == 0;
 	}
+
 }

@@ -88,23 +88,34 @@ public class AuthenticationController implements AuthenticationControllerRemote 
 		manager.persist(c);
 	}
 
-	//TODO eventuale documentazione se non si mette il metodo nella classe remota
 	public void confirmUserEmailAddress(String username)
 			throws UserNotFoundException {
 		findCustomerByUsername(username).setEmailConfirmed();
 	}
 
-	//TODO eventuale documentazione se non si mette il metodo nella classe remota
 	public String resetUserPassword(String username)
 			throws UserNotFoundException {
 		Customer c = findCustomerByUsername(username);
-		String newPassword = generateRandomString(10); //TODO: move 10 to external config class
+		String newPassword = generateRandomString(10); // TODO: move 10 to
+														// external config class
 		c.setPassword(newPassword);
 		return newPassword;
 	}
 
+	public void createAdministrator(String username, String password)
+			throws UsernameAlreadyTakenException {
+		System.out.println("I started");
+		
+		if (!isUsernameAvailable(username)) {
+			throw new UsernameAlreadyTakenException();
+		}
+
+		Administrator a = new Administrator(username, password);
+		manager.persist(a);
+	}
+
 	/* Helpers */
-	
+
 	private boolean isEmailAvailable(String email) {
 		Query q = manager.createQuery("FROM Customer c WHERE c.email=:email");
 		q.setParameter("email", email);
@@ -132,4 +143,5 @@ public class AuthenticationController implements AuthenticationControllerRemote 
 	private String generateRandomString(int length) {
 		return new BigInteger(length * 5, random).toString(32);
 	}
+
 }
