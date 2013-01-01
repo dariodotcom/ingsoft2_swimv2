@@ -3,6 +3,7 @@ package it.polimi.swim.business.bean.remote;
 import it.polimi.swim.business.bean.UserType;
 import it.polimi.swim.business.exceptions.AuthenticationFailedException;
 import it.polimi.swim.business.exceptions.EmailAlreadyTakenException;
+import it.polimi.swim.business.exceptions.UserNotFoundException;
 import it.polimi.swim.business.exceptions.UsernameAlreadyTakenException;
 
 import javax.ejb.Remote;
@@ -56,9 +57,12 @@ public interface AuthenticationControllerRemote {
 			String name, String surname) throws UsernameAlreadyTakenException,
 			EmailAlreadyTakenException;
 
-	// TODO Metodo public void confirmUserEmailAddress(String username) presente
-	// in AuthenticationController.
+	public void createAdministrator(String username, String password)
+			throws UsernameAlreadyTakenException;
 
-	// TODO Metodo public String resetUserPassword(String username) presente in
-	// AuthenticationController.
+	public void confirmUserEmailAddress(String username)
+			throws UserNotFoundException;
+
+	public String resetUserPassword(String username)
+			throws UserNotFoundException;
 }

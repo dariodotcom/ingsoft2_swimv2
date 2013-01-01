@@ -12,6 +12,9 @@ import javax.persistence.Table;
 @Table(name = "administrator")
 public class Administrator extends User {
 
+	public Administrator() {
+	}
+
 	/**
 	 * Class constructor.
 	 * 
@@ -22,7 +25,7 @@ public class Administrator extends User {
 	 *            a String which contains an hash value associated to the
 	 *            administrator password.
 	 */
-	public Administrator(String username, String passwordHash) {
-		super(username, passwordHash);
+	public Administrator(String username, String password) {
+		super(username, password);
 	}
 }
