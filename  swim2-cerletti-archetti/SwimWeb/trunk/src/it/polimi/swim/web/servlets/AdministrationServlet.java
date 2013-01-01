@@ -25,8 +25,7 @@ public class AdministrationServlet extends SwimServlet {
 
 		private String sectionName, sectionIdentifier;
 
-		private AdministrationSection(String sectionName,
-				String sectionIdentifier) {
+		AdministrationSection(String sectionName, String sectionIdentifier) {
 			this.sectionIdentifier = sectionIdentifier;
 			this.sectionName = sectionName;
 		}
@@ -46,7 +45,7 @@ public class AdministrationServlet extends SwimServlet {
 	public AdministrationServlet() {
 		super();
 
-		setSectionName("administration");
+		setSectionName("admin");
 
 		/* GET request actions */
 
@@ -123,7 +122,7 @@ public class AdministrationServlet extends SwimServlet {
 				AbilityControllerRemote.class, Misc.BeanNames.ABILITY);
 		List<?> abilityReqList = ability.getAbilityRequestList();
 		req.setAttribute(Misc.ABILITY_LIST, abilityReqList);
-		
+
 		// Forward
 		req.getRequestDispatcher(Misc.ADMIN_JSP).forward(req, resp);
 	}

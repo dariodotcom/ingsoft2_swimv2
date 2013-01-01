@@ -24,6 +24,8 @@
 			.getAttribute(Misc.NOTIFICATION_ATTR);
 
 	ErrorType error = (ErrorType) request.getAttribute(Misc.ERROR_ATTR);
+
+	String ctx = request.getContextPath();
 %>
 <%@ include file="shared/head.jsp"%>
 <body class="swim">
@@ -34,10 +36,10 @@
 				<ul id="swimSecondaryMenu">
 					<%
 						for (PersonalPageSection s : PersonalPageSection.values()) {
-										String link = request.getContextPath() + "/"
-												+ PersonalPageServlet.CONTEXT_NAME + "/"
-												+ s.getSectionIdentifier(), name = s.getSectionName();
-										String selClass = selectedSection.equals(s) ? " selected" : "";
+							String link = ctx + "/" + PersonalPageServlet.CONTEXT_NAME
+									+ "/" + s.getSectionIdentifier(), name = s
+									.getSectionName();
+							String selClass = selectedSection.equals(s) ? " selected" : "";
 					%>
 					<li class="entry<%=selClass%>"><a class="label"
 						href="<%=link%>"><%=name%></a></li>
@@ -58,7 +60,7 @@
 						<%
 							}
 
-											if (error != null) {
+							if (error != null) {
 						%>
 						<p class="error">
 							<%=error.getErrorDescription()%>
@@ -71,69 +73,80 @@
 					<div class="monoPageContent">
 						<%
 							switch (selectedSection) {
-											case HOME:
+							case HOME:
 						%>
 						<%@include file="shared/userProfileDetails.jsp"%>
 						<%
 							break;
 							case EDIT_PROFILE:
 						%>
-						<form action="<%=request.getContextPath()%>/home/editProfile"
-							method="post">
-							<div class="detail">
-								<div class="detailName">
-									<label for="editName">Nome*</label>
+						<h2 class="partTitle">Modifica dati personali</h2>
+						<div class="part">
+							<form action="<%=ctx%>/home/editProfile" method="post">
+								<div class="detail">
+									<div class="detailName">
+										<label for="editName">Nome*</label>
+									</div>
+									<div class="detailValue">
+										<input type="text" name="name" value="<%=customer.getName()%>"
+											id="editName" class="inputtext" />
+									</div>
 								</div>
-								<div class="detailValue">
-									<input type="text" name="name" value="<%=customer.getName()%>"
-										id="editName" class="inputtext" />
-								</div>
-							</div>
 
-							<div class="detail">
-								<div class="detailName">
-									<label for="editSurname">Cognome*</label>
+								<div class="detail">
+									<div class="detailName">
+										<label for="editSurname">Cognome*</label>
+									</div>
+									<div class="detailValue">
+										<input type="text" name="surname"
+											value="<%=customer.getSurname()%>" id="editSurname"
+											class="inputtext" />
+									</div>
 								</div>
-								<div class="detailValue">
-									<input type="text" name="surname"
-										value="<%=customer.getSurname()%>" id="editSurname"
-										class="inputtext" />
-								</div>
-							</div>
 
-							<div class="detail">
-								<div class="detailName">
-									<label for="editBirthdate">Data di nascita (gg/mm/aaaa)</label>
+								<div class="detail">
+									<div class="detailName">
+										<label for="editBirthdate">Data di nascita
+											(gg/mm/aaaa)</label>
+									</div>
+									<div class="detailValue">
+										<input type="text" name="birthdate"
+											value="<%=Misc.parseDate(customer.getBirthDate())%>"
+											id="editBirthdate" class="inputtext" />
+									</div>
 								</div>
-								<div class="detailValue">
-									<input type="text" name="birthdate"
-										value="<%=Misc.parseDate(customer.getBirthDate())%>"
-										id="editBirthdate" class="inputtext" />
-								</div>
-							</div>
 
-							<div class="detail">
-								<div class="detailName">
-									<label for="editLocation">Luogo di residenza</label>
+								<div class="detail">
+									<div class="detailName">
+										<label for="editLocation">Luogo di residenza</label>
+									</div>
+									<div class="detailValue">
+										<input type="text" name="location"
+											value="<%=Misc.nullfix(customer.getLocation())%>"
+											id="editName" class="inputtext" />
+									</div>
 								</div>
-								<div class="detailValue">
-									<input type="text" name="location"
-										value="<%=Misc.nullfix(customer.getLocation())%>"
-										id="editName" class="inputtext" />
+								<div class="submitLine">
+									<input type="submit" class="inputsubmit" value="Salva" />
 								</div>
-							</div>
-							<div class="submitLine">
-								<input type="submit" class="inputsubmit" value="Salva" />
-							</div>
-						</form>
+							</form>
+						</div>
+						<h2 class="partTitle">Gestisci professionalit&agrave;</h2>
+						<div class="part"></div>
+						<h2 class="partTitle">Aggiungi professionalit&agrave;</h2>
+						<div class="part">
+							<form action="<%=ctx%>/home/addAbility">
+								<input type="text" id="addAbilityInput" class="inputtext" />
+							</form>
+						</div>
+
 						<%
 							break;
 							case EDIT_ACCOUNT:
 						%>
 						<h2 class="partTitle">Modifica email</h2>
 						<div class="part">
-							<form action="<%=request.getContextPath()%>/home/changePassword"
-								method="post">
+							<form action="<%=ctx%>/home/changePassword" method="post">
 
 								<div class="detail">
 									<div class="detailName">
@@ -174,8 +187,7 @@
 
 						<h2 class="partTitle">Modifica email</h2>
 						<div class="part">
-							<form action="<%=request.getContextPath()%>/home/changeEmail"
-								method="post">
+							<form action="<%=ctx%>/home/changeEmail" method="post">
 
 								<div class="detail">
 									<div class="detailName">
