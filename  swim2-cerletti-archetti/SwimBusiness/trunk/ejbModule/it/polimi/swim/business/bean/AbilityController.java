@@ -77,7 +77,6 @@ public class AbilityController implements AbilityControllerRemote {
 
 		req.setApproved(response);
 		req.setReview(comment);
-
 	}
 
 	/**
@@ -135,5 +134,11 @@ public class AbilityController implements AbilityControllerRemote {
 		} else {
 			return entity;
 		}
+	}
+
+	public List<?> getAbilityRequestList() {
+		Query q = manager
+				.createQuery("FROM AbilityRequest r WHERE r.approved=null");
+		return q.getResultList();
 	}
 }
