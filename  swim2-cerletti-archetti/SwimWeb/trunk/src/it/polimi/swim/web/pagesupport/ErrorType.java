@@ -49,12 +49,18 @@ public enum ErrorType {
 			),
 	INVALID_CREDENTIALS(
 			"Credenziali non valide",
-			"Le credenziali inserite non sono valide"
+			"Le credenziali inserite non sono valide."
 			), 
 	BAD_DATE(
 			"Data non valida",
 			"La data inserita non Ë valida."
-			);
+			),
+	ABILITY_NAME_TAKEN(
+			"Nome abilità non disponibile",
+			"Il nome dell'abilità inserita non è disponibile."
+			)
+			;
+	
 
 
 	private String errorName, errorDescription;
