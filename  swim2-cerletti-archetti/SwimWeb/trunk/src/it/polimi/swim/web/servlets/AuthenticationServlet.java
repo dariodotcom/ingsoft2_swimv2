@@ -27,8 +27,6 @@ public class AuthenticationServlet extends SwimServlet {
 	public static final String LOGGED_ATTRIBUTE = "loggedIn";
 	public static final String LOGGED_USERNAME = "loggedUsername";
 	public static final String LOGGED_USERTYPE = "loggedUserType";
-	public static final String USERTYPE_ADMIN = "loggedUserType";
-	public static final String USERTYPE_CUSTOMER = "loggedUserType";
 
 	private static final long serialVersionUID = 2253528507384097557L;
 
@@ -104,7 +102,8 @@ public class AuthenticationServlet extends SwimServlet {
 
 		// Check user is not already logged in
 		if (!isUserLoggedIn(session)) {
-			String username = (String) req.getParameter("username");
+			String username = (String) req.getParameter("username")
+					.toLowerCase();
 			String password = (String) req.getParameter("password");
 
 			if (Misc.isStringEmpty(password) || Misc.isStringEmpty(username)) {
@@ -114,10 +113,11 @@ public class AuthenticationServlet extends SwimServlet {
 				return;
 			}
 
+			UserType loggedUserType;
+
 			// Check user login details are valid
 			try {
-				UserType loggedUserType = auth.authenticateUser(username,
-						password);
+				loggedUserType = auth.authenticateUser(username, password);
 
 				// Log in user
 				session.setAttribute(LOGGED_ATTRIBUTE, true);
@@ -134,7 +134,7 @@ public class AuthenticationServlet extends SwimServlet {
 		}
 
 		// Forward request to /home servlet
-		resp.sendRedirect(req.getContextPath() + "/home/");
+		redirectToRightHome(req, resp);
 	}
 
 	private void doLogout(HttpServletRequest req, HttpServletResponse resp)
@@ -142,7 +142,7 @@ public class AuthenticationServlet extends SwimServlet {
 		HttpSession session = req.getSession();
 
 		// Check that user is logged in
-		if (!isUserLoggedIn(session)) {
+		if (!isCustomerLoggedIn(session)) {
 			sendError(req, resp, ErrorType.LOGIN_REQUIRED);
 		}
 
@@ -169,6 +169,10 @@ public class AuthenticationServlet extends SwimServlet {
 				session.setAttribute(Misc.ERROR_ATTR, ErrorType.EMPTY_FIELDS);
 				resp.sendRedirect(req.getContextPath() + "/retry");
 				return;
+			}
+
+			if (fieldName.equals("username")) {
+				value = value.toLowerCase();
 			}
 
 			values.put(fieldName, value);
@@ -202,7 +206,7 @@ public class AuthenticationServlet extends SwimServlet {
 
 	private void showPage(HttpServletRequest req, HttpServletResponse resp)
 			throws IOException, ServletException {
-		if (isUserLoggedIn(req.getSession())) {
+		if (isCustomerLoggedIn(req.getSession())) {
 			resp.sendRedirect(req.getContextPath() + "/home/");
 			return;
 		}

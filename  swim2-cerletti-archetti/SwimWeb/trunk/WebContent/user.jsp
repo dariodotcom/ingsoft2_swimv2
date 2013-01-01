@@ -1,3 +1,4 @@
+<%@page import="it.polimi.swim.web.pagesupport.Misc.FriendshipStatus"%>
 <%@page import="it.polimi.swim.web.servlets.GenericProfileServlet"%>
 <%@page
 	import="it.polimi.swim.web.servlets.GenericProfileServlet.GenericProfileSection"%>
@@ -19,6 +20,9 @@
 
 	Customer target = (Customer) request
 			.getAttribute(Misc.USER_TO_SHOW);
+
+	FriendshipStatus status = (FriendshipStatus) request
+			.getAttribute(Misc.FRIENDSHIP_STATUS);
 %>
 <%@ include file="shared/head.jsp"%>
 <body class="swim">
@@ -30,9 +34,11 @@
 					Profilo di <span class="bold"><%=target.getName()%> <%=target.getSurname()%></span>
 				</div>
 				<div class="userControls headerElem">
-					<form>
-						<input type="submit" value="Invia richiesta di amicizia"
-							class="inputsubmit" />
+					<form action="<%=request.getContextPath()%>/user/sendfriendship"
+						method="post">
+						<input type="hidden" name="u" value="<%=target.getUsername()%>" />
+						<input type="submit" value="<%=status.getButtonText()%>"
+							class="inputsubmit <%=status.getButtonClass()%>" />
 					</form>
 				</div>
 				<div class="userControls headerElem">

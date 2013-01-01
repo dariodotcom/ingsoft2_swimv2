@@ -17,6 +17,13 @@ public class Misc {
 	public static final String ERROR_ATTR = "errorType";
 	public static final String NOTIFICATION_ATTR = "notificationType";
 	
+	public static final String FRIENDSHIP_STATUS = "friendshipStatus";
+	public static final String FRIENDLIST_ATTR = "friendlist";
+	
+	public static final String LOGGED_ATTRIBUTE = "loggedIn";
+	public static final String LOGGED_USERNAME = "loggedUsername";
+	public static final String LOGGED_USERTYPE = "loggedUserType";
+	
 	// JSP list
 	public static final String HOME_JSP = "/home.jsp";
 	public static final String ERROR_JSP = "/error.jsp";
@@ -32,8 +39,9 @@ public class Misc {
 
 	public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat(
 			"dd/MM/yyyy");
-	
+
 	public static final int MIN_PASSWORD_LENGTH = 8;
+
 
 	// Helpers
 
@@ -44,13 +52,38 @@ public class Misc {
 	public static String nullfix(String input) {
 		return input == null ? "" : input;
 	}
-	
-	public static boolean isStringEmpty(String input){
+
+	public static boolean isStringEmpty(String input) {
 		return input == null || input.length() == 0;
 	}
 
 	public static class BeanNames {
 		public final static String AUTHENTICATION = "AuthenticationController/remote";
 		public final static String PROFILE = "UserProfileController/remote";
+		public static final String FRIENDSHIP = "FriendshipController/remote";
+	}
+
+	// Enums
+	public enum FriendshipStatus {
+		NOT_FRIENDS("Invia richiesta di amicizia", "sendable"), CONFIRMATION_AWAITED(
+				"Amicizia in attesa di conferma", "awaited"), ALREADY_FRIENDS(
+				"Siete amici", "disabled"), FRIENDSHIP_UNAVAILABLE(
+				"Non sei registrato", "disabled");
+
+		private String buttonText;
+		private String buttonClass;
+
+		private FriendshipStatus(String buttonText, String buttonClass) {
+			this.buttonClass = buttonClass;
+			this.buttonText = buttonText;
+		}
+
+		public String getButtonText() {
+			return buttonText;
+		}
+
+		public String getButtonClass() {
+			return buttonClass;
+		}
 	}
 }

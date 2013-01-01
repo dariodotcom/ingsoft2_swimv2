@@ -34,10 +34,10 @@
 				<ul id="swimSecondaryMenu">
 					<%
 						for (PersonalPageSection s : PersonalPageSection.values()) {
-							String link = request.getContextPath() + "/"
-									+ PersonalPageServlet.CONTEXT_NAME + "/"
-									+ s.getSectionIdentifier(), name = s.getSectionName();
-							String selClass = selectedSection.equals(s) ? " selected" : "";
+										String link = request.getContextPath() + "/"
+												+ PersonalPageServlet.CONTEXT_NAME + "/"
+												+ s.getSectionIdentifier(), name = s.getSectionName();
+										String selClass = selectedSection.equals(s) ? " selected" : "";
 					%>
 					<li class="entry<%=selClass%>"><a class="label"
 						href="<%=link%>"><%=name%></a></li>
@@ -58,7 +58,7 @@
 						<%
 							}
 
-							if (error != null) {
+											if (error != null) {
 						%>
 						<p class="error">
 							<%=error.getErrorDescription()%>
@@ -71,7 +71,7 @@
 					<div class="monoPageContent">
 						<%
 							switch (selectedSection) {
-							case HOME:
+											case HOME:
 						%>
 						<%@include file="shared/userProfileDetails.jsp"%>
 						<%
@@ -82,7 +82,7 @@
 							method="post">
 							<div class="detail">
 								<div class="detailName">
-									<label for="editName">Nome</label>
+									<label for="editName">Nome*</label>
 								</div>
 								<div class="detailValue">
 									<input type="text" name="name" value="<%=customer.getName()%>"
@@ -92,7 +92,7 @@
 
 							<div class="detail">
 								<div class="detailName">
-									<label for="editSurname">Cognome</label>
+									<label for="editSurname">Cognome*</label>
 								</div>
 								<div class="detailValue">
 									<input type="text" name="surname"
@@ -137,7 +137,7 @@
 
 								<div class="detail">
 									<div class="detailName">
-										<label for="currentPassword">Password corrente</label>
+										<label for="currentPassword">Password corrente*</label>
 									</div>
 									<div class="detailValue">
 										<input type="password" name="currentpassword"
@@ -147,7 +147,7 @@
 
 								<div class="detail">
 									<div class="detailName">
-										<label for="editPassword">Password</label>
+										<label for="editPassword">Nuova password*</label>
 									</div>
 									<div class="detailValue">
 										<input type="password" name="password" id="editPassword"
@@ -157,7 +157,7 @@
 
 								<div class="detail">
 									<div class="detailName">
-										<label for="editPasswordRepeat">Ripeti password</label>
+										<label for="editPasswordRepeat">Ripeti password*</label>
 									</div>
 									<div class="detailValue">
 										<input type="password" name="passwordrepeat"
@@ -179,7 +179,7 @@
 
 								<div class="detail">
 									<div class="detailName">
-										<label for="currentPassword2">Password corrente</label>
+										<label for="currentPassword2">Password corrente*</label>
 									</div>
 									<div class="detailValue">
 										<input type="password" name="currentpassword"
@@ -189,7 +189,7 @@
 
 								<div class="detail">
 									<div class="detailName">
-										<label for="editEmail">Email</label>
+										<label for="editEmail">Email*</label>
 									</div>
 									<div class="detailValue">
 										<input type="text" name="newemail" id="editEmail"

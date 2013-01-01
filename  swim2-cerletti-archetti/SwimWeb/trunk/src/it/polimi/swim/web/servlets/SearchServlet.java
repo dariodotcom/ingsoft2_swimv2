@@ -64,7 +64,7 @@ public class SearchServlet extends SwimServlet {
 
 	private void showSearchPage(HttpServletRequest req, HttpServletResponse resp)
 			throws IOException, ServletException {
-		MenuDescriptor selectedTab = (isUserLoggedIn(req.getSession()) ? CustomerMenu.SEARCH
+		MenuDescriptor selectedTab = (isCustomerLoggedIn(req.getSession()) ? CustomerMenu.SEARCH
 				: UnloggedMenu.SEARCH);
 
 		req.setAttribute(Misc.SELECTED_TAB_ATTR, selectedTab);

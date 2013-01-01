@@ -8,7 +8,15 @@ public enum ErrorType {
 
 	BAD_REQUEST(
 			"Bad Request",
-			"C'è un errore nella tua richiesta. Se hai digitato l'url controlla di non aver fatto errori."), GENERIC(
+			"C'è un errore nella tua richiesta. Se hai digitato l'url controlla di non aver fatto errori."),
+	INVALID_REQUEST(
+			"Richiesta non valida",
+			"Non è possibile portare a termine la richiesta effettuata perchè non è valida."),
+	UNAUTHORIZED_REQUEST(
+			"Richiesta non autorizzata",
+			"Non sei autorizzato ad effettuare la richiesta da te inviata."
+			),
+	GENERIC(
 			"Unknown Error",
 			"Sembra che uno degli sviluppatori sia stato pigro nel trattare questo errore..."),
 	LOGIN_REQUIRED(
@@ -42,7 +50,12 @@ public enum ErrorType {
 	INVALID_CREDENTIALS(
 			"Credenziali non valide",
 			"Le credenziali inserite non sono valide"
+			), 
+	BAD_DATE(
+			"Data non valida",
+			"La data inserita non è valida."
 			);
+
 
 	private String errorName, errorDescription;
 

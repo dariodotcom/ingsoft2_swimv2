@@ -1,5 +1,8 @@
+<%@page import="it.polimi.swim.business.entity.Friendship"%>
+<%@page import="java.util.List"%>
 <%@page import="it.polimi.swim.web.servlets.CustomerFriendshipServlet"%>
-<%@page import="it.polimi.swim.web.servlets.CustomerFriendshipServlet.CustomerFriendshipSection"%>
+<%@page
+	import="it.polimi.swim.web.servlets.CustomerFriendshipServlet.CustomerFriendshipSection"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
@@ -12,6 +15,13 @@
 
 	request.setAttribute(Misc.PAGE_TITLE_ATTR,
 			selectedSection.getSectionName());
+
+	List<?> friendList = (List<?>) request
+			.getAttribute(Misc.FRIENDLIST_ATTR);
+
+	String ctx = request.getContextPath();
+	String selfUsername = (String) session
+			.getAttribute(AuthenticationServlet.LOGGED_USERNAME);
 %>
 <%@ include file="shared/head.jsp"%>
 <body class="swim">
@@ -23,7 +33,7 @@
 					<%
 						for (CustomerFriendshipSection s : CustomerFriendshipSection
 								.values()) {
-							String link = request.getContextPath() + "/"
+							String link = ctx + "/"
 									+ CustomerFriendshipServlet.CONTEXT_NAME + "/"
 									+ s.getSectionIdentifier(), name = s.getSectionName();
 							String selClass = selectedSection.equals(s) ? " selected" : "";
@@ -36,49 +46,100 @@
 				</ul>
 			</div>
 			<div id="rightColumn" class="column">
-				<%
-					switch (selectedSection) {
-					case FRIENDS:
-				%>
-				<div class="text">Quisque congue auctor magna sed egestas.
-					Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec
-					facilisis, felis vel iaculis commodo, tellus tellus euismod mi,
-					eget volutpat quam massa id nunc. Sed eget urna a metus luctus
-					molestie quis dictum enim. Nulla facilisis tortor vel velit
-					volutpat malesuada. Pellentesque pellentesque ligula ac neque
-					tincidunt lobortis. Sed malesuada leo et enim scelerisque sed
-					congue orci imperdiet. Curabitur id arcu neque. Sed lacinia
-					dignissim eros in molestie. Maecenas vehicula iaculis adipiscing.
-					Nam mattis, massa nec accumsan imperdiet, nibh tortor feugiat
-					neque, vel tincidunt nisl mauris et libero. Vestibulum eget
-					imperdiet quam. Nulla facilisi. Donec ut libero tellus. Praesent
-					ullamcorper elit diam, sed euismod orci. Integer vel sem lacus.</div>
-
-				<%
-					break;
-					case FRIENDSHIP_REQUESTS:
-				%>
-				<div class="text">Quisque congue auctor magna sed egestas.
-					Vivamus leo arcu, ornare elementum imperdiet a, commodo sit amet
-					diam. Pellentesque consequat, quam sit amet commodo dictum, mauris
-					lectus fringilla metus, ac tempor mi enim at tellus. Duis in felis
-					erat, vel dictum leo. Maecenas semper justo eget dolor ultrices ac
-					malesuada sapien commodo. Duis diam elit, placerat ut vestibulum
-					vitae, sagittis id velit. In fringilla tincidunt urna vehicula
-					porttitor. Nam et quam quis risus faucibus sollicitudin. Ut
-					bibendum, ipsum et vulputate faucibus, odio diam blandit enim, at
-					pellentesque eros eros ut turpis. Cras hendrerit, augue vitae
-					ullamcorper aliquam, risus erat egestas leo, at congue ipsum ipsum
-					in ligula. Fusce sapien mauris, consectetur at semper sit amet,
-					convallis vel metus. Donec vestibulum justo vel quam laoreet
-					imperdiet sed facilisis augue. Nunc ornare augue non sem rhoncus
-					condimentum sit amet sit amet lacus. Aenean eget orci hendrerit
-					quam fermentum elementum. Etiam nec orci purus, quis dictum nulla.
+				<div class="pageHeading">
+					<h1 class="pageTitle"><%=selectedSection.getSectionName()%></h1>
 				</div>
-				<%
-					break;
-					}
-				%>
+				<div class="monoPageContent">
+					<%
+						switch (selectedSection) {
+						case FRIENDS:
+							if (friendList.size() == 0) {
+					%>
+					<p class="text">Non hai amici. Inizia ad esplorare il mondo di
+						Swim e stringi nuove amicizie.</p>
+					<%
+						} else {
+					%>
+					<p class="paragraph">I seguenti utenti sono tuoi amici:</p>
+					<div class="list">
+						<%
+							for (Object o : friendList) {
+										Friendship f = (Friendship) o;
+										Customer sender = f.getSender(), receiver = f
+												.getReceiver(), friend = (sender.getUsername()
+												.equals(selfUsername) ? receiver : sender);
+
+										String friendIdentity = String.format("%s %s",
+												friend.getName(), friend.getSurname());
+						%>
+						<div class="listEntry friendship">
+							<div class="smallImageFrame">
+								<img src="<%=ctx%>/resources/user-img.png" alt="User image" />
+							</div>
+							<span class="username"><a
+								href="<%=ctx%>/user/?u=<%=friend.getUsername()%>"><%=friendIdentity%></a></span>
+							<form action="<%=ctx%>/friends/remove" method="post"
+								class="actionForm">
+								<input type="hidden" name="f" value="<%=f.getId()%>" /> <input
+									type="submit" class="inputsubmit" value="Rimuovi" />
+							</form>
+						</div>
+						<%
+							}
+						%>
+					</div>
+					<%
+						}
+					%>
+
+					<%
+						break;
+						case FRIENDSHIP_REQUESTS:
+							if (friendList.size() == 0) {
+					%>
+					<p class="text">Non hai richieste di amicizia.</p>
+					<%
+						} else {
+					%>
+					<p class="paragraph">Hai ricevuto le seguenti richieste di
+						amicizia:</p>
+					<div class="list">
+						<%
+							for (Object o : friendList) {
+										Friendship f = (Friendship) o;
+										Customer sender = f.getSender();
+										String senderIdentity = sender.getName() + " "
+												+ sender.getSurname();
+						%>
+						<div class="listEntry friendshipRequest">
+							<div class="smallImageFrame">
+								<img src="<%=ctx%>/resources/user-img.png" alt="User image" />
+							</div>
+							<span class="username"><a
+								href="<%=ctx%>/user/?u=<%=sender.getUsername()%>"><%=senderIdentity%></a></span>
+							<form action="<%=ctx%>/friends/accept" method="post"
+								class="actionForm">
+								<input type="hidden" name="f" value="<%=f.getId()%>" /> <input
+									type="submit" class="inputsubmit" value="Accetta" />
+							</form>
+							<form action="<%=ctx%>/friends/decline" method="post"
+								class="actionForm">
+								<input type="hidden" name="f" value="<%=f.getId()%>" /> <input
+									type="submit" class="inputsubmit" value="Rifiuta" />
+							</form>
+						</div>
+						<%
+							}
+						%>
+					</div>
+					<%
+						}
+					%>
+					<%
+						break;
+						}
+					%>
+				</div>
 			</div>
 		</div>
 	</div>

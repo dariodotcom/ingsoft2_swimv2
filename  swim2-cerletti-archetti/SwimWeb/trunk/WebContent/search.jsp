@@ -36,7 +36,7 @@
 							class="inputtext" />
 					</div>
 					<%
-						if (SwimServlet.isUserLoggedIn(session)) {
+						if (SwimServlet.isCustomerLoggedIn(session)) {
 					%>
 					<div class="inputLine">
 						<input type="checkbox" name="filter" value="filter" /><label

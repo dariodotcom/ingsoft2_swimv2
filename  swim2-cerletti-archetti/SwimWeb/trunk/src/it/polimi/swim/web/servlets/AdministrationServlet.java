@@ -1,11 +1,14 @@
 package it.polimi.swim.web.servlets;
 
+import it.polimi.swim.web.pagesupport.ErrorType;
+
 import java.io.IOException;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  * Servlet implementation class AdministrationServlet.
@@ -68,6 +71,15 @@ public class AdministrationServlet extends SwimServlet {
 	
 	private void showRequestPage(HttpServletRequest req,
 			HttpServletResponse resp) throws ServletException, IOException {
-		req.getRequestDispatcher("suggestability.jsp").forward(req, resp);
+		HttpSession session = req.getSession();
+		
+		if(!isAdministratorLoggedIn(session)){
+			sendError(req, resp, ErrorType.LOGIN_REQUIRED);
+			return;
+		}
+		
+		//Put ability requests in req scope.
+		
+		//Forward
 	}
 }

@@ -208,8 +208,7 @@ public class PersonalPageServlet extends SwimServlet {
 			HttpServletResponse resp) throws ServletException, IOException {
 
 		HttpSession session = req.getSession();
-		String username = (String) session
-				.getAttribute(AuthenticationServlet.LOGGED_USERNAME);
+		String username = getUsername(session);
 
 		String[] fields = { "name", "surname", "birthdate", "location" };
 		String[] nonNullableFields = { "name", "surname" };
@@ -231,7 +230,8 @@ public class PersonalPageServlet extends SwimServlet {
 					Date d = Misc.DATE_FORMAT.parse(value);
 					values.put(field, d);
 				} catch (ParseException e) {
-					// Error in parsing date
+					req.setAttribute(Misc.ERROR_ATTR, ErrorType.BAD_DATE);
+					showSection(PersonalPageSection.EDIT_PROFILE, req, resp);
 					return;
 				}
 			} else {
@@ -294,8 +294,7 @@ public class PersonalPageServlet extends SwimServlet {
 				AuthenticationControllerRemote.class,
 				Misc.BeanNames.AUTHENTICATION);
 		HttpSession session = req.getSession();
-		String username = (String) session
-				.getAttribute(AuthenticationServlet.LOGGED_USERNAME);
+		String username = (String) getUsername(session);
 
 		try {
 			auth.authenticateUser(username, password);
