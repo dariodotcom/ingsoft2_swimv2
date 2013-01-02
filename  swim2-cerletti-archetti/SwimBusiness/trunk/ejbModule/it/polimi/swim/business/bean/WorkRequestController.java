@@ -47,7 +47,7 @@ public class WorkRequestController implements WorkRequestControllerRemote {
 		// Check receiver abilities
 		List<Ability> receiverAbilities = receiver.getAbilityList();
 		Ability a = Helpers.getEntityChecked(manager, Ability.class,
-				properties.get("abilitySelection"));
+				properties.get("selectedAbility"));
 
 		if (receiverAbilities.size() == 0 || !receiverAbilities.contains(a)) {
 			throw new InvalidStateException();
