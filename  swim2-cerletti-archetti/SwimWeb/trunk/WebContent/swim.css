@@ -411,7 +411,8 @@ h2.partTitle{
 	width: 181px;
 }
 
-
+#swimContent .inputselect:hover,
+#swimContent .inputselect:focus,
 #swimContent .inputtext:hover,
 #swimContent .inputtext:focus{
 	border-color: #2c9be0;
