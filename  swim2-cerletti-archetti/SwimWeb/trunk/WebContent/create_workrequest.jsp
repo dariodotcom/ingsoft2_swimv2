@@ -52,40 +52,43 @@
 						</div>
 						<div class="property">
 							<label for="startDate" class="propertyName">Data inizio*
-								(gg,mm,aa):</label>
+								(gg/mm/aa):</label>
 							<div class="propertyValue">
 								<input type="text" name="startDate" id="startDate"
 									class="inputtext" />
 							</div>
 						</div>
 						<div class="property">
-							<span class="propertyName">Ora inizio* (hh:mm):</span>
+							<label for="startTime" class="propertyName">Ora inizio*
+								(hh:mm):</label>
 							<div class="propertyValue">
 								<input type="text" id="startTime" name="startTime"
 									class="inputtext" />
 							</div>
 						</div>
 						<div class="property">
-							<span class="propertyName">Data fine (gg,mm,aa):</span>
+							<label for="endDate" class="propertyName">Data fine
+								(gg/mm/aa):</label>
 							<div class="propertyValue">
 								<input type="text" id="endDate" name="endDate" class="inputtext" />
 							</div>
 						</div>
 						<div class="property">
-							<span class="propertyName">Ora fine (hh:mm):</span>
+							<label for="endTime" class="propertyName">Ora fine
+								(hh:mm):</label>
 							<div class="propertyValue">
 								<input type="text" id="endTime" name="endTime" class="inputtext" />
 							</div>
 						</div>
 						<div class="property">
-							<span class="propertyName">Luogo*:</span>
+							<label for="location" class="propertyName">Luogo*:</label>
 							<div class="propertyValue">
 								<input type="text" id="location" name="location"
 									class="inputtext" />
 							</div>
 						</div>
 						<div class="property">
-							<span class="propertyName">Descrizione*:</span>
+							<label for="description" class="propertyName">Descrizione*:</label>
 							<div class="propertyValue">
 								<input type="text" id="description" name="description"
 									class="inputtext" />
