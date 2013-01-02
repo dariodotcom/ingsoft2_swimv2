@@ -43,13 +43,13 @@
 					<span class="propertyName">Fine:</span>
 					<div class="propertyValue">
 						<%
-							String endDateTime = Misc.DATE_TIME_FORMAT.format(workReq
-									.getEndDate());
-							if (endDateTime == null) {
+							if (workReq.getEndDate() == null) {
 						%>
 						Non impostato
 						<%
 							} else {
+								String endDateTime = Misc.DATE_TIME_FORMAT.format(workReq
+										.getEndDate());
 						%>
 						<%=endDateTime%>
 						<%
