@@ -16,16 +16,19 @@ public class Misc {
 
 	public static final String ERROR_ATTR = "errorType";
 	public static final String NOTIFICATION_ATTR = "notificationType";
-	
+
 	public static final String FRIENDSHIP_STATUS = "friendshipStatus";
 	public static final String FRIENDLIST_ATTR = "friendlist";
-	
+
 	public static final String LOGGED_ATTRIBUTE = "loggedIn";
 	public static final String LOGGED_USERNAME = "loggedUsername";
 	public static final String LOGGED_USERTYPE = "loggedUserType";
-	
+
 	public static final String ABILITY_LIST = "abilityList";
-	
+
+	public static final String ABILITY_NAME = "abilityName";
+	public static final String TARGET_WORKREQUEST = "targetWorkRequest";
+
 	// JSP list
 	public static final String HOME_JSP = "/home.jsp";
 	public static final String ERROR_JSP = "/error.jsp";
@@ -37,14 +40,19 @@ public class Misc {
 	public static final String SEARCH_JSP = "/search.jsp";
 	public static final String ABOUT_JSP = "/about.jsp";
 	public static final String ADMIN_JSP = "/admin.jsp";
+	public static final String CREATE_WORKREQUEST_JSP = "/create_workrequest.jsp";
+	public static final String VIEW_WORKREQUEST_JSP = "/view_workrequest.jsp";
 
 	// Utils
 
 	public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat(
 			"dd/MM/yyyy");
+	public static final SimpleDateFormat TIME_FORMAT = new SimpleDateFormat(
+			"HH:mm");
+	public static final SimpleDateFormat DATE_TIME_FORMAT = new SimpleDateFormat(
+			"dd/MM/yyyy HH:mm");
 
 	public static final int MIN_PASSWORD_LENGTH = 8;
-
 
 	// Helpers
 
@@ -65,6 +73,7 @@ public class Misc {
 		public final static String PROFILE = "UserProfileController/remote";
 		public static final String FRIENDSHIP = "FriendshipController/remote";
 		public static final String ABILITY = "AbilityController/remote";
+		public static final String WORKREQUEST = "WorkRequestController/remote";
 	}
 
 	// Enums

@@ -51,7 +51,8 @@
 					</form>
 				</div>
 				<div class="userControls headerElem">
-					<form>
+					<form action="<%=ctx%>/user/sendworkrequest" method="post">
+						<input type="hidden" name="u" value="<%=target.getUsername()%>" />
 						<input type="submit" value="Invia richiesta di lavoro"
 							class="inputsubmit" />
 					</form>
@@ -121,7 +122,7 @@
 						<%=friendCount%>
 						amic<%=friendCount == 1 ? "o" : "i"%>:
 					</p>
-					<div class="list">
+					<div class="propertyList reducedWidth withImage">
 						<%
 							for (Object o : friendList) {
 										Friendship f = (Friendship) o;
@@ -133,11 +134,11 @@
 										String friendIdentity = String.format("%s %s",
 												friend.getName(), friend.getSurname());
 						%>
-						<div class="listEntry friendship">
+						<div class="property">
 							<div class="smallImageFrame">
 								<img src="<%=ctx%>/resources/user-img.png" alt="User image" />
 							</div>
-							<span class="username"><a
+							<span class="propertyName"><a
 								href="<%=ctx%>/user/?u=<%=friend.getUsername()%>"><%=friendIdentity%></a></span>
 						</div>
 						<%

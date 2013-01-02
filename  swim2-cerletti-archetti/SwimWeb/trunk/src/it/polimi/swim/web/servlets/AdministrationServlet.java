@@ -1,8 +1,11 @@
 package it.polimi.swim.web.servlets;
 
 import it.polimi.swim.business.bean.remote.AbilityControllerRemote;
+import it.polimi.swim.business.exceptions.BadRequestException;
+import it.polimi.swim.business.exceptions.InvalidStateException;
 import it.polimi.swim.web.pagesupport.ErrorType;
 import it.polimi.swim.web.pagesupport.Misc;
+import it.polimi.swim.web.pagesupport.NotificationMessages;
 
 import java.io.IOException;
 import java.util.List;
@@ -19,6 +22,8 @@ import javax.servlet.http.HttpSession;
 public class AdministrationServlet extends SwimServlet {
 
 	private static final long serialVersionUID = -1318042817980004978L;
+	private static final String ABILITY_NAME = "abilityName";
+	private static final String ABILITY_DESC = "abilityDescription";
 
 	public enum AdministrationSection {
 		REQUEST("Richieste", ""), MANAGEMENT("Gestione", "manage");
@@ -73,7 +78,8 @@ public class AdministrationServlet extends SwimServlet {
 
 		registerPostActionMapping("create", new ServletAction() {
 			public void runAction(HttpServletRequest req,
-					HttpServletResponse resp) throws IOException {
+					HttpServletResponse resp) throws IOException,
+					ServletException {
 				doCreateNewAbility(req, resp);
 			}
 		});
@@ -96,7 +102,41 @@ public class AdministrationServlet extends SwimServlet {
 	/* Methods to respond to different requests */
 
 	private void doCreateNewAbility(HttpServletRequest req,
-			HttpServletResponse resp) {
+			HttpServletResponse resp) throws IOException, ServletException {
+
+		HttpSession session = req.getSession();
+		String adminUsr = getUsername(session);
+
+		if (!isAdministratorLoggedIn(session)) {
+			sendError(req, resp, ErrorType.LOGIN_REQUIRED);
+			return;
+		}
+
+		String abilityName = req.getParameter(ABILITY_NAME);
+		String abilityDesc = req.getParameter(ABILITY_DESC);
+
+		AbilityControllerRemote ability = lookupBean(
+				AbilityControllerRemote.class, Misc.BeanNames.ABILITY);
+
+		req.setAttribute(Misc.SELECTED_SECTION_ATTR,
+				AdministrationSection.MANAGEMENT);
+
+		try {
+			ability.addNewAbility(adminUsr, abilityName, abilityDesc);
+		} catch (BadRequestException e) {
+			req.setAttribute(Misc.ERROR_ATTR, ErrorType.EMPTY_FIELDS);
+			req.getRequestDispatcher(Misc.ADMIN_JSP).forward(req, resp);
+			return;
+		} catch (InvalidStateException e) {
+			req.setAttribute(Misc.ERROR_ATTR, ErrorType.INVALID_REQUEST);
+			req.getRequestDispatcher(Misc.ADMIN_JSP).forward(req, resp);
+			return;
+		}
+
+		req.setAttribute(Misc.NOTIFICATION_ATTR,
+				NotificationMessages.ABILITY_ADDED);
+		req.getRequestDispatcher(Misc.ADMIN_JSP).forward(req, resp);
+		return;
 	}
 
 	private void doAcceptAbilityRequest(HttpServletRequest req,
@@ -121,9 +161,11 @@ public class AdministrationServlet extends SwimServlet {
 		AbilityControllerRemote ability = lookupBean(
 				AbilityControllerRemote.class, Misc.BeanNames.ABILITY);
 		List<?> abilityReqList = ability.getAbilityRequestList();
+		System.out.println(abilityReqList);
 		req.setAttribute(Misc.ABILITY_LIST, abilityReqList);
 
 		// Forward
+		req.setAttribute(Misc.SELECTED_SECTION_ATTR, section);
 		req.getRequestDispatcher(Misc.ADMIN_JSP).forward(req, resp);
 	}
 }
