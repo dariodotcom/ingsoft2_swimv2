@@ -89,6 +89,8 @@ public interface AbilityControllerRemote {
 	 * @return a List of the ability already present in the set.
 	 */
 	public List<?> getAvailableAbilityList();
+	
+	public List<?> getAvailableAbilityList(String match);
 
 	/**
 	 * This method is useful to provide a list of the ability request performed

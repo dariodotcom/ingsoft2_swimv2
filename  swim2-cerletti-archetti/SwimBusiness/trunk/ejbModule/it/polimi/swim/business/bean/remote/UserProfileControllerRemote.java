@@ -1,7 +1,9 @@
 package it.polimi.swim.business.bean.remote;
 
 import it.polimi.swim.business.entity.Customer;
+import it.polimi.swim.business.exceptions.BadRequestException;
 import it.polimi.swim.business.exceptions.EmailAlreadyTakenException;
+import it.polimi.swim.business.exceptions.InvalidStateException;
 
 import java.util.List;
 import java.util.Map;
@@ -55,6 +57,8 @@ public interface UserProfileControllerRemote {
 
 	public List<?> getSentFeedbacks(String username);
 
+	public List<?> getAbilityList(String username) throws BadRequestException;
+
 	/**
 	 * Getter method useful to provide the list of feedback received by an user.
 	 * 
@@ -68,12 +72,19 @@ public interface UserProfileControllerRemote {
 	public void updateCustomerDetails(String username,
 			Map<String, Object> values);
 
+	public void addAbility(String username, String abilityName)
+			throws BadRequestException, InvalidStateException;
+
+	public void removeAbility(String username, String abilityName)
+			throws BadRequestException, InvalidStateException;
+
 	public void changePassword(String username, String password);
 
 	public void changeEmail(String username, String email)
 			throws EmailAlreadyTakenException;
-	
+
 	public Boolean canSendFriendshipRequest(String u1, String u2);
-	
+
 	public Boolean areFriends(String username1, String username2);
+
 }

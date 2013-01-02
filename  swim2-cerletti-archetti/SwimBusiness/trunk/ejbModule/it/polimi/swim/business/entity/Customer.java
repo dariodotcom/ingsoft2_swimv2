@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -73,10 +74,13 @@ public class Customer extends User {
 	/* Relationship */
 
 	@OneToMany(mappedBy = "sender")
-	List<Friendship> sentFriendshipReq;
+	private List<Friendship> sentFriendshipReq;
 
 	@OneToMany(mappedBy = "receiver")
-	List<Friendship> receivedFriendshipReq;
+	private List<Friendship> receivedFriendshipReq;
+
+	@ManyToMany
+	List<Ability> declaredAbilities;
 
 	/**
 	 * Getter method.
@@ -264,18 +268,30 @@ public class Customer extends User {
 			return false;
 		}
 
-		for(Friendship f : sentFriendshipReq){
-			if(f.getReceiver().equals(otherCustomer)){
+		for (Friendship f : sentFriendshipReq) {
+			if (f.getReceiver().equals(otherCustomer)) {
 				return false;
 			}
 		}
-		
-		for(Friendship f : receivedFriendshipReq){
-			if(f.getSender().equals(otherCustomer)){
+
+		for (Friendship f : receivedFriendshipReq) {
+			if (f.getSender().equals(otherCustomer)) {
 				return false;
 			}
 		}
-		
+
 		return true;
+	}
+
+	public List<Ability> getAbilityList() {
+		return declaredAbilities;
+	}
+
+	public void addAbility(Ability a) {
+		this.declaredAbilities.add(a);
+	}
+
+	public void removeAbility(Ability a) {
+		this.declaredAbilities.remove(a);
 	}
 }
