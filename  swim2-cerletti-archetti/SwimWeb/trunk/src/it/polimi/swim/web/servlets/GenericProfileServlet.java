@@ -17,7 +17,6 @@ import it.polimi.swim.web.pagesupport.UnloggedMenu;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.Date;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -57,6 +56,37 @@ public class GenericProfileServlet extends SwimServlet {
 
 		public String getSectionIdentifier() {
 			return sectionIdentifier;
+		}
+	}
+
+	public enum createWRField {
+		SELECTED_ABILITY("Professionalit&agrave; richiesta", "selectedAbility",
+				true), START_DATE("Data inizio (gg/mm/aa)", "startDate", true), START_HOUR(
+				"Ora inizio (hh:mm)", "startHour", true), END_DATE(
+				"Data fine (gg/mm/aa)", "endDate", false), END_HOUR(
+				"Ora fine(hh:mm)", "endHour", false), LOCATION("Luogo",
+				"location", true), DESCRIPTION("Descrizione", "description",
+				true);
+
+		private String labelText, name;
+		private Boolean mandatory;
+
+		private createWRField(String labelText, String name, Boolean mandatory) {
+			this.labelText = labelText;
+			this.name = name;
+			this.mandatory = mandatory;
+		}
+
+		public String getLabelText() {
+			return labelText;
+		}
+
+		public String getName() {
+			return name;
+		}
+
+		public Boolean isMandatory() {
+			return mandatory;
 		}
 	}
 
@@ -274,33 +304,19 @@ public class GenericProfileServlet extends SwimServlet {
 		Map<String, Object> workRequestProperties = new HashMap<String, Object>();
 
 		// Retrieve the username of the customer target of the request
-		String targetUsername = req.getParameter("target");
+		String targetUsername = req.getParameter(TARGET_USER_PARAM);
 
 		workRequestProperties.put("receiver", targetUsername);
 		workRequestProperties.put("sender", getUsername(session));
 
-		// Pust target in request in case we forward to create JSP
-		Customer c = lookupBean(UserProfileControllerRemote.class,
-				Misc.BeanNames.PROFILE).getByUsername(targetUsername);
-		req.setAttribute(Misc.USER_TO_SHOW, c);
-
-		String[] fieldNames = { "abilitySelection", "startDate", "startTime",
-				"endDate", "endTime", "location", "description" };
-
-		String[] mandatoryFieldsNames = { "abilitySelection", "startDate",
-				"startTime", "location", "description" };
-
-		// Put receiver customer in request scope in case we forward the to
-		// create jsp again
-
 		// Initially parse request and retrieve all field values
-		for (String name : fieldNames) {
+		for (createWRField field : createWRField.values()) {
+			String name = field.getName();
 			String value = (String) req.getParameter(name);
-			if (Arrays.asList(mandatoryFieldsNames).contains(name)
-					&& Misc.isStringEmpty(value)) {
+			if (field.isMandatory() && Misc.isStringEmpty(value)) {
 				req.setAttribute(Misc.ERROR_ATTR, ErrorType.EMPTY_FIELDS);
-				req.getRequestDispatcher(Misc.CREATE_WORKREQUEST_JSP).forward(
-						req, resp);
+				showCreateWorkRequest(req, resp);
+				return;
 			}
 
 			workRequestProperties.put(name, value);
@@ -310,15 +326,15 @@ public class GenericProfileServlet extends SwimServlet {
 		try {
 			String startDate = (String) workRequestProperties.get("startDate");
 			workRequestProperties.remove("startDate");
-			String startTime = (String) workRequestProperties.get("startTime");
-			workRequestProperties.remove("startTime");
+			String startTime = (String) workRequestProperties.get("startHour");
+			workRequestProperties.remove("startHour");
 
 			workRequestProperties.put("start", parseDate(startDate, startTime));
 
 			String endDate = (String) workRequestProperties.get("startDate");
 			workRequestProperties.remove("startDate");
-			String endTime = (String) workRequestProperties.get("startTime");
-			workRequestProperties.remove("startTime");
+			String endTime = (String) workRequestProperties.get("endHour");
+			workRequestProperties.remove("endHour");
 
 			if (!Misc.isStringEmpty(endDate) && !Misc.isStringEmpty(endTime)) {
 				workRequestProperties.put("start",
@@ -326,8 +342,8 @@ public class GenericProfileServlet extends SwimServlet {
 			}
 		} catch (ParseException e) {
 			req.setAttribute(Misc.ERROR_ATTR, ErrorType.BAD_DATE);
-			req.getRequestDispatcher(Misc.CREATE_WORKREQUEST_JSP).forward(req,
-					resp);
+			showCreateWorkRequest(req, resp);
+			return;
 		}
 
 		WorkRequestControllerRemote workRequestCtrl = lookupBean(
@@ -343,8 +359,7 @@ public class GenericProfileServlet extends SwimServlet {
 		} catch (InvalidStateException e) {
 			req.setAttribute(Misc.ERROR_ATTR,
 					ErrorType.INVALID_ABILITY_SELECTION);
-			req.getRequestDispatcher(Misc.CREATE_WORKREQUEST_JSP).forward(req,
-					resp);
+			showCreateWorkRequest(req, resp);
 			return;
 		}
 

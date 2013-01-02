@@ -1,3 +1,5 @@
+<%@page
+	import="it.polimi.swim.web.servlets.GenericProfileServlet.createWRField"%>
 <%@page import="it.polimi.swim.business.entity.Ability"%>
 <%@page import="java.util.List"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
@@ -26,74 +28,47 @@
 			<div class="monoPageContent">
 				<div class="propertyList reducedWidth">
 					<form action="<%=ctx%>/user/createWorkrequest" method="post">
-						<input type="hidden" name="target"
-							value="<%=receiver.getUsername()%>" />
+						<input type="hidden" name="u" value="<%=receiver.getUsername()%>" />
 						<div class="property">
-							<span class="propertyName">A:</span> <span class="propertyValue">
-								<%=receiver.getName()%>&nbsp; <%=receiver.getSurname()%>
+							<span class="propertyName">Destinatario</span> <span
+								class="propertyValue"> <%=receiver.getName()%>&nbsp; <%=receiver.getSurname()%>
 							</span>
 						</div>
+						<%
+							for (createWRField field : createWRField.values()) {
+						%>
 						<div class="property">
-							<label class="propertyName">Professionalit&agrave;
-								richiesta*:</label>
+							<label for="<%=field.getName()%>" class="propertyName"><%=field.getLabelText() + (field.isMandatory() ? "*" : "")%></label>
 							<div class="propertyValue">
-								<select name="abilitySelection" class="inputselect">
+								<%
+									if (field.equals(createWRField.SELECTED_ABILITY)) {
+								%>
+								<select id="<%=field.getName()%>" name="<%=field.getName()%>"
+									class="inputselect">
 									<%
 										for (Object o : abilityList) {
-											Ability a = (Ability) o;
-											String option = a.getName();
+													Ability a = (Ability) o;
+													String option = a.getName();
 									%>
 									<option value="<%=option%>"><%=option%></option>
 									<%
 										}
 									%>
 								</select>
+								<%
+									} else {
+								%>
+								<input type="text" name="<%=field.getName()%>"
+									id="<%=field.getName()%>" class="inputtext" />
+								<%
+									}
+								%>
 							</div>
 						</div>
-						<div class="property">
-							<label for="startDate" class="propertyName">Data inizio*
-								(gg/mm/aa):</label>
-							<div class="propertyValue">
-								<input type="text" name="startDate" id="startDate"
-									class="inputtext" />
-							</div>
-						</div>
-						<div class="property">
-							<label for="startTime" class="propertyName">Ora inizio*
-								(hh:mm):</label>
-							<div class="propertyValue">
-								<input type="text" id="startTime" name="startTime"
-									class="inputtext" />
-							</div>
-						</div>
-						<div class="property">
-							<label for="endDate" class="propertyName">Data fine
-								(gg/mm/aa):</label>
-							<div class="propertyValue">
-								<input type="text" id="endDate" name="endDate" class="inputtext" />
-							</div>
-						</div>
-						<div class="property">
-							<label for="endTime" class="propertyName">Ora fine
-								(hh:mm):</label>
-							<div class="propertyValue">
-								<input type="text" id="endTime" name="endTime" class="inputtext" />
-							</div>
-						</div>
-						<div class="property">
-							<label for="location" class="propertyName">Luogo*:</label>
-							<div class="propertyValue">
-								<input type="text" id="location" name="location"
-									class="inputtext" />
-							</div>
-						</div>
-						<div class="property">
-							<label for="description" class="propertyName">Descrizione*:</label>
-							<div class="propertyValue">
-								<input type="text" id="description" name="description"
-									class="inputtext" />
-							</div>
-						</div>
+
+						<%
+							}
+						%>
 						<div class="submitLine">
 							<input type="submit" class="inputsubmit" value="Invia" />
 						</div>
