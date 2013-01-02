@@ -55,14 +55,27 @@ public enum ErrorType {
 			"Data non valida",
 			"La data inserita non Ë valida."
 			),
+	BAD_ABILITY_NAME(
+			"Nome non valido",
+			"Professionalit&grave; inserita non valida"
+			), 
+	ALREADY_DECLARED_ABILITY(
+			"Professionalit&agrave; gi&agrave; dichiarata",
+			"Hai gi&agrave; dichiarato tale professionalit&agrave;"
+			),
+	ABILITY_NOT_DECLARED(
+			"Professionalit&agrave; non dichiarata",
+			"Non hai dichiarato tale la professionalit&agrave;."
+			),
 	ABILITY_NAME_TAKEN(
-			"Nome abilità non disponibile",
-			"Il nome dell'abilità inserita non è disponibile."
-			)
-			;
+			"Nome professionalit&agrave; non disponibile",
+			"Il nome della professionalit&agrave; inserita non &egrave; disponibile."
+			),
+	INVALID_ABILITY_SELECTION(
+			"Selezione professionalit&agrave; non valida",
+			"La selezione della professionalit&agrave; del destinatario non Ë valida."
+			);
 	
-
-
 	private String errorName, errorDescription;
 
 	/**

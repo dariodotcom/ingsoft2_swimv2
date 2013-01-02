@@ -6,7 +6,9 @@ import it.polimi.swim.business.bean.remote.UserProfileControllerRemote;
 import it.polimi.swim.business.entity.Ability;
 import it.polimi.swim.business.entity.Customer;
 import it.polimi.swim.business.exceptions.AuthenticationFailedException;
+import it.polimi.swim.business.exceptions.BadRequestException;
 import it.polimi.swim.business.exceptions.EmailAlreadyTakenException;
+import it.polimi.swim.business.exceptions.InvalidStateException;
 import it.polimi.swim.web.pagesupport.CustomerMenu;
 import it.polimi.swim.web.pagesupport.ErrorType;
 import it.polimi.swim.web.pagesupport.Misc;
@@ -132,8 +134,17 @@ public class PersonalPageServlet extends SwimServlet {
 
 		registerPostActionMapping("addAbility", new ServletAction() {
 			public void runAction(HttpServletRequest req,
-					HttpServletResponse resp) throws IOException {
-				doAddAbilityToDeclaredSet(req, resp);
+					HttpServletResponse resp) throws IOException,
+					ServletException {
+				manageCustomerAbility(req, resp, true);
+			}
+		});
+
+		registerPostActionMapping("removeAbility", new ServletAction() {
+			public void runAction(HttpServletRequest req,
+					HttpServletResponse resp) throws IOException,
+					ServletException {
+				manageCustomerAbility(req, resp, false);
 			}
 		});
 	}
@@ -261,9 +272,52 @@ public class PersonalPageServlet extends SwimServlet {
 		showSection(PersonalPageSection.EDIT_PROFILE, req, resp);
 	}
 
-	private void doAddAbilityToDeclaredSet(HttpServletRequest req,
-			HttpServletResponse resp) {
+	private void manageCustomerAbility(HttpServletRequest req,
+			HttpServletResponse resp, Boolean shouldAdd) throws IOException,
+			ServletException {
+		HttpSession session = req.getSession();
 
+		if (!isCustomerLoggedIn(session)) {
+			sendError(req, resp, ErrorType.LOGIN_REQUIRED);
+			return;
+		}
+
+		String username = getUsername(session);
+
+		String abilityName = req.getParameter(Misc.ABILITY_NAME);
+
+		if (Misc.isStringEmpty(abilityName)) {
+			req.setAttribute(Misc.ERROR_ATTR, ErrorType.EMPTY_FIELDS);
+			showSection(PersonalPageSection.EDIT_PROFILE, req, resp);
+			return;
+		}
+
+		UserProfileControllerRemote profile = lookupBean(
+				UserProfileControllerRemote.class, Misc.BeanNames.PROFILE);
+
+		try {
+			if (shouldAdd) {
+				profile.addAbility(username, abilityName);
+			} else {
+				profile.removeAbility(username, abilityName);
+			}
+		} catch (BadRequestException e) {
+			req.setAttribute(Misc.ERROR_ATTR, ErrorType.BAD_ABILITY_NAME);
+			showSection(PersonalPageSection.EDIT_PROFILE, req, resp);
+			return;
+		} catch (InvalidStateException e) {
+			ErrorType err = shouldAdd ? ErrorType.ALREADY_DECLARED_ABILITY
+					: ErrorType.ABILITY_NOT_DECLARED;
+			req.setAttribute(Misc.ERROR_ATTR, err);
+			showSection(PersonalPageSection.EDIT_PROFILE, req, resp);
+			return;
+		}
+
+		NotificationMessages mess = shouldAdd ? NotificationMessages.ABILITY_ADDED
+				: NotificationMessages.ABILITY_REMOVED;
+
+		req.setAttribute(Misc.NOTIFICATION_ATTR, mess);
+		showSection(PersonalPageSection.EDIT_PROFILE, req, resp);
 	}
 
 	private void showSection(PersonalPageSection section,
@@ -282,17 +336,27 @@ public class PersonalPageServlet extends SwimServlet {
 		}
 
 		// Retrieve username
-		String username = String.valueOf(session
+		String selfUsername = String.valueOf(session
 				.getAttribute(AuthenticationServlet.LOGGED_USERNAME));
 
 		// lookup bean to retrieve user informations
 		UserProfileControllerRemote profile = lookupBean(
 				UserProfileControllerRemote.class, Misc.BeanNames.PROFILE);
 
-		Customer c = profile.getByUsername(username);
+		Customer c = profile.getByUsername(selfUsername);
 
 		// Put user informations in request
 		req.setAttribute(Misc.USER_TO_SHOW, c);
+
+		// Put user ability list in request
+		List<?> abilityList;
+		try {
+			abilityList = profile.getAbilityList(selfUsername);
+			req.setAttribute(Misc.ABILITY_LIST, abilityList);
+		} catch (BadRequestException e) {
+			sendError(req, resp, ErrorType.BAD_REQUEST);
+			return;
+		}
 
 		// Set section to show
 		req.setAttribute(Misc.SELECTED_TAB_ATTR, CustomerMenu.HOME);
@@ -320,23 +384,38 @@ public class PersonalPageServlet extends SwimServlet {
 			throws IOException {
 		resp.setContentType("application/json");
 
+		HttpSession session = req.getSession();
+
+		if (!isCustomerLoggedIn(session)) {
+			return;
+		}
+
 		PrintWriter respWriter = resp.getWriter();
 
 		// Retrieve ability list
+		String match = req.getParameter("term");
+
 		AbilityControllerRemote ability = lookupBean(
 				AbilityControllerRemote.class, Misc.BeanNames.ABILITY);
 
-		List<?> abilityList = ability.getAvailableAbilityList();
+		List<?> abilityList;
+		if (Misc.isStringEmpty(match)) {
+			abilityList = ability.getAvailableAbilityList();
+		} else {
+			abilityList = ability.getAvailableAbilityList(match);
+		}
+
 		int size = abilityList.size();
 
-		respWriter.println("[");
+		respWriter.print("[");
 
 		for (int i = 0; i < size; i++) {
-			Ability a = (Ability) abilityList.get(i);
-			respWriter.printf("{%s,%s}%s", a.getName(), a.getDescription(),
+			Object obj = abilityList.get(i);
+			Ability a = (Ability) obj;
+			respWriter.printf("\"%s\"%s", a.getName(),
 					(i < size - 1 ? "," : ""));
 		}
 
-		respWriter.println("]");
+		respWriter.print("]");
 	}
 }

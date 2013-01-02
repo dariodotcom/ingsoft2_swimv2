@@ -12,10 +12,12 @@
 	Object ref = request.getAttribute(Misc.SELECTED_SECTION_ATTR);
 	AdministrationSection selectedSection = (ref != null ? (AdministrationSection) ref
 			: AdministrationSection.REQUEST);
-	request.setAttribute(Misc.ABILITY_LIST,
-			selectedSection.getSectionName());
+
+	System.out.println(request.getAttribute(Misc.ABILITY_LIST));
+
 	List<?> abilityReqList = (List<?>) request
 			.getAttribute(Misc.ABILITY_LIST);
+
 	String ctx = request.getContextPath();
 %>
 <%@ include file="shared/head.jsp"%>
@@ -27,7 +29,7 @@
 				<ul id="swimSecondaryMenu">
 					<%
 						for (AdministrationSection s : AdministrationSection.values()) {
-							String link = ctx + "/" + s.getSectionIdentifier(), name = s
+							String link = ctx + "/admin/" + s.getSectionIdentifier(), name = s
 									.getSectionName();
 							String selClass = selectedSection.equals(s) ? " selected" : "";
 					%>
@@ -54,23 +56,40 @@
 					%>
 					<p class="paragraph">Richieste:</p>
 					<div class="list">
-					<%
-					for (Object o: abilityReqList){
-						AbilityRequest a = (AbilityRequest) o;
-						Customer requestAuthor = a.getRequestAuthor();
-						String name = a.getAbilityName();
-						String description = a.getAbilityDescription();
-					}
-					%>
+						<%
+							for (Object o : abilityReqList) {
+										AbilityRequest a = (AbilityRequest) o;
+										Customer requestAuthor = a.getRequestAuthor();
+										String name = a.getAbilityName();
+										String description = a.getAbilityDescription();
+									}
+						%>
 					</div>
 					<%
 						}
 
 							break;
 						case MANAGEMENT:
-							break;
 					%>
+					<p class="paragraph">Crea una nuova professionlità che sarà
+						resa disponibile a tutti gli utenti della piattaforma.</p>
+					<form action="<%=ctx%>/admin/create" method="post">
+						<div class="inputLine">
+							<label for="abilityName">Nome</label> <input
+								type="text" name="abilityName" id="abilityName"
+								class="inputtext" />
+						</div>
+						<div class="inputLine">
+							<label for="abilityDescription">Descrizione</label> <input
+								type="text" name="abilityDescription" id="abilityDescription"
+								class="inputtext" />
+						</div>
+						<div class="submitLine">
+							<input type=submit class="inputsubmit" value="Aggiungi" />
+						</div>
+					</form>
 					<%
+						break;
 						}
 					%>
 				</div>

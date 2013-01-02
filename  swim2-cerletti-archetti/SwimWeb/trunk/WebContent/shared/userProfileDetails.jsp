@@ -41,7 +41,7 @@
 				alt="user image" />
 		</div>
 	</div>
-	<div class="column" id="detailColumn">
+	<div class="column propertyList" id="detailColumn">
 		<%
 			for (UserDetail d : details) {
 				Method getter = custClass.getMethod(d.getGetterName(),
@@ -55,9 +55,9 @@
 
 				if (showOwnProfile || !d.isDetailPrivate()) {
 		%>
-		<div class="detail">
-			<div class="detailName"><%=d.getDetailName()%></div>
-			<div class="detailValue<%=additionalClass%>"><%=detailValue%></div>
+		<div class="property">
+			<div class="propertyName"><%=d.getDetailName()%></div>
+			<div class="propertyValue<%=additionalClass%>"><%=detailValue%></div>
 		</div>
 		<%
 			}

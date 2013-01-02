@@ -358,13 +358,59 @@ h2.partTitle{
 	text-align: justify;
 }
 
+/*ValueList*/
+.propertyList .property{
+	min-height: 30px;
+    padding: 6px;
+    border-bottom: 1px solid #e1e1e1;
+}
+
+.propertyList .property:hover{
+    background-color: #f1f1f1;
+}
+
+.propertyList .property .propertyName{
+	line-height: 30px;
+	vertical-align: middle;
+	float: left;
+}
+
+.propertyList .property .propertyValue{
+	float: right;
+	display: inline-block;
+	vertical-align: middle;
+}
+
+.propertyList .property .propertyValue:not(:last-child){
+	margin-left: 15px;
+}
+
+.propertyList.withImage .property{
+	height: 34px;
+}
+
+.propertyList.withImage .propertyName{
+	line-height: 34px;
+	margin-left: 15px;
+}
+
+.propertyList.withImage .smallImageFrame{
+	float: left;
+}
+
 /*Forms*/
+#swimContent .inputselect,
 #swimContent .inputtext{
 	border: 1px solid rgba(0,0,0,.25);
 	box-shadow: 0 -3px 2px rgba(0,0,0,.08) inset;
 	padding: 5px;
 	border-radius: 2px;
 }
+
+#swimContent .inputselect{
+	width: 181px;
+}
+
 
 #swimContent .inputtext:hover,
 #swimContent .inputtext:focus{
@@ -389,6 +435,7 @@ h2.partTitle{
 
 #swimContent .inputLine{
 	margin-top: 10px;
+	height: 25px;
 }
 
 #swimContent .submitLine .inputsubmit{
@@ -402,6 +449,11 @@ h2.partTitle{
 
 #swimContent .inputtext{
 	width: 170px;
+}
+
+.reducedWidth{
+	width: 480px;
+	margin: 0 auto;
 }
 
 /*Footer*/
@@ -463,28 +515,18 @@ body.welcome .formContainer h2{
 
 .profilePage #detailColumn{
     margin-left: 40px;
+    width: 480px;
 }
 
-.profilePage .detail{
-    border-bottom: 1px solid #e1e1e1;
-    padding: 5px 3px;
-    margin-bottom: 20px;
+.profilePage #detailColumn .propertyValue{
+    line-height: 30px;
 }
 
-.profilePage .detailName,
-.profilePage .detailValue{
-    display: inline-block;
-}
-
-.profilePage .detailName{
-    width: 250px;
-}
-
-.profilePage .detailValue:not(.unset){
+.profilePage #detailColumn .propertyValue:not(.unset){
     font-weight: bold;
 }
 
-.profilePage .detailValue.unset{
+.profilePage #detailColumn .propertyValue.unset{
     color: #acacac
 }
 
@@ -512,6 +554,26 @@ body.welcome .formContainer h2{
 	font-weight: bold;
 }
 
+/*autocomplete*/
+.ui-autocomplete{
+    position: absolute;
+    border: 1px solid #acacac;
+    margin-top: -2px;
+    cursor: default;
+    border-radius: 0 0 2px 2px;
+    background: white;
+    box-shadow: 0 1px 1px 0 rgba(0,0,0,.3);
+}
+
+.ui-helper-hidden-accessible{
+    display: none;
+}
+
+.ui-menu-item a{display: block;    padding: 6px;}
+.ui-menu-item a.ui-state-focus{
+    background-color: #e5e5e5;
+}
+
 /*SEARCH*/
 body.search .formContainer{
     width: 335px;
@@ -520,7 +582,7 @@ body.search .formContainer{
 }
 
 .list .listEntry{
-    padding: 6px;
+
 }
 
 .list .listEntry:not(:last-child){
@@ -531,7 +593,8 @@ body.search .formContainer{
     background-color: #f1f1f1;
 }
 
-.list .listEntry .username{
+.list .listEntry .username,
+.list .listEntry span{
     line-height: 30px;
     margin-left: 10px;
     vertical-align: bottom;
@@ -547,5 +610,5 @@ body.search .formContainer{
 form.actionForm{
     display: inline-block;
     float: right;
-    margin: 3px 5px;
+    margin: 0 5px;
 }

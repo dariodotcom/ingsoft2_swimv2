@@ -61,7 +61,7 @@
 						} else {
 					%>
 					<p class="paragraph">I seguenti utenti sono tuoi amici:</p>
-					<div class="list">
+					<div class="propertyList reducedWidth withImage">
 						<%
 							for (Object o : friendList) {
 										Friendship f = (Friendship) o;
@@ -72,14 +72,13 @@
 										String friendIdentity = String.format("%s %s",
 												friend.getName(), friend.getSurname());
 						%>
-						<div class="listEntry friendship">
-							<div class="smallImageFrame">
-								<img src="<%=ctx%>/resources/user-img.png" alt="User image" />
-							</div>
-							<span class="username"><a
+						<div class="property">
+							<span class="smallImageFrame"> <img
+								src="<%=ctx%>/resources/user-img.png" alt="User image" />
+							</span> <span class="propertyName"> <a
 								href="<%=ctx%>/user/?u=<%=friend.getUsername()%>"><%=friendIdentity%></a></span>
 							<form action="<%=ctx%>/friends/remove" method="post"
-								class="actionForm">
+								class="propertyValue">
 								<input type="hidden" name="f" value="<%=f.getId()%>" /> <input
 									type="submit" class="inputsubmit" value="Rimuovi" />
 							</form>
@@ -103,7 +102,7 @@
 					%>
 					<p class="paragraph">Hai ricevuto le seguenti richieste di
 						amicizia:</p>
-					<div class="list">
+					<div class="propertyList withImage reducedWidth">
 						<%
 							for (Object o : friendList) {
 										Friendship f = (Friendship) o;
@@ -111,19 +110,19 @@
 										String senderIdentity = sender.getName() + " "
 												+ sender.getSurname();
 						%>
-						<div class="listEntry friendshipRequest">
-							<div class="smallImageFrame">
+						<div class="property">
+							<span class="smallImageFrame">
 								<img src="<%=ctx%>/resources/user-img.png" alt="User image" />
-							</div>
-							<span class="username"><a
+							</span>
+							<span class="propertyName"><a
 								href="<%=ctx%>/user/?u=<%=sender.getUsername()%>"><%=senderIdentity%></a></span>
 							<form action="<%=ctx%>/friends/accept" method="post"
-								class="actionForm">
+								class="propertyValue">
 								<input type="hidden" name="f" value="<%=f.getId()%>" /> <input
 									type="submit" class="inputsubmit" value="Accetta" />
 							</form>
 							<form action="<%=ctx%>/friends/decline" method="post"
-								class="actionForm">
+								class="propertyValue">
 								<input type="hidden" name="f" value="<%=f.getId()%>" /> <input
 									type="submit" class="inputsubmit" value="Rifiuta" />
 							</form>

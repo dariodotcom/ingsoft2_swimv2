@@ -1,6 +1,10 @@
 package it.polimi.swim.web.servlets;
 
+import it.polimi.swim.business.bean.remote.WorkRequestControllerRemote;
+import it.polimi.swim.business.entity.WorkRequest;
+import it.polimi.swim.business.exceptions.BadRequestException;
 import it.polimi.swim.web.pagesupport.CustomerMenu;
+import it.polimi.swim.web.pagesupport.ErrorType;
 import it.polimi.swim.web.pagesupport.Misc;
 
 import java.io.IOException;
@@ -164,6 +168,27 @@ public class CustomerWorkrequestServlet extends SwimServlet {
 
 	private void showWorkRequest(HttpServletRequest req,
 			HttpServletResponse resp) throws IOException, ServletException {
-		req.getRequestDispatcher("workrequest.jsp").forward(req, resp);
+		int requestId;
+
+		try {
+			requestId = Integer.parseInt(req.getParameter("id"));
+		} catch (NumberFormatException e) {
+			sendError(req, resp, ErrorType.BAD_REQUEST);
+			return;
+		}
+
+		WorkRequestControllerRemote workReqCtrl = lookupBean(
+				WorkRequestControllerRemote.class, Misc.BeanNames.WORKREQUEST);
+
+		WorkRequest workReq;
+		try {
+			workReq = workReqCtrl.getById(requestId);
+		} catch (BadRequestException e) {
+			sendError(req, resp, ErrorType.BAD_REQUEST);
+			return;
+		}
+
+		req.setAttribute(Misc.TARGET_WORKREQUEST, workReq);
+		req.getRequestDispatcher(Misc.VIEW_WORKREQUEST_JSP).forward(req, resp);
 	}
 }

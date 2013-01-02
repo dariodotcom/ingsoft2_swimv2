@@ -103,17 +103,24 @@
 					<form id="secLoginForm"
 						action="<%=request.getContextPath() + "/login"%>" method="post"
 						class="welcomeForm">
-						<div class="inputLine">
-							<label class="inputLabel" for="secUsername">Username</label> <input
-								type="text" id="secUsername" name="username" class="inputtext" />
-						</div>
-						<div class="inputLine">
-							<label class="inputLabel" for="secPassword">Password</label> <input
-								type="password" id="secPassword" name="password"
-								class="inputtext" />
-						</div>
-						<div class="submitLine">
-							<input type="submit" value="Login" class="inputsubmit" />
+						<div class="propertyList reducedWidth">
+							<div class="property">
+								<label class="propertyName" for="secUsername">Username</label>
+								<div class="propertyValue">
+									<input type="text" id="secUsername" name="username"
+										class="inputtext" />
+								</div>
+							</div>
+							<div class="property">
+								<label class="propertyName" for="secPassword">Password</label>
+								<div class="propertyValue">
+									<input type="password" id="secPassword" name="password"
+										class="inputtext" />
+								</div>
+							</div>
+							<div class="submitLine">
+								<input type="submit" value="Login" class="inputsubmit" />
+							</div>
 						</div>
 					</form>
 					<%
