@@ -106,7 +106,14 @@ public class AbilityController implements AbilityControllerRemote {
 	 * @see AbilityControllerRemote
 	 */
 	public List<?> getAvailableAbilityList() {
-		Query q = manager.createQuery("FROM Ability");
+		Query q = manager.createQuery("FROM Ability a");
+		return q.getResultList();
+	}
+
+	public List<?> getAvailableAbilityList(String match) {
+		Query q = manager
+				.createQuery("FROM Ability a WHERE a.name LIKE :match");
+		q.setParameter("match", "%" + match + "%");
 		return q.getResultList();
 	}
 
@@ -119,7 +126,7 @@ public class AbilityController implements AbilityControllerRemote {
 	private Boolean isAbilityNameAvailable(String name) {
 		Boolean noAbilityWithName = manager.find(Ability.class, name) == null;
 		Query q = manager
-				.createQuery("FROM AbilityRequest r WHERE r.name=:name");
+				.createQuery("FROM AbilityRequest r WHERE r.abilityName=:name");
 		q.setParameter("name", name);
 		Boolean noRequestWithName = q.getResultList().size() == 0;
 

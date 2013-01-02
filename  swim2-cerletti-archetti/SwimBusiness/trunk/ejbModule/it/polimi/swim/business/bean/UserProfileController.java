@@ -8,8 +8,11 @@ import java.util.List;
 import java.util.Map;
 
 import it.polimi.swim.business.bean.remote.UserProfileControllerRemote;
+import it.polimi.swim.business.entity.Ability;
 import it.polimi.swim.business.entity.Customer;
+import it.polimi.swim.business.exceptions.BadRequestException;
 import it.polimi.swim.business.exceptions.EmailAlreadyTakenException;
+import it.polimi.swim.business.exceptions.InvalidStateException;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -160,14 +163,14 @@ public class UserProfileController implements UserProfileControllerRemote {
 						+ "(f.sender.username=:firstUser AND f.receiver.username=:secondUser OR "
 						+ "f.sender.username=:secondUser AND f.receiver.username=:firstUser) AND "
 						+ "f.confirmed=true");
-		
+
 		q.setParameter("firstUser", username1);
 		q.setParameter("secondUser", username2);
-		
-		try{
+
+		try {
 			q.getSingleResult();
 			return true;
-		}catch(NoResultException e){
+		} catch (NoResultException e) {
 			return false;
 		}
 	}
@@ -178,6 +181,42 @@ public class UserProfileController implements UserProfileControllerRemote {
 		q.setParameter("email", email);
 
 		return q.getResultList().size() == 0;
+	}
+
+	public List<?> getAbilityList(String username) throws BadRequestException {
+		Query q = manager
+				.createQuery("SELECT a FROM Customer c, IN (c.declaredAbilities) a WHERE c.username=:username");
+		q.setParameter("username", username);
+		return q.getResultList();
+	}
+
+	public void addAbility(String username, String abilityName)
+			throws BadRequestException, InvalidStateException {
+		Customer c = Helpers
+				.getEntityChecked(manager, Customer.class, username);
+		Ability a = Helpers.getEntityChecked(manager, Ability.class,
+				abilityName);
+		
+		if(c.getAbilityList().contains(a)){
+			throw new InvalidStateException();
+		}
+		
+		c.addAbility(a);
+	}
+
+	public void removeAbility(String username, String abilityName)
+			throws BadRequestException, InvalidStateException {
+		// TODO Auto-generated method stub
+		Customer c = Helpers
+				.getEntityChecked(manager, Customer.class, username);
+		Ability a = Helpers.getEntityChecked(manager, Ability.class,
+				abilityName);
+		
+		if(!c.getAbilityList().contains(a)){
+			throw new InvalidStateException();
+		}
+		
+		c.removeAbility(a);
 	}
 
 }

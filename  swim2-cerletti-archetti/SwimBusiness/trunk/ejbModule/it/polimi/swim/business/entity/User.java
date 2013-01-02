@@ -3,14 +3,12 @@ package it.polimi.swim.business.entity;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
-import javax.persistence.OneToMany;
 
 /**
  * User is an entity that represents a user of the system, which may be a
@@ -46,11 +44,6 @@ public abstract class User {
 
 	@Column(name = "passwordHash", nullable = false)
 	private String passwordHash;
-
-	/* Relationship */
-
-	@OneToMany
-	List<Ability> declaredAbilities;
 
 	/**
 	 * Getter method.

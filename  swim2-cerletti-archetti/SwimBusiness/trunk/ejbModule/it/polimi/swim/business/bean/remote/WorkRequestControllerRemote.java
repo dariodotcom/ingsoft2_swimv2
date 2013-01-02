@@ -1,6 +1,10 @@
 package it.polimi.swim.business.bean.remote;
 
+import java.util.Map;
+
+import it.polimi.swim.business.entity.WorkRequest;
 import it.polimi.swim.business.exceptions.BadRequestException;
+import it.polimi.swim.business.exceptions.InvalidStateException;
 import it.polimi.swim.business.exceptions.UnauthorizedRequestException;
 
 import javax.ejb.Remote;
@@ -20,9 +24,10 @@ public interface WorkRequestControllerRemote {
 	 * @param recevierUsr
 	 *            - the identifier of the user receiving the request.
 	 * @return the identifier of the created work request.
+	 * @throws InvalidStateException
 	 * */
-	public int createWorkRequest(String senderUsr, String receiverUsr)
-			throws BadRequestException;
+	public int createWorkRequest(Map<String, Object> properties)
+			throws BadRequestException, InvalidStateException;
 
 	/**
 	 * Confirms or cancels a work request. Both the sender and the receiver can
@@ -71,4 +76,6 @@ public interface WorkRequestControllerRemote {
 	 */
 	public void sendMessage(String authorUsr, String text, int workRequestId)
 			throws UnauthorizedRequestException, BadRequestException;
+
+	public WorkRequest getById(int requestId) throws BadRequestException;
 }

@@ -103,9 +103,7 @@ public class AuthenticationController implements AuthenticationControllerRemote 
 	}
 
 	public void createAdministrator(String username, String password)
-			throws UsernameAlreadyTakenException {
-		System.out.println("I started");
-		
+			throws UsernameAlreadyTakenException {	
 		if (!isUsernameAvailable(username)) {
 			throw new UsernameAlreadyTakenException();
 		}

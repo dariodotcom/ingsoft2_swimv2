@@ -16,6 +16,10 @@ import javax.persistence.Table;
 @Table(name = "ability")
 public class Ability {
 
+	public Ability() {
+	}
+	
+	
 	/**
 	 * Class constructor.
 	 * 

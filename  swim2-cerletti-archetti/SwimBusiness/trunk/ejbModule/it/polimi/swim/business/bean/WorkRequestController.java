@@ -1,10 +1,16 @@
 package it.polimi.swim.business.bean;
 
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
 import it.polimi.swim.business.bean.remote.WorkRequestControllerRemote;
+import it.polimi.swim.business.entity.Ability;
 import it.polimi.swim.business.entity.Customer;
 import it.polimi.swim.business.entity.Message;
 import it.polimi.swim.business.entity.WorkRequest;
 import it.polimi.swim.business.exceptions.BadRequestException;
+import it.polimi.swim.business.exceptions.InvalidStateException;
 import it.polimi.swim.business.exceptions.UnauthorizedRequestException;
 
 import javax.ejb.Stateless;
@@ -28,17 +34,33 @@ public class WorkRequestController implements WorkRequestControllerRemote {
 	}
 
 	/**
+	 * @throws InvalidStateException
 	 * @see WorkRequestControllerRemote
 	 */
-	public int createWorkRequest(String senderUsr, String receiverUsr)
-			throws BadRequestException {
+	public int createWorkRequest(Map<String, Object> properties)
+			throws BadRequestException, InvalidStateException {
+		String senderUsr = (String) properties.get("sender");
+		String receiverUsr = (String) properties.get("receiver");
+
 		Customer sender = getCustomer(senderUsr), receiver = getCustomer(receiverUsr);
 
 		// Check receiver abilities
+		List<Ability> receiverAbilities = receiver.getAbilityList();
+		Ability a = Helpers.getEntityChecked(manager, Ability.class,
+				properties.get("abilitySelection"));
+
+		if (receiverAbilities.size() == 0 || !receiverAbilities.contains(a)) {
+			throw new InvalidStateException();
+		}
 
 		WorkRequest w = new WorkRequest(sender, receiver);
-		manager.persist(w);
+		w.setDescription((String) properties.get("description"));
+		w.setRequiredAbility(a);
+		w.setStartDate((Date) properties.get("start"));
+		w.setEndDate((Date) properties.get("end"));
+		w.setLocation((String) properties.get("location"));
 
+		manager.persist(w);
 		return w.getId();
 	}
 
@@ -112,10 +134,10 @@ public class WorkRequestController implements WorkRequestControllerRemote {
 
 		Customer sender = request.getSender(), receiver = request.getReceiver();
 
-		if(!isTextValid(text)){
+		if (!isTextValid(text)) {
 			throw new BadRequestException();
 		}
-		
+
 		if (!(author.equals(sender) || author.equals(receiver))) {
 			throw new UnauthorizedRequestException();
 		}
@@ -125,7 +147,6 @@ public class WorkRequestController implements WorkRequestControllerRemote {
 	}
 
 	/* Helpers */
-	
 	private Customer getCustomer(String username) throws BadRequestException {
 		Customer customer = manager.find(Customer.class, username);
 		if (customer == null) {
@@ -146,5 +167,9 @@ public class WorkRequestController implements WorkRequestControllerRemote {
 
 	private Boolean isTextValid(String text) {
 		return text != null && text.length() >= 0;
+	}
+
+	public WorkRequest getById(int requestId) throws BadRequestException {
+		return Helpers.getEntityChecked(manager, WorkRequest.class, requestId);
 	}
 }
