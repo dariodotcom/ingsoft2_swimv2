@@ -28,6 +28,10 @@ public class Misc {
 
 	public static final String ABILITY_NAME = "abilityName";
 	public static final String TARGET_WORKREQUEST = "targetWorkRequest";
+	
+	public static final String WORKREQUEST_LIST = "workRequestList";
+	
+	public static final String FEEDBACK_LIST = "feedbackList";
 
 	// JSP list
 	public static final String HOME_JSP = "/home.jsp";
