@@ -144,7 +144,7 @@
 					</p>
 					<%
 						} else if (selfResponseAwaited) {
-					%>
+					%><p class="paragraph"><%=responseAwaitedMessage%></p>
 					<form action="<%=ctx%>/works/respond" method="post"
 						class="inlineForm">
 						<input type="hidden" name="w" value="<%=workReq.getId()%>" /> <input
@@ -167,10 +167,10 @@
 					<%
 						} else if (showCompletionControl) {
 					%>
-					<p class="paragraph">
-						Quando la rihiesta è stata completata, segnala qui LOL.
-					</p>
-					<form action="<%=ctx%>/works/respond" method="post" class="inlineForm">
+					<p class="paragraph">Quando la rihiesta è stata completata,
+						segnala qui LOL.</p>
+					<form action="<%=ctx%>/works/respond" method="post"
+						class="inlineForm">
 						<input type="hidden" name="w" value="<%=workReq.getId()%>" /><input
 							type="submit" class="inputsubmit" value="La richiesta è completa" />
 					</form>
