@@ -169,7 +169,7 @@
 					<form action="<%=ctx%>/works/respond" method="post"
 						class="inlineForm">
 						<input type="hidden" name="w" value="<%=workReq.getId()%>" /><input
-							type="submit" class="inputsubmit" value="La richiesta è completa" />
+							type="submit" class="inputsubmit" value="Segna come completata" />
 					</form>
 					<%
 						} else if (otherCompletionAwaited) {
