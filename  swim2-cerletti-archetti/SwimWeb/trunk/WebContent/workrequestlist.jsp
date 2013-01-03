@@ -1,3 +1,6 @@
+<%@page import="it.polimi.swim.business.entity.Ability"%>
+<%@page import="it.polimi.swim.business.entity.WorkRequest"%>
+<%@page import="java.util.List"%>
 <%@page import="it.polimi.swim.web.servlets.CustomerWorkrequestServlet"%>
 <%@page
 	import="it.polimi.swim.web.servlets.CustomerWorkrequestServlet.CustomerWorkRequestSection"%>
@@ -13,6 +16,9 @@
 
 	request.setAttribute(Misc.PAGE_TITLE_ATTR,
 			selectedSection.getSectionName());
+
+	List<?> workReqList = (List<?>) request
+			.getAttribute(Misc.WORKREQUEST_LIST);
 %>
 <%@ include file="shared/head.jsp"%>
 <body class="swim">
@@ -37,48 +43,55 @@
 				</ul>
 			</div>
 			<div id="rightColumn" class="column">
-				<%
-					switch (selectedSection) {
-					case ACTIVE_REQUESTS:
-				%>
-				<div class="text">Quisque congue auctor magna sed egestas.
-					Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec
-					facilisis, felis vel iaculis commodo, tellus tellus euismod mi,
-					eget volutpat quam massa id nunc. Sed eget urna a metus luctus
-					molestie quis dictum enim. Nulla facilisis tortor vel velit
-					volutpat malesuada. Pellentesque pellentesque ligula ac neque
-					tincidunt lobortis. Sed malesuada leo et enim scelerisque sed
-					congue orci imperdiet. Curabitur id arcu neque. Sed lacinia
-					dignissim eros in molestie. Maecenas vehicula iaculis adipiscing.
-					Nam mattis, massa nec accumsan imperdiet, nibh tortor feugiat
-					neque, vel tincidunt nisl mauris et libero. Vestibulum eget
-					imperdiet quam. Nulla facilisi. Donec ut libero tellus. Praesent
-					ullamcorper elit diam, sed euismod orci. Integer vel sem lacus.</div>
-				<%
-					break;
-					case ARCHIVED_REQUESTS:
-				%>
-				<div class="text">Quisque congue auctor magna sed egestas.
-					Vivamus leo arcu, ornare elementum imperdiet a, commodo sit amet
-					diam. Pellentesque consequat, quam sit amet commodo dictum, mauris
-					lectus fringilla metus, ac tempor mi enim at tellus. Duis in felis
-					erat, vel dictum leo. Maecenas semper justo eget dolor ultrices ac
-					malesuada sapien commodo. Duis diam elit, placerat ut vestibulum
-					vitae, sagittis id velit. In fringilla tincidunt urna vehicula
-					porttitor. Nam et quam quis risus faucibus sollicitudin. Ut
-					bibendum, ipsum et vulputate faucibus, odio diam blandit enim, at
-					pellentesque eros eros ut turpis. Cras hendrerit, augue vitae
-					ullamcorper aliquam, risus erat egestas leo, at congue ipsum ipsum
-					in ligula. Fusce sapien mauris, consectetur at semper sit amet,
-					convallis vel metus. Donec vestibulum justo vel quam laoreet
-					imperdiet sed facilisis augue. Nunc ornare augue non sem rhoncus
-					condimentum sit amet sit amet lacus. Aenean eget orci hendrerit
-					quam fermentum elementum. Etiam nec orci purus, quis dictum nulla.
+				<div class="pageHeading">
+					<h1 class="pageTitle"><%=selectedSection.getSectionName()%></h1>
 				</div>
-				<%
-					break;
-					}
-				%>
+				<div class="monoPageContent">
+					<%
+						switch (selectedSection) {
+						case ACTIVE_REQUESTS:
+					%>
+					<p class="paragraph">Richieste attive:</p>
+					<div class="list">
+						<%
+							if (workReqList.size() == 0) {
+						%>
+						<p class="text">Non sono presenti richieste di lavoro attive.</p>
+						<%
+							} else {
+									for (Object o : workReqList) {
+										WorkRequest w = (WorkRequest) o;
+										Customer sender = w.getSender();
+										Ability requiredAbility = w.getRequiredAbility();
+									}
+								}
+						%>
+					</div>
+					<%
+						break;
+						case ARCHIVED_REQUESTS:
+					%>
+					<p class="paragraph">Richieste concluse:</p>
+					<div class="list">
+						<%
+							if (workReqList.size() == 0) {
+						%>
+						<p class="text">Non sono presenti richieste di lavoro concluse.</p>
+						<%
+							} else {
+									for (Object o : workReqList) {
+										WorkRequest w = (WorkRequest) o;
+										Customer sender = w.getSender();
+										Ability requiredAbility = w.getRequiredAbility();
+									}
+								}
+						%>
+					</div>
+					<%
+						break;
+						}
+					%>
+				</div>
 			</div>
 		</div>
 	</div>
