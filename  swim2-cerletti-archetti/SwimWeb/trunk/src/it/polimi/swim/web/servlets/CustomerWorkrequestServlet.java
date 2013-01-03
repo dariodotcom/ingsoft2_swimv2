@@ -3,6 +3,8 @@ package it.polimi.swim.web.servlets;
 import it.polimi.swim.business.bean.remote.WorkRequestControllerRemote;
 import it.polimi.swim.business.entity.WorkRequest;
 import it.polimi.swim.business.exceptions.BadRequestException;
+import it.polimi.swim.business.exceptions.InvalidStateException;
+import it.polimi.swim.business.exceptions.UnauthorizedRequestException;
 import it.polimi.swim.web.pagesupport.CustomerMenu;
 import it.polimi.swim.web.pagesupport.ErrorType;
 import it.polimi.swim.web.pagesupport.Misc;
@@ -13,6 +15,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  * Servlet implementation class UserWorkrequestServlet.
@@ -79,7 +82,7 @@ public class CustomerWorkrequestServlet extends SwimServlet {
 					}
 				});
 
-		registerGetActionMapping("/view", new ServletAction() {
+		registerGetActionMapping("view", new ServletAction() {
 			public void runAction(HttpServletRequest req,
 					HttpServletResponse resp) throws IOException,
 					ServletException {
@@ -89,17 +92,11 @@ public class CustomerWorkrequestServlet extends SwimServlet {
 
 		/* POST request actions */
 
-		registerPostActionMapping("accept", new ServletAction() {
+		registerPostActionMapping("respond", new ServletAction() {
 			public void runAction(HttpServletRequest req,
-					HttpServletResponse resp) {
-				doAcceptWorkRequest(req, resp);
-			}
-		});
-
-		registerPostActionMapping("decline", new ServletAction() {
-			public void runAction(HttpServletRequest req,
-					HttpServletResponse resp) {
-				doDeclineWorkRequest(req, resp);
+					HttpServletResponse resp) throws IOException,
+					ServletException {
+				doRespondToWorkRequest(req, resp);
 			}
 		});
 
@@ -134,12 +131,41 @@ public class CustomerWorkrequestServlet extends SwimServlet {
 
 	/* Methods to respond to different requests */
 
-	private void doAcceptWorkRequest(HttpServletRequest req,
-			HttpServletResponse resp) {
-	}
+	private void doRespondToWorkRequest(HttpServletRequest req,
+			HttpServletResponse resp) throws IOException, ServletException {
+		HttpSession session = req.getSession();
 
-	private void doDeclineWorkRequest(HttpServletRequest req,
-			HttpServletResponse resp) {
+		if (!isCustomerLoggedIn(session)) {
+			sendError(req, resp, ErrorType.LOGIN_REQUIRED);
+			return;
+		}
+
+		Integer reqId = getWorkRequestId(req);
+		Boolean response = getCustomerResponse(req);
+
+		if (reqId == null || response == null) {
+			sendError(req, resp, ErrorType.BAD_REQUEST);
+		}
+
+		String loggedUsername = getUsername(session);
+
+		WorkRequestControllerRemote workReqCtrl = lookupBean(
+				WorkRequestControllerRemote.class, Misc.BeanNames.WORKREQUEST);
+
+		try {
+			workReqCtrl.respondToWorkRequest(loggedUsername, response, reqId);
+		} catch (UnauthorizedRequestException e) {
+			sendError(req, resp, ErrorType.UNAUTHORIZED_REQUEST);
+			return;
+		} catch (BadRequestException e) {
+			sendError(req, resp, ErrorType.BAD_REQUEST);
+			return;
+		} catch (InvalidStateException e) {
+			sendError(req, resp, ErrorType.INVALID_REQUEST);
+			return;
+		}
+		
+		resp.sendRedirect(req.getContextPath() + "/works/view?w=" + reqId);
 	}
 
 	private void doMarkRequestAsCompleted(HttpServletRequest req,
@@ -168,11 +194,17 @@ public class CustomerWorkrequestServlet extends SwimServlet {
 
 	private void showWorkRequest(HttpServletRequest req,
 			HttpServletResponse resp) throws IOException, ServletException {
-		int requestId;
+		HttpSession session = req.getSession();
 
-		try {
-			requestId = Integer.parseInt(req.getParameter("id"));
-		} catch (NumberFormatException e) {
+		if (!isCustomerLoggedIn(session)) {
+			sendError(req, resp, ErrorType.LOGIN_REQUIRED);
+			return;
+		}
+
+		String selfUsername = getUsername(session);
+
+		Integer reqId = getWorkRequestId(req);
+		if (reqId == null) {
 			sendError(req, resp, ErrorType.BAD_REQUEST);
 			return;
 		}
@@ -182,13 +214,36 @@ public class CustomerWorkrequestServlet extends SwimServlet {
 
 		WorkRequest workReq;
 		try {
-			workReq = workReqCtrl.getById(requestId);
+			workReq = workReqCtrl.getById(reqId);
 		} catch (BadRequestException e) {
 			sendError(req, resp, ErrorType.BAD_REQUEST);
 			return;
 		}
 
+		String senderUsername = workReq.getSender().getUsername();
+		String recevierUsername = workReq.getReceiver().getUsername();
+
+		if (!(selfUsername.equals(senderUsername) || selfUsername
+				.equals(recevierUsername))) {
+			sendError(req, resp, ErrorType.UNAUTHORIZED_REQUEST);
+			return;
+		}
+
 		req.setAttribute(Misc.TARGET_WORKREQUEST, workReq);
+		req.setAttribute(Misc.SELECTED_TAB_ATTR, CustomerMenu.WORKS);
 		req.getRequestDispatcher(Misc.VIEW_WORKREQUEST_JSP).forward(req, resp);
+	}
+
+	private Integer getWorkRequestId(HttpServletRequest req) {
+		try {
+			return Integer.parseInt(req.getParameter("w"));
+		} catch (NumberFormatException e) {
+			return null;
+		}
+	}
+
+	private Boolean getCustomerResponse(HttpServletRequest req) {
+		String desc = req.getParameter("a");
+		return Boolean.valueOf(desc);
 	}
 }

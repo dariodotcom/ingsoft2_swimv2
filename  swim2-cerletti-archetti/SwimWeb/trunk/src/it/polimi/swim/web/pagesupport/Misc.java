@@ -72,6 +72,10 @@ public class Misc {
 		return input == null || input.length() == 0;
 	}
 
+	public static boolean boolValueOf(Boolean b) {
+		return (b == null ? false : b);
+	}
+
 	public static class BeanNames {
 		public final static String AUTHENTICATION = "AuthenticationController/remote";
 		public final static String PROFILE = "UserProfileController/remote";

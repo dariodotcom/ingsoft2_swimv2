@@ -402,6 +402,10 @@ span.propertyValue{
 	float: left;
 }
 
+.propertyList.spaceUnder{
+	margin-bottom: 35px;
+}
+
 /*Forms*/
 #swimContent .inputselect,
 #swimContent .inputtext{
@@ -459,6 +463,11 @@ span.propertyValue{
 .reducedWidth{
 	width: 480px;
 	margin: 0 auto;
+}
+
+.inlineForm{
+	display: inline-block;
+	margin-left: 15px;
 }
 
 /*Footer*/
@@ -616,4 +625,8 @@ form.actionForm{
     display: inline-block;
     float: right;
     margin: 0 5px;
+}
+
+.centerText{
+	text-align: center;
 }
