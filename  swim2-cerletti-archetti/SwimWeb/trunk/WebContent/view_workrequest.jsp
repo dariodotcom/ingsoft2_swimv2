@@ -120,8 +120,7 @@
 						if (requestConfirmed && !requestCompleted) {
 					%>
 
-					<p>La richiesta è confermata. Puoi ancora scambiare messaggi
-						con il tuo interlocutore.</p>
+					<p>Richiesta in corso di svolgimento.</p>
 					<%
 						} else if (interlocutorDeclined) {
 					%>
@@ -167,8 +166,6 @@
 					<%
 						} else if (showCompletionControl) {
 					%>
-					<p class="paragraph">Quando la rihiesta è stata completata,
-						segnala qui LOL.</p>
 					<form action="<%=ctx%>/works/respond" method="post"
 						class="inlineForm">
 						<input type="hidden" name="w" value="<%=workReq.getId()%>" /><input
