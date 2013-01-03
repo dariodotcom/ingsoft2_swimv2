@@ -1,3 +1,6 @@
+<%@page import="it.polimi.swim.business.entity.WorkRequest"%>
+<%@page import="it.polimi.swim.business.entity.Feedback"%>
+<%@page import="java.util.List"%>
 <%@page import="it.polimi.swim.web.servlets.CustomerFeedbackServlet"%>
 <%@page
 	import="it.polimi.swim.web.servlets.CustomerFeedbackServlet.CustomerFeedbackSection"%>
@@ -9,10 +12,13 @@
 <%
 	Object ref = request.getAttribute(Misc.SELECTED_SECTION_ATTR);
 	CustomerFeedbackSection selectedSection = (ref != null ? (CustomerFeedbackSection) ref
-	: CustomerFeedbackSection.RECEIVED_FEEDBACKS);
+			: CustomerFeedbackSection.RECEIVED_FEEDBACKS);
 
 	request.setAttribute(Misc.PAGE_TITLE_ATTR,
-	selectedSection.getSectionName());
+			selectedSection.getSectionName());
+
+	List<?> feedbackList = (List<?>) request
+			.getAttribute(Misc.FEEDBACK_LIST);
 %>
 <%@ include file="shared/head.jsp"%>
 <body class="swim">
@@ -23,10 +29,10 @@
 				<ul id="swimSecondaryMenu">
 					<%
 						for (CustomerFeedbackSection s : CustomerFeedbackSection.values()) {
-										String link = request.getContextPath() + "/"
-												+ CustomerFeedbackServlet.CONTEXT_NAME + "/"
-												+ s.getSectionIdentifier(), name = s.getSectionName();
-										String selClass = selectedSection.equals(s) ? " selected" : "";
+							String link = request.getContextPath() + "/"
+									+ CustomerFeedbackServlet.CONTEXT_NAME + "/"
+									+ s.getSectionIdentifier(), name = s.getSectionName();
+							String selClass = selectedSection.equals(s) ? " selected" : "";
 					%>
 					<li class="entry<%=selClass%>"><a class="label"
 						href="<%=link%>"><%=name%></a></li>
@@ -36,44 +42,46 @@
 				</ul>
 			</div>
 			<div id="rightColumn" class="column">
+				<div class="pageHeading">
+					<h1 class="pageTitle"><%=selectedSection.getSectionName()%></h1>
+				</div>
 				<%
 					switch (selectedSection) {
 					case RECEIVED_FEEDBACKS:
 				%>
-				<div class="text">Quisque congue auctor magna sed egestas.
-					Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec
-					facilisis, felis vel iaculis commodo, tellus tellus euismod mi,
-					eget volutpat quam massa id nunc. Sed eget urna a metus luctus
-					molestie quis dictum enim. Nulla facilisis tortor vel velit
-					volutpat malesuada. Pellentesque pellentesque ligula ac neque
-					tincidunt lobortis. Sed malesuada leo et enim scelerisque sed
-					congue orci imperdiet. Curabitur id arcu neque. Sed lacinia
-					dignissim eros in molestie. Maecenas vehicula iaculis adipiscing.
-					Nam mattis, massa nec accumsan imperdiet, nibh tortor feugiat
-					neque, vel tincidunt nisl mauris et libero. Vestibulum eget
-					imperdiet quam. Nulla facilisi. Donec ut libero tellus. Praesent
-					ullamcorper elit diam, sed euismod orci. Integer vel sem lacus.</div>
-
+				<div class="list">
+					<%
+						if (feedbackList.size() == 0) {
+					%>
+					<p class="text">Non sono stati ancora ricevuti feedback.</p>
+					<%
+						} else {
+								for (Object o : feedbackList) {
+									Feedback f = (Feedback) o;
+									WorkRequest relatedWork = f.getLinkedRequest();
+									int mark = f.getMark();
+								}
+							}
+					%>
+				</div>
 				<%
 					break;
 					case SENT_FEEDBACKS:
 				%>
-				<div class="text">Quisque congue auctor magna sed egestas.
-					Vivamus leo arcu, ornare elementum imperdiet a, commodo sit amet
-					diam. Pellentesque consequat, quam sit amet commodo dictum, mauris
-					lectus fringilla metus, ac tempor mi enim at tellus. Duis in felis
-					erat, vel dictum leo. Maecenas semper justo eget dolor ultrices ac
-					malesuada sapien commodo. Duis diam elit, placerat ut vestibulum
-					vitae, sagittis id velit. In fringilla tincidunt urna vehicula
-					porttitor. Nam et quam quis risus faucibus sollicitudin. Ut
-					bibendum, ipsum et vulputate faucibus, odio diam blandit enim, at
-					pellentesque eros eros ut turpis. Cras hendrerit, augue vitae
-					ullamcorper aliquam, risus erat egestas leo, at congue ipsum ipsum
-					in ligula. Fusce sapien mauris, consectetur at semper sit amet,
-					convallis vel metus. Donec vestibulum justo vel quam laoreet
-					imperdiet sed facilisis augue. Nunc ornare augue non sem rhoncus
-					condimentum sit amet sit amet lacus. Aenean eget orci hendrerit
-					quam fermentum elementum. Etiam nec orci purus, quis dictum nulla.
+				<div class="list">
+					<%
+						if (feedbackList.size() == 0) {
+					%>
+					<p class="text">Non sono stati ancora inviati feedback.</p>
+					<%
+						} else {
+								for (Object o : feedbackList) {
+									Feedback f = (Feedback) o;
+									WorkRequest relatedWork = f.getLinkedRequest();
+									int mark = f.getMark();
+								}
+							}
+					%>
 				</div>
 				<%
 					break;
