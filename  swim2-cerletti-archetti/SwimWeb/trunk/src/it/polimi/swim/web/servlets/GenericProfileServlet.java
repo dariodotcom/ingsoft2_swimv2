@@ -38,6 +38,10 @@ public class GenericProfileServlet extends SwimServlet {
 
 	private static final String TARGET_USER_PARAM = "u";
 
+	/**
+	 * GenericProfileSection is an enumeration useful to provide all the
+	 * possible sections accessible from profile of an another user.
+	 */
 	public enum GenericProfileSection {
 		PROFILE("Profilo", ""), FEEDBACKS("Feedback", "feedbacks"), FRIENDS(
 				"Amici", "friends");
@@ -50,15 +54,32 @@ public class GenericProfileServlet extends SwimServlet {
 			this.sectionName = sectionName;
 		}
 
+		/**
+		 * Getter method.
+		 * 
+		 * @return a String that contains the name of this
+		 *         GenericProfileSection.
+		 */
 		public String getSectionName() {
 			return sectionName;
 		}
 
+		/**
+		 * Getter method.
+		 * 
+		 * @return a String that contains the identifier of this
+		 *         GenericProfileSection.
+		 */
 		public String getSectionIdentifier() {
 			return sectionIdentifier;
 		}
 	}
 
+	/**
+	 * createWRField is an enumeration useful to manage compilation of all the
+	 * fields present in a work request form accessible from the profile of a
+	 * user we want to send a work request.
+	 */
 	public enum createWRField {
 		SELECTED_ABILITY("Professionalit&agrave; richiesta", "selectedAbility",
 				true), START_DATE("Data inizio (gg/mm/aa)", "startDate", true), START_HOUR(
@@ -77,14 +98,30 @@ public class GenericProfileServlet extends SwimServlet {
 			this.mandatory = mandatory;
 		}
 
+		/**
+		 * Getter method.
+		 * 
+		 * @return a String that contains the name of this field to compile.
+		 */
 		public String getLabelText() {
 			return labelText;
 		}
 
+		/**
+		 * Getter method.
+		 * 
+		 * @return a String that contains the value inserted for this field.
+		 */
 		public String getName() {
 			return name;
 		}
 
+		/**
+		 * Getter method.
+		 * 
+		 * @return true if the compilation of this field is mandatory, false
+		 *         otherwise.
+		 */
 		public Boolean isMandatory() {
 			return mandatory;
 		}
@@ -158,6 +195,7 @@ public class GenericProfileServlet extends SwimServlet {
 	}
 
 	/* Methods to respond to different requests */
+	
 	private void showSection(GenericProfileSection section,
 			HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
@@ -171,7 +209,7 @@ public class GenericProfileServlet extends SwimServlet {
 			targetUsername = targetUsername.toLowerCase();
 		}
 
-		// Check user isn't asking to view its own profile
+		/* Check user isn't asking to view its own profile */
 		HttpSession session = req.getSession();
 		String loggedUsername = getUsername(session);
 
@@ -190,7 +228,7 @@ public class GenericProfileServlet extends SwimServlet {
 			return;
 		}
 
-		// Check friendship status between users
+		/* Check friendship status between users */
 		FriendshipStatus status;
 
 		if (Misc.isStringEmpty(loggedUsername)) {
@@ -208,7 +246,7 @@ public class GenericProfileServlet extends SwimServlet {
 
 		req.setAttribute(Misc.FRIENDSHIP_STATUS, status);
 
-		// Friend list
+		/* Friend list */
 		List<?> friendList = profile.getConfirmedFriendshipList(targetUsername);
 		req.setAttribute(Misc.FRIENDLIST_ATTR, friendList);
 
@@ -257,7 +295,7 @@ public class GenericProfileServlet extends SwimServlet {
 
 		HttpSession session = req.getSession();
 
-		// Check logged user
+		/* Check logged user */
 		if (!isCustomerLoggedIn(session)) {
 			req.setAttribute(Misc.ERROR_ATTR, ErrorType.LOGIN_REQUIRED);
 			req.getRequestDispatcher(Misc.ERROR_JSP).forward(req, resp);
@@ -266,7 +304,7 @@ public class GenericProfileServlet extends SwimServlet {
 
 		String loggedUsername = getUsername(session);
 
-		// Retrieve target username from request
+		/* Retrieve target username from request */
 		String targetUsername = req.getParameter(TARGET_USER_PARAM);
 
 		if (Misc.isStringEmpty(targetUsername)) {
@@ -274,7 +312,7 @@ public class GenericProfileServlet extends SwimServlet {
 			return;
 		}
 
-		// Create frienship
+		/* Create frienship */
 		FriendshipControllerRemote frController = lookupBean(
 				FriendshipControllerRemote.class, Misc.BeanNames.FRIENDSHIP);
 
@@ -303,13 +341,13 @@ public class GenericProfileServlet extends SwimServlet {
 
 		Map<String, Object> workRequestProperties = new HashMap<String, Object>();
 
-		// Retrieve the username of the customer target of the request
+		/* Retrieve the username of the customer target of the request */
 		String targetUsername = req.getParameter(TARGET_USER_PARAM);
 
 		workRequestProperties.put("receiver", targetUsername);
 		workRequestProperties.put("sender", getUsername(session));
 
-		// Initially parse request and retrieve all field values
+		/* Initially parse request and retrieve all field values */
 		for (createWRField field : createWRField.values()) {
 			String name = field.getName();
 			String value = (String) req.getParameter(name);
@@ -322,7 +360,7 @@ public class GenericProfileServlet extends SwimServlet {
 			workRequestProperties.put(name, value);
 		}
 
-		// Correctly parse date
+		/* Correctly parse date */
 		try {
 			String startDate = (String) workRequestProperties.get("startDate");
 			workRequestProperties.remove("startDate");
