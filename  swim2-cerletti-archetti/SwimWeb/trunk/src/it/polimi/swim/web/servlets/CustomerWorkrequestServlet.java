@@ -1,5 +1,6 @@
 package it.polimi.swim.web.servlets;
 
+import it.polimi.swim.business.bean.remote.UserProfileControllerRemote;
 import it.polimi.swim.business.bean.remote.WorkRequestControllerRemote;
 import it.polimi.swim.business.entity.WorkRequest;
 import it.polimi.swim.business.exceptions.BadRequestException;
@@ -10,6 +11,7 @@ import it.polimi.swim.web.pagesupport.ErrorType;
 import it.polimi.swim.web.pagesupport.Misc;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -100,16 +102,18 @@ public class CustomerWorkrequestServlet extends SwimServlet {
 			}
 		});
 
-		registerPostActionMapping("completed", new ServletAction() {
+		registerPostActionMapping("complete", new ServletAction() {
 			public void runAction(HttpServletRequest req,
-					HttpServletResponse resp) {
+					HttpServletResponse resp) throws IOException,
+					ServletException {
 				doMarkRequestAsCompleted(req, resp);
 			}
 		});
 
 		registerPostActionMapping("sendmsg", new ServletAction() {
 			public void runAction(HttpServletRequest req,
-					HttpServletResponse resp) {
+					HttpServletResponse resp) throws IOException,
+					ServletException {
 				doSendMessage(req, resp);
 			}
 		});
@@ -164,15 +168,79 @@ public class CustomerWorkrequestServlet extends SwimServlet {
 			sendError(req, resp, ErrorType.INVALID_REQUEST);
 			return;
 		}
-		
+
 		resp.sendRedirect(req.getContextPath() + "/works/view?w=" + reqId);
 	}
 
 	private void doMarkRequestAsCompleted(HttpServletRequest req,
-			HttpServletResponse resp) {
+			HttpServletResponse resp) throws IOException, ServletException {
+		HttpSession session = req.getSession();
+
+		if (!isCustomerLoggedIn(session)) {
+			sendError(req, resp, ErrorType.LOGIN_REQUIRED);
+			return;
+		}
+
+		String loggedUsername = getUsername(session);
+		Integer reqId = getWorkRequestId(req);
+
+		if (reqId == null) {
+			sendError(req, resp, ErrorType.BAD_REQUEST);
+			return;
+		}
+
+		WorkRequestControllerRemote workReqCtrl = lookupBean(
+				WorkRequestControllerRemote.class, Misc.BeanNames.WORKREQUEST);
+
+		try {
+			workReqCtrl.markRequestAsCompleted(loggedUsername, reqId);
+		} catch (UnauthorizedRequestException e) {
+			sendError(req, resp, ErrorType.UNAUTHORIZED_REQUEST);
+			return;
+		} catch (BadRequestException e) {
+			sendError(req, resp, ErrorType.BAD_REQUEST);
+			return;
+		} catch (InvalidStateException e) {
+			sendError(req, resp, ErrorType.INVALID_REQUEST);
+			return;
+		}
+
+		resp.sendRedirect(req.getContextPath() + "/works/view?w=" + reqId);
 	}
 
-	private void doSendMessage(HttpServletRequest req, HttpServletResponse resp) {
+	private void doSendMessage(HttpServletRequest req, HttpServletResponse resp)
+			throws IOException, ServletException {
+		HttpSession session = req.getSession();
+
+		if (!isCustomerLoggedIn(session)) {
+			sendError(req, resp, ErrorType.LOGIN_REQUIRED);
+			return;
+		}
+
+		String username = getUsername(session);
+
+		Integer reqId = getWorkRequestId(req);
+		String text = (String) req.getParameter("messageText");
+
+		if (Misc.isStringEmpty(text) || reqId == null) {
+			sendError(req, resp, ErrorType.BAD_REQUEST);
+			return;
+		}
+
+		WorkRequestControllerRemote workReqCtrl = lookupBean(
+				WorkRequestControllerRemote.class, Misc.BeanNames.WORKREQUEST);
+
+		try {
+			workReqCtrl.sendMessage(username, text, reqId);
+		} catch (UnauthorizedRequestException e) {
+			sendError(req, resp, ErrorType.UNAUTHORIZED_REQUEST);
+			return;
+		} catch (BadRequestException e) {
+			sendError(req, resp, ErrorType.BAD_REQUEST);
+			return;
+		}
+
+		resp.sendRedirect(req.getContextPath() + "/works/view?w=" + reqId);
 	}
 
 	private void doInsertFeedback(HttpServletRequest req,
@@ -186,8 +254,34 @@ public class CustomerWorkrequestServlet extends SwimServlet {
 	private void showSection(CustomerWorkRequestSection section,
 			HttpServletRequest req, HttpServletResponse resp)
 			throws IOException, ServletException {
+		HttpSession session = req.getSession();
+
+		if (!isCustomerLoggedIn(session)) {
+			sendError(req, resp, ErrorType.LOGIN_REQUIRED);
+			return;
+		}
+
+		String username = getUsername(session);
+		List<?> sentRequest, receivedRequest;
+
+		UserProfileControllerRemote profileCtrl = lookupBean(
+				UserProfileControllerRemote.class, Misc.BeanNames.PROFILE);
+
+		if (section.equals(CustomerWorkRequestSection.ACTIVE_REQUESTS)) {
+			sentRequest = profileCtrl.getSentActiveWorkRequest(username);
+			receivedRequest = profileCtrl
+					.getReceivedActiveWorkRequest(username);
+		} else {
+			sentRequest = profileCtrl.getSentArchivedWorkRequest(username);
+			receivedRequest = profileCtrl
+					.getReceivedArchivedWorkRequest(username);
+		}
+
 		req.setAttribute(Misc.SELECTED_TAB_ATTR, CustomerMenu.WORKS);
 		req.setAttribute(Misc.SELECTED_SECTION_ATTR, section);
+
+		req.setAttribute(Misc.SENT_WORKREQUEST_LIST, sentRequest);
+		req.setAttribute(Misc.RECEIVED_WORKREQUEST_LIST, receivedRequest);
 
 		req.getRequestDispatcher(Misc.WORKREQUEST_LIST_JSP).forward(req, resp);
 	}
@@ -229,11 +323,22 @@ public class CustomerWorkrequestServlet extends SwimServlet {
 			return;
 		}
 
+		List<?> messageList;
+
+		try {
+			messageList = workReqCtrl.getMessageList(reqId);
+		} catch (BadRequestException e) {
+			sendError(req, resp, ErrorType.BAD_REQUEST);
+			return;
+		}
+
+		req.setAttribute(Misc.MESSAGE_LIST, messageList);
 		req.setAttribute(Misc.TARGET_WORKREQUEST, workReq);
 		req.setAttribute(Misc.SELECTED_TAB_ATTR, CustomerMenu.WORKS);
 		req.getRequestDispatcher(Misc.VIEW_WORKREQUEST_JSP).forward(req, resp);
 	}
 
+	/* Helpers */
 	private Integer getWorkRequestId(HttpServletRequest req) {
 		try {
 			return Integer.parseInt(req.getParameter("w"));
