@@ -1,5 +1,10 @@
 package it.polimi.swim.web.pagesupport;
 
+/**
+ * 
+ * @author Chiara
+ *
+ */
 public enum NotificationMessages {
 
 	EMAIL_CHANGED("L'indirizzo email è stato modificato."),
