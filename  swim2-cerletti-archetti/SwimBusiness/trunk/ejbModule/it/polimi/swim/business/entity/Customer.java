@@ -283,14 +283,33 @@ public class Customer extends User {
 		return true;
 	}
 
+	/**
+	 * Method that provides the list of abilities declared by this Customer.
+	 * 
+	 * @return the List of Ability declared by this Customer.
+	 */
 	public List<Ability> getAbilityList() {
 		return declaredAbilities;
 	}
 
+	/**
+	 * Method that adds a given ability to the set of abilities declared by this
+	 * Customer.
+	 * 
+	 * @param a
+	 *            the Ability to add.
+	 */
 	public void addAbility(Ability a) {
 		this.declaredAbilities.add(a);
 	}
 
+	/**
+	 * Method that removes a given ability to the set of abilities declared by
+	 * this Customer.
+	 * 
+	 * @param a
+	 *            the Ability to remove.
+	 */
 	public void removeAbility(Ability a) {
 		this.declaredAbilities.remove(a);
 	}
