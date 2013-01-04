@@ -33,7 +33,6 @@ public class UserProfileController implements UserProfileControllerRemote {
 	 * Default constructor.
 	 */
 	public UserProfileController() {
-		// TODO Auto-generated constructor stub
 	}
 
 	/**
@@ -86,6 +85,9 @@ public class UserProfileController implements UserProfileControllerRemote {
 		return q.getResultList();
 	}
 
+	/**
+	 * @see UserProfileControllerRemote
+	 */
 	public void updateCustomerDetails(String username,
 			Map<String, Object> values) {
 
@@ -111,8 +113,10 @@ public class UserProfileController implements UserProfileControllerRemote {
 				}
 			}
 
-			// List of exceptions related to reflection. They shouldn't happen
-			// since all methods name are hardcoded.
+			/*
+			 * List of exceptions related to reflection. They shouldn't happen
+			 * since all methods name are hardcoded.
+			 */
 		} catch (SecurityException e) {
 			e.printStackTrace();
 		} catch (NoSuchMethodException e) {
@@ -126,11 +130,17 @@ public class UserProfileController implements UserProfileControllerRemote {
 		}
 	}
 
+	/**
+	 * @see UserProfileControllerRemote
+	 */
 	public void changePassword(String username, String password) {
 		Customer c = manager.find(Customer.class, username);
 		c.setPassword(password);
 	}
 
+	/**
+	 * @see UserProfileControllerRemote
+	 */
 	public void changeEmail(String username, String email)
 			throws EmailAlreadyTakenException {
 		Customer c = manager.find(Customer.class, username);
@@ -142,6 +152,9 @@ public class UserProfileController implements UserProfileControllerRemote {
 		c.setEmail(email);
 	}
 
+	/**
+	 * @see UserProfileControllerRemote
+	 */
 	public Boolean canSendFriendshipRequest(String u1, String u2) {
 		if (u1.equals(u2)) {
 			return false;
@@ -157,6 +170,9 @@ public class UserProfileController implements UserProfileControllerRemote {
 		return q.getResultList().size() == 0;
 	}
 
+	/**
+	 * @see UserProfileControllerRemote
+	 */
 	public Boolean areFriends(String username1, String username2) {
 		Query q = manager
 				.createQuery("FROM Friendship f WHERE "
@@ -175,14 +191,9 @@ public class UserProfileController implements UserProfileControllerRemote {
 		}
 	}
 
-	/* Helpers */
-	private boolean isEmailAvailable(String email) {
-		Query q = manager.createQuery("FROM Customer c WHERE c.email=:email");
-		q.setParameter("email", email);
-
-		return q.getResultList().size() == 0;
-	}
-
+	/**
+	 * @see UserProfileControllerRemote
+	 */
 	public List<?> getAbilityList(String username) throws BadRequestException {
 		Query q = manager
 				.createQuery("SELECT a FROM Customer c, IN (c.declaredAbilities) a WHERE c.username=:username");
@@ -190,6 +201,9 @@ public class UserProfileController implements UserProfileControllerRemote {
 		return q.getResultList();
 	}
 
+	/**
+	 * @see UserProfileControllerRemote
+	 */
 	public void addAbility(String username, String abilityName)
 			throws BadRequestException, InvalidStateException {
 		Customer c = Helpers
@@ -204,6 +218,9 @@ public class UserProfileController implements UserProfileControllerRemote {
 		c.addAbility(a);
 	}
 
+	/**
+	 * @see UserProfileControllerRemote
+	 */
 	public void removeAbility(String username, String abilityName)
 			throws BadRequestException, InvalidStateException {
 		Customer c = Helpers
@@ -218,6 +235,9 @@ public class UserProfileController implements UserProfileControllerRemote {
 		c.removeAbility(a);
 	}
 
+	/**
+	 * @see UserProfileControllerRemote
+	 */
 	public List<?> getReceivedActiveWorkRequest(String username) {
 		Query q = manager
 				.createQuery("FROM WorkRequest w WHERE w.receiver.username=:u "
@@ -227,6 +247,9 @@ public class UserProfileController implements UserProfileControllerRemote {
 		return q.getResultList();
 	}
 
+	/**
+	 * @see UserProfileControllerRemote
+	 */
 	public List<?> getSentActiveWorkRequest(String username) {
 		Query q = manager
 				.createQuery("FROM WorkRequest w WHERE w.sender.username=:u "
@@ -236,6 +259,9 @@ public class UserProfileController implements UserProfileControllerRemote {
 		return q.getResultList();
 	}
 
+	/**
+	 * @see UserProfileControllerRemote
+	 */
 	public List<?> getReceivedArchivedWorkRequest(String username) {
 		Query q = manager
 				.createQuery("FROM WorkRequest w WHERE w.receiver.username=:u "
@@ -245,6 +271,9 @@ public class UserProfileController implements UserProfileControllerRemote {
 		return q.getResultList();
 	}
 
+	/**
+	 * @see UserProfileControllerRemote
+	 */
 	public List<?> getSentArchivedWorkRequest(String username) {
 		Query q = manager
 				.createQuery("FROM WorkRequest w WHERE w.sender.username=:u "
@@ -253,4 +282,13 @@ public class UserProfileController implements UserProfileControllerRemote {
 
 		return q.getResultList();
 	}
+
+	/* Helpers */
+	private boolean isEmailAvailable(String email) {
+		Query q = manager.createQuery("FROM Customer c WHERE c.email=:email");
+		q.setParameter("email", email);
+
+		return q.getResultList().size() == 0;
+	}
+
 }
