@@ -46,7 +46,7 @@ public class FeedbackController implements FeedbackControllerRemote {
 		 * completed and with no feedback
 		 */
 		Boolean notCompleted = !targetRequest.isCompleted();
-		Boolean hasFeedback = targetRequest.getFeedback() == null;
+		Boolean hasFeedback = targetRequest.getFeedback() != null;
 
 		if (notCompleted || hasFeedback) {
 			throw new InvalidStateException();

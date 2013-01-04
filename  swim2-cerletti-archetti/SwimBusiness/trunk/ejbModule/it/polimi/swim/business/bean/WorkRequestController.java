@@ -7,6 +7,7 @@ import java.util.Map;
 import it.polimi.swim.business.bean.remote.WorkRequestControllerRemote;
 import it.polimi.swim.business.entity.Ability;
 import it.polimi.swim.business.entity.Customer;
+import it.polimi.swim.business.entity.Feedback;
 import it.polimi.swim.business.entity.Message;
 import it.polimi.swim.business.entity.WorkRequest;
 import it.polimi.swim.business.exceptions.BadRequestException;
@@ -15,6 +16,7 @@ import it.polimi.swim.business.exceptions.UnauthorizedRequestException;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
@@ -163,6 +165,17 @@ public class WorkRequestController implements WorkRequestControllerRemote {
 		return q.getResultList();
 	}
 
+	public Feedback getFeedback(int reqId){
+		Query q = manager.createQuery("SELECT w.feedback FROM WorkRequest w WHERE w.id=:id");
+		q.setParameter("id", reqId);
+		
+		try{
+			return (Feedback) q.getSingleResult();
+		} catch (NoResultException e) {
+			return null;
+		}
+	}
+	
 	/* Helpers */
 	private Customer getCustomer(String username) throws BadRequestException {
 		Customer customer = manager.find(Customer.class, username);
