@@ -10,6 +10,7 @@ import it.polimi.swim.business.exceptions.BadRequestException;
 public class Helpers {
 
 	/**
+	 * This method provides the entire entity associated to the given key.
 	 * 
 	 * @param manager
 	 *            an EntityManager object, i.e. an API used to create and remove
@@ -42,7 +43,7 @@ public class Helpers {
 	 * @return a Boolean value which is true if the string has been created and
 	 *         it is not empty.
 	 */
-	public static Boolean isStringValid(String s) {
+	public static boolean isStringValid(String s) {
 		return s != null && s.length() > 0;
 	}
 }
