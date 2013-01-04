@@ -30,19 +30,21 @@ public class FeedbackController implements FeedbackControllerRemote {
 
 		WorkRequest targetRequest = getWorkRequest(workRequestId);
 		Customer feedbackAuthor = getCustomer(authorUsr);
-		
-		// Check request
+
+		/* Check request */
 		if (!isMarkValid(mark) || !isStringValid(review)) {
 			throw new BadRequestException();
 		}
 
-		// Check that feedback's author is the sender of the work request.
+		/* Check that feedback's author is the sender of the work request */
 		if (!targetRequest.getSender().equals(feedbackAuthor)) {
 			throw new UnauthorizedRequestException();
 		}
 
-		// Check that target work request is in correct state, which is
-		// completed and with no feedback
+		/*
+		 * Check that target work request is in correct state, which is
+		 * completed and with no feedback
+		 */
 		Boolean notCompleted = !targetRequest.isCompleted();
 		Boolean hasFeedback = targetRequest.getFeedback() == null;
 
@@ -50,7 +52,7 @@ public class FeedbackController implements FeedbackControllerRemote {
 			throw new InvalidStateException();
 		}
 
-		// Create feedback
+		/* Create feedback */
 		Feedback f = new Feedback(mark, review, targetRequest);
 		manager.persist(f);
 	}
@@ -64,17 +66,18 @@ public class FeedbackController implements FeedbackControllerRemote {
 
 		WorkRequest targetRequest = getWorkRequest(workRequestId);
 		Customer feedbackAuthor = getCustomer(authorUsr);
-		
-		// Check Request
-		if(!isStringValid(reply)){
+
+		/* Check request */
+		if (!isStringValid(reply)) {
 			throw new BadRequestException();
 		}
-		
-		//Check state
-		Boolean rightCustomer = targetRequest.getReceiver().equals(feedbackAuthor);
+
+		/* Check state */
+		Boolean rightCustomer = targetRequest.getReceiver().equals(
+				feedbackAuthor);
 		Boolean hasFeedback = targetRequest.getFeedback() != null;
-		
-		if(!rightCustomer || !hasFeedback){
+
+		if (!rightCustomer || !hasFeedback) {
 			throw new InvalidStateException();
 		}
 
@@ -83,19 +86,19 @@ public class FeedbackController implements FeedbackControllerRemote {
 	}
 
 	/* Helpers */
-	
+
 	private WorkRequest getWorkRequest(int id) throws BadRequestException {
 		WorkRequest request = manager.find(WorkRequest.class, id);
-		if(request == null){
+		if (request == null) {
 			throw new BadRequestException();
 		} else {
 			return request;
 		}
 	}
-	
+
 	private Customer getCustomer(String username) throws BadRequestException {
 		Customer customer = manager.find(Customer.class, username);
-		if(customer == null){
+		if (customer == null) {
 			throw new BadRequestException();
 		} else {
 			return customer;
