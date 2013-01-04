@@ -113,5 +113,13 @@ public interface WorkRequestControllerRemote {
 	 */
 	public List<?> getMessageList(int reqId) throws BadRequestException;
 
+	/**
+	 * This method provides the feedback associated to a given work request
+	 * given to the professional by the employee.
+	 * 
+	 * @param reqId
+	 *            a integer that contains the work request identifier.
+	 * @return the Feedback associated to the given work request identifier.
+	 */
 	public Feedback getFeedback(int reqId);
 }

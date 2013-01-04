@@ -165,6 +165,9 @@ public class WorkRequestController implements WorkRequestControllerRemote {
 		return q.getResultList();
 	}
 
+	/**
+	 * @see WorkRequestControllerRemote
+	 */
 	public Feedback getFeedback(int reqId){
 		Query q = manager.createQuery("SELECT w.feedback FROM WorkRequest w WHERE w.id=:id");
 		q.setParameter("id", reqId);
