@@ -5,7 +5,8 @@ import java.util.Date;
 
 public class Misc {
 
-	// Request attibutes definitions
+	/* Request attibutes definitions */
+
 	public static final String PAGE_TITLE_ATTR = "pageTitle";
 	public static final String SELECTED_SECTION_ATTR = "selectedSection";
 	public static final String SELECTED_TAB_ATTR = "selectedTab";
@@ -36,7 +37,8 @@ public class Misc {
 
 	public static final String MESSAGE_LIST = "messageList";
 
-	// JSP list
+	/* JSP list */
+
 	public static final String HOME_JSP = "/home.jsp";
 	public static final String ERROR_JSP = "/error.jsp";
 	public static final String LANDING_JSP = "/landing.jsp";
@@ -50,7 +52,7 @@ public class Misc {
 	public static final String CREATE_WORKREQUEST_JSP = "/create_workrequest.jsp";
 	public static final String VIEW_WORKREQUEST_JSP = "/view_workrequest.jsp";
 
-	// Utils
+	/* Utils */
 
 	public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat(
 			"dd/MM/yyyy");
@@ -61,24 +63,61 @@ public class Misc {
 
 	public static final int MIN_PASSWORD_LENGTH = 8;
 
-	// Helpers
+	/* Helpers */
 
+	/**
+	 * This method converts a given date element into its string representation.
+	 * 
+	 * @param d
+	 *            a Date.
+	 * @return a String that represents the given date.
+	 */
 	public static String parseDate(Date d) {
 		return (d == null ? "" : DATE_FORMAT.format(d));
 	}
 
+	/**
+	 * This method analyzes a given input: if the input is empty retrieves an
+	 * empty string, if the input is not empty retrieves the corresponding
+	 * string.
+	 * 
+	 * @param input
+	 *            a String that contains the input value.
+	 * @return the String corresponding to the given input.
+	 */
 	public static String nullfix(String input) {
 		return input == null ? "" : input;
 	}
 
+	/**
+	 * This method analyzes a given input and returns true if it contains a null
+	 * or empty value.
+	 * 
+	 * @param input
+	 *            a String that contains the input value.
+	 * @return true if the input paramether is null or empty.
+	 */
 	public static boolean isStringEmpty(String input) {
 		return input == null || input.length() == 0;
 	}
 
+	/**
+	 * This method assigns the false value to a given boolean that has not been
+	 * set.
+	 * 
+	 * @param b
+	 *            a boolean value.
+	 * @return false if the given boolean is set to false or null, true
+	 *         otherwise.
+	 */
 	public static boolean boolValueOf(Boolean b) {
 		return (b == null ? false : b);
 	}
 
+	/**
+	 * Class BeanNames contains a set of value that represents the name of all
+	 * the beans.
+	 */
 	public static class BeanNames {
 		public final static String AUTHENTICATION = "AuthenticationController/remote";
 		public final static String PROFILE = "UserProfileController/remote";
@@ -87,7 +126,11 @@ public class Misc {
 		public static final String WORKREQUEST = "WorkRequestController/remote";
 	}
 
-	// Enums
+	/**
+	 * FrienshipStatus is an enumeration which purpose is to represent all the
+	 * possible values related to friendship requests on buttons in the profile
+	 * of a generic user different from the current one.
+	 */
 	public enum FriendshipStatus {
 		NOT_FRIENDS("Invia richiesta di amicizia", "sendable"), CONFIRMATION_AWAITED(
 				"Amicizia in attesa di conferma", "awaited"), ALREADY_FRIENDS(
@@ -102,10 +145,21 @@ public class Misc {
 			this.buttonText = buttonText;
 		}
 
+		/**
+		 * Getter method.
+		 * 
+		 * @return a String that contains the value present on this button.
+		 */
 		public String getButtonText() {
 			return buttonText;
 		}
 
+		/**
+		 * Getter method
+		 * 
+		 * @return a String which says if the request on the button is sendable,
+		 *         awaited or disabled.
+		 */
 		public String getButtonClass() {
 			return buttonClass;
 		}
