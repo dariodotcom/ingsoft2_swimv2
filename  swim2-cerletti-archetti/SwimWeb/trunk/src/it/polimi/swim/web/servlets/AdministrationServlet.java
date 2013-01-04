@@ -25,6 +25,10 @@ public class AdministrationServlet extends SwimServlet {
 	private static final String ABILITY_NAME = "abilityName";
 	private static final String ABILITY_DESC = "abilityDescription";
 
+	/**
+	 * AdministrationSection is an enumeration useful to provide all the
+	 * possible sections accessible from the home page of an administrator.
+	 */
 	public enum AdministrationSection {
 		REQUEST("Richieste", ""), MANAGEMENT("Gestione", "manage");
 
@@ -35,10 +39,22 @@ public class AdministrationServlet extends SwimServlet {
 			this.sectionName = sectionName;
 		}
 
+		/**
+		 * Getter method.
+		 * 
+		 * @return a String that contains the name of this
+		 *         AdministrationSection.
+		 */
 		public String getSectionName() {
 			return sectionName;
 		}
 
+		/**
+		 * Getter method.
+		 * 
+		 * @return a String that contains the identifier of this
+		 *         AdministrationSection.
+		 */
 		public String getSectionIdentifier() {
 			return sectionIdentifier;
 		}
@@ -157,14 +173,14 @@ public class AdministrationServlet extends SwimServlet {
 			return;
 		}
 
-		// Put ability requests in req scope.
+		/* Put ability requests in req scope */
 		AbilityControllerRemote ability = lookupBean(
 				AbilityControllerRemote.class, Misc.BeanNames.ABILITY);
 		List<?> abilityReqList = ability.getAbilityRequestList();
 		System.out.println(abilityReqList);
 		req.setAttribute(Misc.ABILITY_LIST, abilityReqList);
 
-		// Forward
+		/* Forward */
 		req.setAttribute(Misc.SELECTED_SECTION_ATTR, section);
 		req.getRequestDispatcher(Misc.ADMIN_JSP).forward(req, resp);
 	}

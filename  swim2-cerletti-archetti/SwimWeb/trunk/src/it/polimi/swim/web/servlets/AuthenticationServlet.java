@@ -91,16 +91,17 @@ public class AuthenticationServlet extends SwimServlet {
 	}
 
 	/* Methods to respond to different requests */
+	
 	private void doLogin(HttpServletRequest req, HttpServletResponse resp)
 			throws IOException, ServletException {
 		HttpSession session = req.getSession();
 
-		// Retrieve the bean used for authentication
+		/* Retrieve the bean used for authentication */
 		AuthenticationControllerRemote auth = lookupBean(
 				AuthenticationControllerRemote.class,
 				Misc.BeanNames.AUTHENTICATION);
 
-		// Check user is not already logged in
+		/* Check user is not already logged in */
 		if (!isUserLoggedIn(session)) {
 			String username = (String) req.getParameter("username")
 					.toLowerCase();
@@ -115,7 +116,7 @@ public class AuthenticationServlet extends SwimServlet {
 
 			UserType loggedUserType;
 
-			// Check user login details are valid
+			/* Check user login details are valid */
 			try {
 				loggedUserType = auth.authenticateUser(username, password);
 
@@ -133,7 +134,7 @@ public class AuthenticationServlet extends SwimServlet {
 			}
 		}
 
-		// Forward request to /home servlet
+		/* Forward request to /home servlet */
 		redirectToRightHome(req, resp);
 	}
 
@@ -141,17 +142,17 @@ public class AuthenticationServlet extends SwimServlet {
 			throws IOException, ServletException {
 		HttpSession session = req.getSession();
 
-		// Check that user is logged in
+		/* Check that user is logged in */
 		if (!isUserLoggedIn(session)) {
 			sendError(req, resp, ErrorType.LOGIN_REQUIRED);
 		}
 
-		// Remove parameters from session
+		/* Remove parameters from session */
 		session.removeAttribute(LOGGED_ATTRIBUTE);
 		session.removeAttribute(LOGGED_USERNAME);
 		session.removeAttribute(LOGGED_USERTYPE);
 
-		// Forward to landing
+		/* Forward to landing */
 		resp.sendRedirect(req.getContextPath() + "/landing");
 	}
 
@@ -178,7 +179,7 @@ public class AuthenticationServlet extends SwimServlet {
 			values.put(fieldName, value);
 		}
 
-		// Retrieve bean used for registration
+		/* Retrieve bean used for registration */
 		AuthenticationControllerRemote auth = lookupBean(
 				AuthenticationControllerRemote.class,
 				Misc.BeanNames.AUTHENTICATION);
@@ -200,7 +201,8 @@ public class AuthenticationServlet extends SwimServlet {
 			return;
 		}
 
-		// Redirect user to home for the moment //TODO
+		/* Redirect user to home for the moment  */
+		//TODO
 		resp.sendRedirect(req.getContextPath() + "/landing");
 	}
 

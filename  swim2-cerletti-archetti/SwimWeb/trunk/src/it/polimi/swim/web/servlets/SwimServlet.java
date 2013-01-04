@@ -133,13 +133,15 @@ public abstract class SwimServlet extends HttpServlet {
 	}
 
 	/**
-	 * This method is useful to send error after bad HTTP requests.
+	 * This method sends error after bad HTTP requests.
 	 * 
 	 * @param req
 	 *            an HttpServletRequest which is the HTTP request.
 	 * @param resp
 	 *            an HttpServletRequest which is the response to the HTTP
 	 *            request.
+	 * @param err
+	 *            the ErrorType of the found error.
 	 * @throws IOException
 	 *             an exception generated because of a bad input.
 	 * @throws ServletException
@@ -153,6 +155,16 @@ public abstract class SwimServlet extends HttpServlet {
 		req.getRequestDispatcher("/error.jsp").forward(req, resp);
 	}
 
+	/**
+	 * This method, given the name and the belonging class, provides the sought
+	 * bean.
+	 * 
+	 * @param beanClass
+	 *            the Class which the sought bean belongs to.
+	 * @param beanName
+	 *            a String that contains the name of the sought bean.
+	 * @return the sought bean.
+	 */
 	protected <T> T lookupBean(Class<T> beanClass, String beanName) {
 		Hashtable<String, String> env = new Hashtable<String, String>();
 		env.put(Context.INITIAL_CONTEXT_FACTORY,
@@ -168,10 +180,30 @@ public abstract class SwimServlet extends HttpServlet {
 		}
 	}
 
+	/**
+	 * This method provides informations whether a customer is logged or not in
+	 * a given session.
+	 * 
+	 * @param session
+	 *            the HttpSession we want to know if a customer is logged or
+	 *            not.
+	 * @return true if a customer is logged in the given session, false
+	 *         otherwise.
+	 */
 	public static boolean isCustomerLoggedIn(HttpSession session) {
 		return isUserTypeLoggedIn(session, UserType.CUSTOMER);
 	}
 
+	/**
+	 * This method provides informations whether an administrator is logged or
+	 * not in a given session.
+	 * 
+	 * @param session
+	 *            the HttpSession we want to know if an administrator is logged
+	 *            or not.
+	 * @return true if an administrator is logged in the given session, false
+	 *         otherwise.
+	 */
 	public static boolean isAdministratorLoggedIn(HttpSession session) {
 		return isUserTypeLoggedIn(session, UserType.ADMINISTRATOR);
 	}
@@ -185,16 +217,48 @@ public abstract class SwimServlet extends HttpServlet {
 		return loggedUser != null && ((UserType) loggedUser).equals(type);
 	}
 
+	/**
+	 * This method provides informations whether an generic user is logged or
+	 * not in a given session.
+	 * 
+	 * @param session
+	 *            the HttpSession we want to know if a generic user is logged or
+	 *            not.
+	 * @return true if a generic user is logged in the given session, false
+	 *         otherwise.
+	 */
 	public static Boolean isUserLoggedIn(HttpSession session) {
 		Object logged = session.getAttribute(Misc.LOGGED_ATTRIBUTE);
 		return logged != null && (Boolean) logged;
 	}
 
+	/**
+	 * This method provides informations about the username of a user logged in
+	 * a given session.
+	 * 
+	 * @param session
+	 *            the HttpSession we want to know the username of the logged
+	 *            user.
+	 * @return a String that contains the username of the user logged in the
+	 *         given session.
+	 */
 	public static String getUsername(HttpSession session) {
 		Object o = session.getAttribute(Misc.LOGGED_USERNAME);
 		return (String) o;
 	}
 
+	/**
+	 * This method redirects a user to the correct home page associated to his
+	 * type.
+	 * 
+	 * @param req
+	 *            an HttpServletRequest which is the HTTP request.
+	 * @param resp
+	 *            an HttpServletRequest which is the response to the HTTP
+	 *            request.
+	 * @throws IOException
+	 *             an exception generated because of a bad input.
+	 */
 	public static void redirectToRightHome(HttpServletRequest req,
 			HttpServletResponse resp) throws IOException {
 		HttpSession session = req.getSession();

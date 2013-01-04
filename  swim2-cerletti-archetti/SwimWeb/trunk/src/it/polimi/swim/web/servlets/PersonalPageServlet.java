@@ -38,6 +38,10 @@ public class PersonalPageServlet extends SwimServlet {
 	public static final String CONTEXT_NAME = "home";
 	public static final String USER_ATTR = "user";
 
+	/**
+	 * PersonalPageSection is an enumeration useful to provide all the possible
+	 * sections accessible from the home page of a logged user.
+	 */
 	public enum PersonalPageSection {
 		HOME("Il tuo profilo", ""), EDIT_PROFILE("Modifica profilo",
 				"editProfile"), EDIT_ACCOUNT("Modifica account", "editAccount");
@@ -49,10 +53,21 @@ public class PersonalPageServlet extends SwimServlet {
 			this.sectionName = sectionName;
 		}
 
+		/**
+		 * Getter method.
+		 * 
+		 * @return a String that contains the name of this PersonalPageSection.
+		 */
 		public String getSectionName() {
 			return sectionName;
 		}
 
+		/**
+		 * Getter method.
+		 * 
+		 * @return a String that contains the identifier of this
+		 *         PersonalPageSection.
+		 */
 		public String getSectionIdentifier() {
 			return sectionIdentifier;
 		}
@@ -167,21 +182,21 @@ public class PersonalPageServlet extends SwimServlet {
 		String username = (String) session
 				.getAttribute(AuthenticationServlet.LOGGED_USERNAME);
 
-		// Check password length
+		/* Check password length */
 		if (newPassword.length() < Misc.MIN_PASSWORD_LENGTH) {
 			req.setAttribute(Misc.ERROR_ATTR, ErrorType.INVALID_PASSWORD);
 			showSection(PersonalPageSection.EDIT_ACCOUNT, req, resp);
 			return;
 		}
 
-		// Authenticate request
+		/* Authenticate request */
 		if (!authenticateRequest(currentPassword, req)) {
 			req.setAttribute(Misc.ERROR_ATTR, ErrorType.INCORRECT_PASSWORD);
 			showSection(PersonalPageSection.EDIT_ACCOUNT, req, resp);
 			return;
 		}
 
-		// Now request is authenticated. Update password!
+		/* Now request is authenticated. Update password! */
 		UserProfileControllerRemote profile = lookupBean(
 				UserProfileControllerRemote.class, Misc.BeanNames.PROFILE);
 
@@ -198,11 +213,11 @@ public class PersonalPageServlet extends SwimServlet {
 		HttpSession session = req.getSession();
 		String newEmail = req.getParameter("newemail");
 
-		// Check email
+		/* Check email */
 
-		// Authenticate request
+		/* Authenticate request */
 		if (!authenticateRequest(currentPassword, req)) {
-			// Send error
+			/* Send error */
 			req.setAttribute(Misc.ERROR_ATTR, ErrorType.INCORRECT_PASSWORD);
 			showSection(PersonalPageSection.EDIT_ACCOUNT, req, resp);
 			return;
@@ -247,7 +262,7 @@ public class PersonalPageServlet extends SwimServlet {
 				return;
 			}
 
-			// For the field birthdate, convert it into a date.
+			/* For the field birthdate, convert it into a date. */
 			if (field.equals("birthdate")) {
 				try {
 					Date d = Misc.DATE_FORMAT.parse(value);
@@ -262,7 +277,7 @@ public class PersonalPageServlet extends SwimServlet {
 			}
 		}
 
-		// lookup bean to retrieve user informations
+		/* Lookup bean to retrieve user informations */
 		UserProfileControllerRemote profile = lookupBean(
 				UserProfileControllerRemote.class, Misc.BeanNames.PROFILE);
 		profile.updateCustomerDetails(username, values);
@@ -324,31 +339,31 @@ public class PersonalPageServlet extends SwimServlet {
 			HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 
-		// Check that user is logged in
+		/* Check that user is logged in */
 		HttpSession session = req.getSession();
 		Object loggedIn = session
 				.getAttribute(AuthenticationServlet.LOGGED_ATTRIBUTE);
 
 		if (loggedIn == null || !(Boolean) loggedIn) {
-			// User is not logged in
+			/* User is not logged in */
 			resp.sendRedirect(req.getContextPath() + "/landing");
 			return;
 		}
 
-		// Retrieve username
+		/* Retrieve username */
 		String selfUsername = String.valueOf(session
 				.getAttribute(AuthenticationServlet.LOGGED_USERNAME));
 
-		// lookup bean to retrieve user informations
+		/* Lookup bean to retrieve user informations */
 		UserProfileControllerRemote profile = lookupBean(
 				UserProfileControllerRemote.class, Misc.BeanNames.PROFILE);
 
 		Customer c = profile.getByUsername(selfUsername);
 
-		// Put user informations in request
+		/* Put user informations in request */
 		req.setAttribute(Misc.USER_TO_SHOW, c);
 
-		// Put user ability list in request
+		/* Put user ability list in request */
 		List<?> abilityList;
 		try {
 			abilityList = profile.getAbilityList(selfUsername);
@@ -358,7 +373,7 @@ public class PersonalPageServlet extends SwimServlet {
 			return;
 		}
 
-		// Set section to show
+		/* Set section to show */
 		req.setAttribute(Misc.SELECTED_TAB_ATTR, CustomerMenu.HOME);
 		req.setAttribute(Misc.SELECTED_SECTION_ATTR, section);
 		req.getRequestDispatcher(Misc.HOME_JSP).forward(req, resp);
@@ -392,7 +407,7 @@ public class PersonalPageServlet extends SwimServlet {
 
 		PrintWriter respWriter = resp.getWriter();
 
-		// Retrieve ability list
+		/* Retrieve ability list */
 		String match = req.getParameter("term");
 
 		AbilityControllerRemote ability = lookupBean(

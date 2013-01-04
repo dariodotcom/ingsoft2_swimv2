@@ -19,6 +19,10 @@ public class CustomerFeedbackServlet extends SwimServlet {
 
 	public static final String CONTEXT_NAME = "feedbacks";
 
+	/**
+	 * CustomerFeedbackSection is an enumeration useful to provide all the
+	 * possible sections accessible from the feedback page of a logged user.
+	 */
 	public enum CustomerFeedbackSection {
 
 		RECEIVED_FEEDBACKS("Feedback ricevuti", ""), SENT_FEEDBACKS(
@@ -32,10 +36,22 @@ public class CustomerFeedbackServlet extends SwimServlet {
 			this.sectionName = sectionName;
 		}
 
+		/**
+		 * Getter method.
+		 * 
+		 * @return a String that contains the name of this
+		 *         CustomerFeedbackSection.
+		 */
 		public String getSectionName() {
 			return sectionName;
 		}
 
+		/**
+		 * Getter method.
+		 * 
+		 * @return a String that contains the identifier of this
+		 *         CustomerFeedbackSection.
+		 */
 		public String getSectionIdentifier() {
 			return sectionIdentifier;
 		}
