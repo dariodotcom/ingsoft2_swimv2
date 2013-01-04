@@ -264,8 +264,9 @@ public class UserProfileController implements UserProfileControllerRemote {
 	 */
 	public List<?> getReceivedArchivedWorkRequest(String username) {
 		Query q = manager
-				.createQuery("FROM WorkRequest w WHERE w.receiver.username=:u "
-						+ "AND w.senderCompleted=true AND w.receiverCompleted=true)");
+				.createQuery("FROM WorkRequest w WHERE w.receiver.username=:u AND "
+						+ "(w.senderCompleted=true AND w.receiverCompleted=true OR "
+						+ "w.senderConfirmed=false OR w.receiverConfirmed=false)");
 		q.setParameter("u", username);
 
 		return q.getResultList();
@@ -277,7 +278,8 @@ public class UserProfileController implements UserProfileControllerRemote {
 	public List<?> getSentArchivedWorkRequest(String username) {
 		Query q = manager
 				.createQuery("FROM WorkRequest w WHERE w.sender.username=:u "
-						+ "AND (w.senderCompleted=true AND w.receiverCompleted=true)");
+						+ "AND (w.senderCompleted=true AND w.receiverCompleted=true OR "
+						+ "w.senderConfirmed=false OR w.receiverConfirmed=false)");
 		q.setParameter("u", username);
 
 		return q.getResultList();

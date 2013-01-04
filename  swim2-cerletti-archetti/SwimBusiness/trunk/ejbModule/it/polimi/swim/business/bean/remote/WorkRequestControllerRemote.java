@@ -3,6 +3,7 @@ package it.polimi.swim.business.bean.remote;
 import java.util.List;
 import java.util.Map;
 
+import it.polimi.swim.business.entity.Feedback;
 import it.polimi.swim.business.entity.WorkRequest;
 import it.polimi.swim.business.exceptions.BadRequestException;
 import it.polimi.swim.business.exceptions.InvalidStateException;
@@ -111,4 +112,6 @@ public interface WorkRequestControllerRemote {
 	 *             a request that does not fit.
 	 */
 	public List<?> getMessageList(int reqId) throws BadRequestException;
+
+	public Feedback getFeedback(int reqId);
 }
