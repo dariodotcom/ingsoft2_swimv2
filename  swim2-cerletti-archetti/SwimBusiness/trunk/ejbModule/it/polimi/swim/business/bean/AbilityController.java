@@ -28,7 +28,6 @@ public class AbilityController implements AbilityControllerRemote {
 	 * Class constructor.
 	 */
 	public AbilityController() {
-		// TODO Auto-generated constructor stub
 	}
 
 	/**
@@ -68,13 +67,12 @@ public class AbilityController implements AbilityControllerRemote {
 			throw new BadRequestException();
 		}
 
+		/* Create new ability */
 		if (response == true) {
-			// Create new ability
 			Ability ab = new Ability(req.getAbilityName(),
 					req.getAbilityDescription(), admin);
 			manager.persist(ab);
 		}
-
 		req.setApproved(response);
 		req.setReview(comment);
 	}
@@ -99,7 +97,6 @@ public class AbilityController implements AbilityControllerRemote {
 
 		Ability ab = new Ability(name, description, admin);
 		manager.persist(ab);
-
 	}
 
 	/**
@@ -110,10 +107,22 @@ public class AbilityController implements AbilityControllerRemote {
 		return q.getResultList();
 	}
 
+	/**
+	 * @see AbilityControllerRemote
+	 */
 	public List<?> getAvailableAbilityList(String match) {
 		Query q = manager
 				.createQuery("FROM Ability a WHERE a.name LIKE :match");
 		q.setParameter("match", "%" + match + "%");
+		return q.getResultList();
+	}
+
+	/**
+	 * @see AbilityControllerRemote
+	 */
+	public List<?> getAbilityRequestList() {
+		Query q = manager
+				.createQuery("FROM AbilityRequest r WHERE r.approved=null");
 		return q.getResultList();
 	}
 
@@ -141,11 +150,5 @@ public class AbilityController implements AbilityControllerRemote {
 		} else {
 			return entity;
 		}
-	}
-
-	public List<?> getAbilityRequestList() {
-		Query q = manager
-				.createQuery("FROM AbilityRequest r WHERE r.approved=null");
-		return q.getResultList();
 	}
 }
