@@ -13,7 +13,7 @@ import javax.ejb.Remote;
 @Remote
 public interface FeedbackControllerRemote {
 	/**
-	 * This method is useful to add a new feedback to the database.
+	 * This method manages the adding of a new feedback to the database.
 	 * 
 	 * @param workRequestId
 	 *            an Integer which contains the identifier of the associated
@@ -40,8 +40,8 @@ public interface FeedbackControllerRemote {
 			BadRequestException, InvalidStateException;
 
 	/**
-	 * This method is useful to register a reply for a given feedback to the
-	 * database.
+	 * This method manages the registration of a reply for a given feedback to
+	 * the database.
 	 * 
 	 * @param workRequestId
 	 *            an Integer which contains the identifier of the associated
