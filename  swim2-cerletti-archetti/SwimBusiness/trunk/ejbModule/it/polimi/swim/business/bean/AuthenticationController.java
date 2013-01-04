@@ -34,7 +34,7 @@ public class AuthenticationController implements AuthenticationControllerRemote 
 	 * Default constructor.
 	 */
 	public AuthenticationController() {
-		// TODO Auto-generated constructor stub
+
 	}
 
 	/**
@@ -64,7 +64,8 @@ public class AuthenticationController implements AuthenticationControllerRemote 
 		} else if (user instanceof Customer) {
 			return UserType.CUSTOMER;
 		} else {
-			throw new ClassCastException(); // TODO: solve this in a better way
+			throw new ClassCastException(); // TODO: Solve this exception in a
+											// better way
 		}
 	}
 
@@ -84,15 +85,20 @@ public class AuthenticationController implements AuthenticationControllerRemote 
 		}
 
 		Customer c = new Customer(username, password, email, name, surname);
-
 		manager.persist(c);
 	}
 
+	/**
+	 * @see AuthenticationControllerRemote
+	 */
 	public void confirmUserEmailAddress(String username)
 			throws UserNotFoundException {
 		findCustomerByUsername(username).setEmailConfirmed();
 	}
 
+	/**
+	 * @see AuthenticationControllerRemote
+	 */
 	public String resetUserPassword(String username)
 			throws UserNotFoundException {
 		Customer c = findCustomerByUsername(username);
@@ -102,8 +108,11 @@ public class AuthenticationController implements AuthenticationControllerRemote 
 		return newPassword;
 	}
 
+	/**
+	 * @see AuthenticationControllerRemote
+	 */
 	public void createAdministrator(String username, String password)
-			throws UsernameAlreadyTakenException {	
+			throws UsernameAlreadyTakenException {
 		if (!isUsernameAvailable(username)) {
 			throw new UsernameAlreadyTakenException();
 		}
