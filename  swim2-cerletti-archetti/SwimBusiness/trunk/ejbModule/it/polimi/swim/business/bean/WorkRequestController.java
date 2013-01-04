@@ -16,6 +16,7 @@ import it.polimi.swim.business.exceptions.UnauthorizedRequestException;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 /**
  * Session Bean implementation class WorkRequestController.
@@ -65,27 +66,29 @@ public class WorkRequestController implements WorkRequestControllerRemote {
 	}
 
 	/**
+	 * @throws InvalidStateException
 	 * @see WorkRequestControllerRemote
 	 */
 	public void respondToWorkRequest(String responseAuthorUsr,
 			Boolean responseDescriptor, int workRequestId)
-			throws UnauthorizedRequestException, BadRequestException {
+			throws UnauthorizedRequestException, BadRequestException,
+			InvalidStateException {
 
 		Customer author = getCustomer(responseAuthorUsr);
 		WorkRequest request = getRequest(workRequestId);
 
 		if (author.equals(request.getSender())) {
 
-			if (request.getSenderConfirmed() != null) {
-				throw new BadRequestException();
+			if (request.isConfirmedBySender() != null) {
+				throw new InvalidStateException();
 			} else {
 				request.setSenderConfirmed(responseDescriptor);
 			}
 
 		} else if (author.equals(request.getReceiver())) {
 
-			if (request.getReceiverConfirmed() != null) {
-				throw new BadRequestException();
+			if (request.isConfirmedByReceiver() != null) {
+				throw new InvalidStateException();
 			} else {
 				request.setReceiverConfirmed(responseDescriptor);
 			}
@@ -96,30 +99,30 @@ public class WorkRequestController implements WorkRequestControllerRemote {
 	}
 
 	/**
+	 * @throws InvalidStateException
 	 * @see WorkRequestControllerRemote
 	 */
 	public void markRequestAsCompleted(String responseAuthorUsr,
 			int workRequestId) throws UnauthorizedRequestException,
-			BadRequestException {
-
+			BadRequestException, InvalidStateException {
+		System.out.println("lol");
 		Customer author = getCustomer(responseAuthorUsr);
 		WorkRequest request = getRequest(workRequestId);
 
 		if (author.equals(request.getSender())) {
-
-			if (request.getSenderCompleted() != null) {
-				throw new BadRequestException();
+			if (request.getSenderCompleted()) {
+				throw new InvalidStateException();
 			} else {
 				request.setSenderCompleted();
 			}
 		} else if (author.equals(request.getReceiver())) {
-
-			if (request.getReceiverCompleted() != null) {
-				throw new BadRequestException();
+			if (request.getReceiverCompleted()) {
+				throw new InvalidStateException();
 			} else {
 				request.setReceiverCompleted();
 			}
-		}
+		} else
+			throw new UnauthorizedRequestException();
 	}
 
 	/**
@@ -142,7 +145,7 @@ public class WorkRequestController implements WorkRequestControllerRemote {
 			throw new UnauthorizedRequestException();
 		}
 
-		Message m = new Message(request, sender, text);
+		Message m = new Message(request, author, text);
 		manager.persist(m);
 	}
 
@@ -171,5 +174,12 @@ public class WorkRequestController implements WorkRequestControllerRemote {
 
 	public WorkRequest getById(int requestId) throws BadRequestException {
 		return Helpers.getEntityChecked(manager, WorkRequest.class, requestId);
+	}
+
+	public List<?> getMessageList(int reqId) throws BadRequestException {
+		Query q = manager
+				.createQuery("SELECT m FROM WorkRequest w, IN (w.relatedMessages) m WHERE w.id=:id ORDER BY m.sentDate");
+		q.setParameter("id", reqId);
+		return q.getResultList();
 	}
 }

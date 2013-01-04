@@ -196,27 +196,61 @@ public class UserProfileController implements UserProfileControllerRemote {
 				.getEntityChecked(manager, Customer.class, username);
 		Ability a = Helpers.getEntityChecked(manager, Ability.class,
 				abilityName);
-		
-		if(c.getAbilityList().contains(a)){
+
+		if (c.getAbilityList().contains(a)) {
 			throw new InvalidStateException();
 		}
-		
+
 		c.addAbility(a);
 	}
 
 	public void removeAbility(String username, String abilityName)
 			throws BadRequestException, InvalidStateException {
-		// TODO Auto-generated method stub
 		Customer c = Helpers
 				.getEntityChecked(manager, Customer.class, username);
 		Ability a = Helpers.getEntityChecked(manager, Ability.class,
 				abilityName);
-		
-		if(!c.getAbilityList().contains(a)){
+
+		if (!c.getAbilityList().contains(a)) {
 			throw new InvalidStateException();
 		}
-		
+
 		c.removeAbility(a);
 	}
 
+	public List<?> getReceivedActiveWorkRequest(String username) {
+		Query q = manager
+				.createQuery("FROM WorkRequest w WHERE w.receiver.username=:u "
+						+ "AND (w.senderCompleted=false OR w.receiverCompleted=false)");
+		q.setParameter("u", username);
+
+		return q.getResultList();
+	}
+
+	public List<?> getSentActiveWorkRequest(String username) {
+		Query q = manager
+				.createQuery("FROM WorkRequest w WHERE w.sender.username=:u "
+						+ "AND (w.senderCompleted=false OR w.receiverCompleted=false)");
+		q.setParameter("u", username);
+
+		return q.getResultList();
+	}
+
+	public List<?> getReceivedArchivedWorkRequest(String username) {
+		Query q = manager
+				.createQuery("FROM WorkRequest w WHERE w.receiver.username=:u "
+						+ "AND w.senderCompleted=true AND w.receiverCompleted=true)");
+		q.setParameter("u", username);
+
+		return q.getResultList();
+	}
+
+	public List<?> getSentArchivedWorkRequest(String username) {
+		Query q = manager
+				.createQuery("FROM WorkRequest w WHERE w.sender.username=:u "
+						+ "AND (w.senderCompleted=true AND w.receiverCompleted=true)");
+		q.setParameter("u", username);
+
+		return q.getResultList();
+	}
 }

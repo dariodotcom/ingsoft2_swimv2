@@ -1,7 +1,7 @@
 package it.polimi.swim.business.entity;
 
 import java.util.Date;
-import java.util.Set;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -25,6 +25,8 @@ public class WorkRequest {
 	 * Class constructor.
 	 */
 	public WorkRequest() {
+		this.receiverCompleted = false;
+		this.senderCompleted = false;
 	}
 
 	/**
@@ -36,6 +38,7 @@ public class WorkRequest {
 	 *            the Customer which has received the work request.
 	 */
 	public WorkRequest(Customer sender, Customer receiver) {
+		super();
 		this.sender = sender;
 		this.receiver = receiver;
 	}
@@ -82,7 +85,7 @@ public class WorkRequest {
 	private Ability requiredAbility;
 
 	@OneToMany(mappedBy = "linkedRequest")
-	private Set<Message> relatedMessages;
+	private List<Message> relatedMessages;
 
 	@OneToOne(mappedBy = "linkedRequest")
 	@JoinColumn(name = "feedback")
@@ -132,7 +135,7 @@ public class WorkRequest {
 	 * @return true if the user who has sent the work request has confirmed it,
 	 *         false otherwise.
 	 */
-	public Boolean getSenderConfirmed() {
+	public Boolean isConfirmedBySender() {
 		return senderConfirmed;
 	}
 
@@ -153,7 +156,7 @@ public class WorkRequest {
 	 * @return true if the user who has received the work request has confirmed
 	 *         it, false otherwise.
 	 */
-	public Boolean getReceiverConfirmed() {
+	public Boolean isConfirmedByReceiver() {
 		return receiverConfirmed;
 	}
 
@@ -175,6 +178,10 @@ public class WorkRequest {
 	 *         finish, false otherwise.
 	 */
 	public Boolean getSenderCompleted() {
+		if (senderCompleted == null) {
+			return false;
+		}
+
 		return senderCompleted;
 	}
 
@@ -192,6 +199,10 @@ public class WorkRequest {
 	 *         its finish, false otherwise.
 	 */
 	public Boolean getReceiverCompleted() {
+		if (receiverCompleted == null) {
+			return false;
+		}
+
 		return receiverCompleted;
 	}
 
@@ -304,7 +315,7 @@ public class WorkRequest {
 	 * 
 	 * @return a Set of Message related to the work request.
 	 */
-	public Set<Message> getRelatedMessages() {
+	public List<Message> getRelatedMessages() {
 		return relatedMessages;
 	}
 
@@ -342,8 +353,8 @@ public class WorkRequest {
 	 * @return true if the work request is set completed by both sender and
 	 *         receiver, false otherwise.
 	 */
-	public boolean isCompleted() {
-		return receiverCompleted && senderCompleted;
+	public Boolean isCompleted() {
+		return getSenderCompleted() && getReceiverCompleted();
 	}
 
 	/**
@@ -352,7 +363,24 @@ public class WorkRequest {
 	 * @return true if the work request is set confirmed by both sender and
 	 *         receiver, false otherwise.
 	 */
-	public boolean isConfirmed() {
+	public Boolean isConfirmed() {
+		if (receiverConfirmed == null || senderConfirmed == null) {
+			return false;
+		}
 		return receiverConfirmed && senderConfirmed;
+	}
+
+	/**
+	 * Getter method.
+	 * 
+	 * @return true if either the sender or the receiver has declined the
+	 *         request, false otherwise.
+	 */
+	public Boolean isDeclined() {
+		if (receiverCompleted == null || senderCompleted == null) {
+			return false;
+		}
+
+		return receiverConfirmed == false || senderConfirmed == false;
 	}
 }
