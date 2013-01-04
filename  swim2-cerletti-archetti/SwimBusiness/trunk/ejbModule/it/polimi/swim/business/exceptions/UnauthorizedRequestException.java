@@ -1,7 +1,8 @@
 package it.polimi.swim.business.exceptions;
 
 /**
- * Thrown when an user performs request which can't be fulfilled because of
+ * Class UnauthorizedRequestExecption extends Exception in order to be thrown
+ * when an user performs request which can't be fulfilled because of
  * authorization problem.
  * */
 public class UnauthorizedRequestException extends Exception {
