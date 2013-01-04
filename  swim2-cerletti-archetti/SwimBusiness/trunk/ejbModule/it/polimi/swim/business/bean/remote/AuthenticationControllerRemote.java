@@ -16,8 +16,8 @@ import javax.ejb.Remote;
 public interface AuthenticationControllerRemote {
 
 	/**
-	 * This method is useful to provide informations about the type of the
-	 * authenticated user.
+	 * This method provides informations about the type of the authenticated
+	 * user (customer or administrator).
 	 * 
 	 * @param username
 	 *            a String that contains the username of the user who is
@@ -34,14 +34,14 @@ public interface AuthenticationControllerRemote {
 			throws AuthenticationFailedException;
 
 	/**
-	 * This method is useful to add a new registered user to the database.
+	 * This method manages the adding of a new registered user to the database.
 	 * 
 	 * @param username
 	 *            a String that contains the username of the new user.
 	 * @param password
 	 *            a String that contains the password of the new user.
 	 * @param email
-	 *            a String that contains the e-mail given by the new user.
+	 *            a String that contains the e-mail of the new user.
 	 * @param name
 	 *            a String that contains the name of the new user.
 	 * @param surname
@@ -51,18 +51,48 @@ public interface AuthenticationControllerRemote {
 	 * @throws EmailAlreadyTakenException
 	 *             the e-mail address given by the user is already in use.
 	 */
-	// TODO aggiungere eccezione EmailPathIncompatible se la mail inserita non
-	// rispetta il path, e modificare poi il javadoc!
+	// TODO for the future: Add an exception EmailPathIncompatible if the
+	// inserted email path doesn't match with a standard one. N.B. After that
+	// remember to modify JavaDoc!
 	public void createUser(String username, String password, String email,
 			String name, String surname) throws UsernameAlreadyTakenException,
 			EmailAlreadyTakenException;
 
+	/**
+	 * This method manages the adding of a new administrator to the database.
+	 * 
+	 * @param username
+	 *            a String that contains the username of the new administrator.
+	 * @param password
+	 *            a String that contains the password of the new administrator.
+	 * @throws UsernameAlreadyTakenException
+	 *             the username chosen by the administrator is already in use.
+	 */
 	public void createAdministrator(String username, String password)
 			throws UsernameAlreadyTakenException;
 
+	/**
+	 * This method manages the confirmation of a user email address.
+	 * 
+	 * @param username
+	 *            a String that contains the username of the user we want to
+	 *            confirm the email address.
+	 * @throws UserNotFoundException
+	 *             the user has not been found.
+	 */
 	public void confirmUserEmailAddress(String username)
 			throws UserNotFoundException;
 
+	/**
+	 * This method manages the reset password request made by a user.
+	 * 
+	 * @param username
+	 *            a String that contains the username of the user that wants to
+	 *            reset his password.
+	 * @return a String which contains the user new password.
+	 * @throws UserNotFoundException
+	 *             the user has not been found.
+	 */
 	public String resetUserPassword(String username)
 			throws UserNotFoundException;
 }
