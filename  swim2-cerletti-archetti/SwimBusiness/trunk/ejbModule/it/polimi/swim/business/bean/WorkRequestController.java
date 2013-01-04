@@ -31,11 +31,9 @@ public class WorkRequestController implements WorkRequestControllerRemote {
 	 * Default constructor.
 	 */
 	public WorkRequestController() {
-		// TODO Auto-generated constructor stub
 	}
 
 	/**
-	 * @throws InvalidStateException
 	 * @see WorkRequestControllerRemote
 	 */
 	public int createWorkRequest(Map<String, Object> properties)
@@ -45,11 +43,12 @@ public class WorkRequestController implements WorkRequestControllerRemote {
 
 		Customer sender = getCustomer(senderUsr), receiver = getCustomer(receiverUsr);
 
-		// Check receiver abilities
+		/* Check receiver abilities */
 		List<Ability> receiverAbilities = receiver.getAbilityList();
 		Ability a = Helpers.getEntityChecked(manager, Ability.class,
 				properties.get("selectedAbility"));
 
+		/* We can't send a work request to a user that has no declared abilities */
 		if (receiverAbilities.size() == 0 || !receiverAbilities.contains(a)) {
 			throw new InvalidStateException();
 		}
@@ -66,7 +65,6 @@ public class WorkRequestController implements WorkRequestControllerRemote {
 	}
 
 	/**
-	 * @throws InvalidStateException
 	 * @see WorkRequestControllerRemote
 	 */
 	public void respondToWorkRequest(String responseAuthorUsr,
@@ -99,7 +97,6 @@ public class WorkRequestController implements WorkRequestControllerRemote {
 	}
 
 	/**
-	 * @throws InvalidStateException
 	 * @see WorkRequestControllerRemote
 	 */
 	public void markRequestAsCompleted(String responseAuthorUsr,
@@ -148,6 +145,23 @@ public class WorkRequestController implements WorkRequestControllerRemote {
 		Message m = new Message(request, author, text);
 		manager.persist(m);
 	}
+	
+	/**
+	 * @see WorkRequestControllerRemote
+	 */
+	public WorkRequest getById(int requestId) throws BadRequestException {
+		return Helpers.getEntityChecked(manager, WorkRequest.class, requestId);
+	}
+
+	/**
+	 * @see WorkRequestControllerRemote
+	 */
+	public List<?> getMessageList(int reqId) throws BadRequestException {
+		Query q = manager
+				.createQuery("SELECT m FROM WorkRequest w, IN (w.relatedMessages) m WHERE w.id=:id ORDER BY m.sentDate");
+		q.setParameter("id", reqId);
+		return q.getResultList();
+	}
 
 	/* Helpers */
 	private Customer getCustomer(String username) throws BadRequestException {
@@ -172,14 +186,4 @@ public class WorkRequestController implements WorkRequestControllerRemote {
 		return text != null && text.length() >= 0;
 	}
 
-	public WorkRequest getById(int requestId) throws BadRequestException {
-		return Helpers.getEntityChecked(manager, WorkRequest.class, requestId);
-	}
-
-	public List<?> getMessageList(int reqId) throws BadRequestException {
-		Query q = manager
-				.createQuery("SELECT m FROM WorkRequest w, IN (w.relatedMessages) m WHERE w.id=:id ORDER BY m.sentDate");
-		q.setParameter("id", reqId);
-		return q.getResultList();
-	}
 }

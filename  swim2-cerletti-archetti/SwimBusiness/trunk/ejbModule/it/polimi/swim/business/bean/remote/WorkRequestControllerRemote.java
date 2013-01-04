@@ -26,6 +26,8 @@ public interface WorkRequestControllerRemote {
 	 *            - the identifier of the user receiving the request.
 	 * @return the identifier of the created work request.
 	 * @throws InvalidStateException
+	 *             a request that is incompatible with the status of the
+	 *             database.
 	 * */
 	public int createWorkRequest(Map<String, Object> properties)
 			throws BadRequestException, InvalidStateException;
@@ -44,6 +46,8 @@ public interface WorkRequestControllerRemote {
 	 *             when user who performed the action is not involved in the
 	 *             request.
 	 * @throws InvalidStateException
+	 *             a request that is incompatible with the status of the
+	 *             database.
 	 * */
 	public void respondToWorkRequest(String responseAuthorUsr,
 			Boolean responseDescriptor, int workRequestId)
@@ -61,6 +65,8 @@ public interface WorkRequestControllerRemote {
 	 *             when user who performed the action is not involved in the
 	 *             request.
 	 * @throws InvalidStateException
+	 *             a request that is incompatible with the status of the
+	 *             database.
 	 * */
 	public void markRequestAsCompleted(String actorUsr, int workRequestId)
 			throws UnauthorizedRequestException, BadRequestException,
@@ -82,7 +88,27 @@ public interface WorkRequestControllerRemote {
 	public void sendMessage(String authorUsr, String text, int workRequestId)
 			throws UnauthorizedRequestException, BadRequestException;
 
+	/**
+	 * This method provides a work request associated to a given identifier.
+	 * 
+	 * @param requestId
+	 *            a integer that contains a work request identifier.
+	 * @return the WorkRequest associated to the given work request identifier.
+	 * @throws BadRequestException
+	 *             a request that does not fit.
+	 */
 	public WorkRequest getById(int requestId) throws BadRequestException;
 
+	/**
+	 * This method provides a list of messages exchanged during a specific work
+	 * request.
+	 * 
+	 * @param reqId
+	 *            a integer that contains a work request identifier.
+	 * @return the List of messages associated to the given work request
+	 *         identifier.
+	 * @throws BadRequestException
+	 *             a request that does not fit.
+	 */
 	public List<?> getMessageList(int reqId) throws BadRequestException;
 }
