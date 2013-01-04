@@ -630,3 +630,55 @@ form.actionForm{
 .centerText{
 	text-align: center;
 }
+
+/*WORKREQUESTS*/
+.messageContainer{
+	margin-bottom: 25px;
+}
+
+.messageContainer .message,
+.messageContainer .arrow{
+    display: inline-block;
+    position: relative;
+}
+
+.messageContainer .message{
+    width: 250px;
+    padding: 15px;
+    border: 1px solid #acacac;
+    border-radius: 2px;
+    box-shadow: 0 1px 1px rgba(0,0,0,.1);
+    z-index: 20;
+}
+
+.messageContainer .message .messageDate{
+    font-size: 14px;
+    margin-bottom: 15px;
+}
+
+.messageContainer .arrow{
+    width: 22px;
+    height: 28px;
+    margin-top: 20px;
+    vertical-align: top;
+    z-index: 500000;
+}
+
+.messageContainer.other .arrow{
+    margin-right: -6px;
+    background: url("resources/arrow.png");
+}
+
+.messageContainer.self .message{
+    float: right;
+}
+
+.messageContainer.self .arrow{
+    float: right;
+    margin-left: -1px;
+    background: url("resources/arrow-left.png");
+}
+
+#swimContent .messageContainer .message .submitLine .inputsubmit{
+	margin-top: 15px;
+}

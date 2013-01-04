@@ -19,6 +19,7 @@
 <meta name="keywords" content="" />
 
 <link type="text/css" rel="stylesheet" href="<%=context%>/zero.css" />
+<link type="text/css" rel="stylesheet" href="<%=context%>/clearfix.css" />
 <link href='http://fonts.googleapis.com/css?family=Droid+Sans'
 	rel='stylesheet' type='text/css' />
 <link type="text/css" rel="stylesheet" href="<%=context%>/swim.css" />
@@ -26,7 +27,9 @@
 <link rel="icon" href="<%=context%>/resources/favicon.png"
 	type="image/png" />
 
-<script src="http://code.jquery.com/jquery-1.8.3.js"></script>
-<script src="http://code.jquery.com/ui/1.9.2/jquery-ui.js"></script>
-<script src="<%=context%>/swim.js"></script>
+<script type="text/javascript"
+	src="http://code.jquery.com/jquery-1.8.3.js"></script>
+<script type="text/javascript"
+	src="http://code.jquery.com/ui/1.9.2/jquery-ui.js"></script>
+<script type="text/javascript" src="<%=context%>/swim.js"></script>
 </head>

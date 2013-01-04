@@ -15,14 +15,18 @@
 	<%@include file="shared/header.jsp"%>
 	<div id="swimContentContainer">
 		<div id="swimContent" class="topWidthElement">
-			<h1 id="errorHeading">Ops! Sembra ci sia stato un errore.</h1>
-			<p id="errorName">
-				Errore:
-				<%=e.getErrorName()%>
-			</p>
-			<p id="errorDescription">
-				<%=e.getErrorDescription() %>
-			</p>
+			<div class="pageHeading">
+				<h1 class="pageTitle">Ops! Sembra ci sia stato un errore.</h1>
+			</div>
+			<div class="monoPageContent">
+				<p id="errorName">
+					Errore:
+					<%=e.getErrorName()%>
+				</p>
+				<p id="errorDescription">
+					<%=e.getErrorDescription()%>
+				</p>
+			</div>
 		</div>
 		<%@include file="shared/footer.jsp"%>
 	</div>
