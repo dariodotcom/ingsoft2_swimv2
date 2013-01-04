@@ -69,6 +69,14 @@ public interface UserProfileControllerRemote {
 	 */
 	public List<?> getReceivedFeedacks(String username);
 
+	public List<?> getReceivedActiveWorkRequest(String username);
+
+	public List<?> getSentActiveWorkRequest(String username);
+
+	public List<?> getReceivedArchivedWorkRequest(String username);
+
+	public List<?> getSentArchivedWorkRequest(String username);
+
 	public void updateCustomerDetails(String username,
 			Map<String, Object> values);
 

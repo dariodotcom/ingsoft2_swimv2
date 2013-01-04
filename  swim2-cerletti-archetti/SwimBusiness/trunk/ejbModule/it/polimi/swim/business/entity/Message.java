@@ -39,6 +39,7 @@ public class Message {
 		this.message = text;
 		this.sender = sender;
 		this.linkedRequest = request;
+		this.sentDate = new Date();
 	}
 
 	@Id

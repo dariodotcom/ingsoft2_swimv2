@@ -1,5 +1,6 @@
 package it.polimi.swim.business.bean.remote;
 
+import java.util.List;
 import java.util.Map;
 
 import it.polimi.swim.business.entity.WorkRequest;
@@ -42,10 +43,12 @@ public interface WorkRequestControllerRemote {
 	 * @throws UnauthorizedRequestException
 	 *             when user who performed the action is not involved in the
 	 *             request.
+	 * @throws InvalidStateException
 	 * */
 	public void respondToWorkRequest(String responseAuthorUsr,
 			Boolean responseDescriptor, int workRequestId)
-			throws UnauthorizedRequestException, BadRequestException;
+			throws UnauthorizedRequestException, BadRequestException,
+			InvalidStateException;
 
 	/**
 	 * Marks a request as complete by either the sender or the receiver
@@ -57,9 +60,11 @@ public interface WorkRequestControllerRemote {
 	 * @throws UnauthorizedRequestException
 	 *             when user who performed the action is not involved in the
 	 *             request.
+	 * @throws InvalidStateException
 	 * */
 	public void markRequestAsCompleted(String actorUsr, int workRequestId)
-			throws UnauthorizedRequestException, BadRequestException;
+			throws UnauthorizedRequestException, BadRequestException,
+			InvalidStateException;
 
 	/**
 	 * Send a message in the context of a specific work request.
@@ -78,4 +83,6 @@ public interface WorkRequestControllerRemote {
 			throws UnauthorizedRequestException, BadRequestException;
 
 	public WorkRequest getById(int requestId) throws BadRequestException;
+
+	public List<?> getMessageList(int reqId) throws BadRequestException;
 }
