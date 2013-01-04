@@ -13,7 +13,8 @@ import javax.ejb.Remote;
 @Remote
 public interface FriendshipControllerRemote {
 	/**
-	 * This method is useful to add a new friendship request to the database.
+	 * This method manages the adding of a new friendship request to the
+	 * database.
 	 * 
 	 * @param senderUsr
 	 *            a String that contains the username of the user that sends the
@@ -31,8 +32,8 @@ public interface FriendshipControllerRemote {
 			throws BadRequestException, InvalidStateException;
 
 	/**
-	 * This method is useful to register in the database the response to a
-	 * friendship request.
+	 * This method manages the registration of the response to a friendship
+	 * request in the database.
 	 * 
 	 * @param responseAuthorUsr
 	 *            a String that contains the username of the user that receives
@@ -56,7 +57,7 @@ public interface FriendshipControllerRemote {
 			InvalidStateException, UnauthorizedRequestException;
 
 	/**
-	 * This method is useful to remove a friendship request registered in the
+	 * This method manages the removal of a friendship request registered in the
 	 * database.
 	 * 
 	 * @param requestAuthorUsr

@@ -26,7 +26,6 @@ public class FriendshipController implements FriendshipControllerRemote {
 	 * Default constructor.
 	 */
 	public FriendshipController() {
-		// TODO Auto-generated constructor stub
 	}
 
 	/**
@@ -39,8 +38,8 @@ public class FriendshipController implements FriendshipControllerRemote {
 		Customer receiver = Helpers.getEntityChecked(manager, Customer.class,
 				receiverUsr);
 
+		/* Users are already friends */
 		if (!sender.canBeSentFRBy(receiver)) {
-			// Users are already friends
 			throw new InvalidStateException();
 		}
 
