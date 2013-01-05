@@ -73,6 +73,21 @@ public interface AuthenticationControllerRemote {
 	public void createAdministrator(String username, String password)
 			throws UsernameAlreadyTakenException;
 
+	/**
+	 * This method retrieves the key of an email validation request made by a
+	 * given user if there are no errors.
+	 * 
+	 * @param authorUsr
+	 *            a String that contains the username of the Customer that made
+	 *            the request.
+	 * @return a String that contains the key value of the email validation
+	 *         request.
+	 * @throws BadRequestException
+	 *             a request that does not fit.
+	 * @throws InvalidStateException
+	 *             a request that is incompatible with the status of the
+	 *             database.
+	 */
 	public String createEmailValidationRequest(String authorUsr)
 			throws BadRequestException, InvalidStateException;
 
@@ -87,6 +102,18 @@ public interface AuthenticationControllerRemote {
 	public void validateCustomerEmail(String emailValidationKey)
 			throws BadRequestException, InvalidStateException;
 
+	/**
+	 * This method retrieves the key of a password reset request made by a given
+	 * user if there are no errors.
+	 * 
+	 * @param authorUsr
+	 *            a String that contains the username of the Customer that made
+	 *            the request.
+	 * @return a String that contains the key value of the password reset
+	 *         request.
+	 * @throws BadRequestException
+	 *             a request that does not fit.
+	 */
 	public String createPasswordResetRequest(String authorUsr)
 			throws BadRequestException;
 
@@ -102,5 +129,17 @@ public interface AuthenticationControllerRemote {
 	public String resetCustomerPassword(String reqId)
 			throws BadRequestException;
 
-	public String getPasswordResetEmail(String reqId) throws BadRequestException;
+	/**
+	 * This method retrieves the email associated to a user that made a password
+	 * reset request.
+	 * 
+	 * @param reqId
+	 *            a String that contains the identifier of the password reset
+	 *            request.
+	 * @return the email of the author of the password reset request.
+	 * @throws BadRequestException
+	 *             a request that does not fit.
+	 */
+	public String getPasswordResetEmail(String reqId)
+			throws BadRequestException;
 }

@@ -97,6 +97,9 @@ public class AuthenticationController implements AuthenticationControllerRemote 
 		manager.persist(a);
 	}
 
+	/**
+	 * @see AuthenticationControllerRemote
+	 */
 	public String createEmailValidationRequest(String authorUsr)
 			throws BadRequestException, InvalidStateException {
 		Customer author = Helpers.getEntityChecked(manager, Customer.class,
@@ -138,6 +141,9 @@ public class AuthenticationController implements AuthenticationControllerRemote 
 		return;
 	}
 
+	/**
+	 * @see AuthenticationControllerRemote
+	 */
 	public String createPasswordResetRequest(String authorUsr)
 			throws BadRequestException {
 		Customer author = Helpers.getEntityChecked(manager, Customer.class,
@@ -162,6 +168,9 @@ public class AuthenticationController implements AuthenticationControllerRemote 
 		return password;
 	}
 
+	/**
+	 * @see AuthenticationControllerRemote
+	 */
 	public String getPasswordResetEmail(String reqId)
 			throws BadRequestException {
 		PasswordResetRequest req = Helpers.getEntityChecked(manager,
