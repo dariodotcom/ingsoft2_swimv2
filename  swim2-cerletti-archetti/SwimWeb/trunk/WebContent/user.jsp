@@ -1,3 +1,5 @@
+<%@page import="it.polimi.swim.business.entity.WorkRequest"%>
+<%@page import="it.polimi.swim.business.entity.Feedback"%>
 <%@page import="it.polimi.swim.business.entity.Friendship"%>
 <%@page import="it.polimi.swim.web.pagesupport.Misc.FriendshipStatus"%>
 <%@page import="it.polimi.swim.web.servlets.GenericProfileServlet"%>
@@ -28,11 +30,21 @@
 	List<?> friendList = (List<?>) request
 			.getAttribute(Misc.FRIENDLIST_ATTR);
 
+	List<?> feedbackList = (List<?>) request
+			.getAttribute(Misc.FEEDBACK_LIST);
+
+	List<?> abilityList = (List<?>) request
+			.getAttribute(Misc.ABILITY_LIST);
+
 	int friendCount = friendList.size();
 
 	String ctx = request.getContextPath();
 	String targetIdentity = String.format("%s %s", target.getName(),
 			target.getSurname());
+
+	Boolean canBeSentFriendshipReq = status
+			.equals(FriendshipStatus.NOT_FRIENDS);
+	Boolean canReceiveWorkRequests = (abilityList.size() != 0);
 %>
 <%@ include file="shared/head.jsp"%>
 <body class="swim">
@@ -44,18 +56,37 @@
 					Profilo di <span class="bold"><%=targetIdentity%></span>
 				</div>
 				<div class="userControls headerElem">
+					<%
+						if (canBeSentFriendshipReq) {
+					%>
 					<form action="<%=ctx%>/user/sendfriendship" method="post">
 						<input type="hidden" name="u" value="<%=target.getUsername()%>" />
 						<input type="submit" value="<%=status.getButtonText()%>"
 							class="inputsubmit <%=status.getButtonClass()%>" />
 					</form>
+					<%
+						} else {
+					%>
+					<span class="disabledButton"><%=status.getButtonText()%></span>
+					<%
+						}
+					%>
 				</div>
 				<div class="userControls headerElem">
-					<form action="<%=ctx%>/user/sendworkrequest" method="post">
-						<input type="hidden" name="u" value="<%=target.getUsername()%>" />
-						<input type="submit" value="Invia richiesta di lavoro"
-							class="inputsubmit" />
-					</form>
+					<%
+						if (canReceiveWorkRequests) {
+							String link = context + "/user/sendworkrequest?u="
+									+ target.getUsername();
+					%>
+					<a href="<%=link%>" class="button">Invia richiesta di lavoro</a>
+					<%
+						} else {
+					%>
+					<span class="disabledButton">Non pu&ograve; ricevere
+						richieste di lavoro</span>
+					<%
+						}
+					%>
 				</div>
 			</div>
 			<div id="leftColumn" class="column">
@@ -89,24 +120,57 @@
 						break;
 						case FEEDBACKS:
 					%>
-					Quisque congue auctor magna sed egestas. Vivamus leo arcu, ornare
-					elementum imperdiet a, commodo sit amet diam. Pellentesque
-					consequat, quam sit amet commodo dictum, mauris lectus fringilla
-					metus, ac tempor mi enim at tellus. Duis in felis erat, vel dictum
-					leo. Maecenas semper justo eget dolor ultrices ac malesuada sapien
-					commodo. Duis diam elit, placerat ut vestibulum vitae, sagittis id
-					velit. In fringilla tincidunt urna vehicula porttitor. Nam et quam
-					quis risus faucibus sollicitudin. Ut bibendum, ipsum et vulputate
-					faucibus, odio diam blandit enim, at pellentesque eros eros ut
-					turpis. Cras hendrerit, augue vitae ullamcorper aliquam, risus erat
-					egestas leo, at congue ipsum ipsum in ligula. Fusce sapien mauris,
-					consectetur at semper sit amet, convallis vel metus. Donec
-					vestibulum justo vel quam laoreet imperdiet sed facilisis augue.
-					Nunc ornare augue non sem rhoncus condimentum sit amet sit amet
-					lacus. Aenean eget orci hendrerit quam fermentum elementum. Etiam
-					nec orci purus, quis dictum nulla.
+
 					<%
-						break;
+						if (feedbackList.size() == 0) {
+					%>
+					<p class="paragraph">L'utente non ha ricevuto feedback.</p>
+					<%
+						} else {
+					%>
+					<p class="paragraph">L'utente ha ricevuto i seguenti feedback:</p>
+					<div class="feedbackList">
+						<%
+							for (Object o : feedbackList) {
+										Feedback f = (Feedback) o;
+										WorkRequest relatedWork = f.getLinkedRequest();
+										Customer author = relatedWork.getSender();
+										String identity = author.getName() + " "
+												+ author.getSurname();
+										String ability = relatedWork.getRequiredAbility()
+												.getName();
+										int feedbackMark = f.getMark();
+										request.setAttribute(Misc.MARK_VALUE, feedbackMark);
+										String reply = f.getReply();
+						%>
+						<div class="feedback">
+							<p class=heading>
+								<span class="bold">Autore:&nbsp;</span><%=identity%>
+								&emsp;<span class="bold">Professionalit&agrave;:&nbsp;</span><%=ability%>
+								&emsp;<span class="bold">Voto:&nbsp;</span>
+								<%@include file="shared/feedbackMarker.jsp"%>
+							</p>
+							<p class="review">
+								<span class="bold">Recensione:</span>&nbsp;<%=f.getReview()%>
+							</p>
+							<%
+								if (reply != null) {
+							%>
+							<p class="reply">
+								<span class="bold">Risposta:</span>&nbsp;<%=reply%>
+							</p>
+							<%
+								}
+							%>
+						</div>
+						<%
+							}
+						%>
+					</div>
+					<%
+						}
+
+							break;
 						case FRIENDS:
 
 							if (friendList.size() == 0) {

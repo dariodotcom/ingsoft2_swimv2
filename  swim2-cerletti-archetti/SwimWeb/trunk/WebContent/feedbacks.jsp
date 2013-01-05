@@ -1,3 +1,4 @@
+<%@page import="it.polimi.swim.web.servlets.CustomerWorkrequestServlet"%>
 <%@page import="it.polimi.swim.business.entity.WorkRequest"%>
 <%@page import="it.polimi.swim.business.entity.Feedback"%>
 <%@page import="java.util.List"%>
@@ -19,6 +20,13 @@
 
 	List<?> feedbackList = (List<?>) request
 			.getAttribute(Misc.FEEDBACK_LIST);
+
+	Boolean showReceived = selectedSection
+			.equals(CustomerFeedbackSection.RECEIVED_FEEDBACKS);
+
+	String verb = showReceived ? "ricevuti" : "inviati";
+	String feedbackClass = showReceived ? "other" : "self";
+	String replyClass = showReceived ? "self" : "other";
 %>
 <%@ include file="shared/head.jsp"%>
 <body class="swim">
@@ -45,48 +53,66 @@
 				<div class="pageHeading">
 					<h1 class="pageTitle"><%=selectedSection.getSectionName()%></h1>
 				</div>
-				<%
-					switch (selectedSection) {
-					case RECEIVED_FEEDBACKS:
-				%>
-				<div class="list">
+				<div class="monoPageContent">
 					<%
 						if (feedbackList.size() == 0) {
 					%>
-					<p class="text">Non sono stati ancora ricevuti feedback.</p>
+					<p class="paragraph">Non sono stati ancora ricevuti feedback.</p>
 					<%
 						} else {
-								for (Object o : feedbackList) {
+					%>
+					<p class="paragraph">Sono stati ricevuti i seguenti feedbacks</p>
+					<div class="feedbackList">
+						<%
+							for (Object o : feedbackList) {
 									Feedback f = (Feedback) o;
 									WorkRequest relatedWork = f.getLinkedRequest();
-									int mark = f.getMark();
+									Customer target = showReceived ? relatedWork.getSender()
+											: relatedWork.getReceiver();
+									String targetDesc = showReceived ? "Autore"
+											: "Destinatario";
+
+									String identity = target.getName() + " "
+											+ target.getSurname();
+
+									int feedbackMark = f.getMark();
+									request.setAttribute(Misc.MARK_VALUE, feedbackMark);
+									String reply = f.getReply();
+									String link = String.format("%s/%s/view?%s=%s", context,
+											CustomerWorkrequestServlet.CONTEXT_NAME,
+											CustomerWorkrequestServlet.WORK_REQUEST_PARAM,
+											relatedWork.getId());
+						%>
+						<div class="feedback">
+							<p class=heading>
+								<span class="bold"><%=targetDesc%>:&nbsp;</span><%=identity%>
+								&emsp;<span class="bold">Voto:&nbsp;</span>
+								<%@include file="shared/feedbackMarker.jsp"%>
+								<a href="<%=link%>" class="button">Visualizza richiesta di
+									lavoro</a>
+							</p>
+							<p class="review">
+								<span class="bold">Recensione:</span>&nbsp;<%=f.getReview()%>
+							</p>
+							<%
+								if (reply != null) {
+							%>
+							<p class="reply">
+								<span class="bold">Risposta:</span>&nbsp;<%=reply%>
+							</p>
+							<%
 								}
+							%>
+
+						</div>
+						<%
 							}
+						%>
+					</div>
+					<%
+						}
 					%>
 				</div>
-				<%
-					break;
-					case SENT_FEEDBACKS:
-				%>
-				<div class="list">
-					<%
-						if (feedbackList.size() == 0) {
-					%>
-					<p class="text">Non sono stati ancora inviati feedback.</p>
-					<%
-						} else {
-								for (Object o : feedbackList) {
-									Feedback f = (Feedback) o;
-									WorkRequest relatedWork = f.getLinkedRequest();
-									int mark = f.getMark();
-								}
-							}
-					%>
-				</div>
-				<%
-					break;
-					}
-				%>
 			</div>
 		</div>
 	</div>

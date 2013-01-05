@@ -42,6 +42,7 @@
 			</div>
 			<div id="rightColumn" class="column">
 				<div class="pageHeading">
+					<%@include file="shared/messageNotifier.jsp"%>
 					<h1 class="pageTitle"><%=selectedSection.getSectionName()%></h1>
 				</div>
 				<div class="monoPageContent">
@@ -67,25 +68,30 @@
 					</div>
 					<%
 						}
-
 							break;
 						case MANAGEMENT:
 					%>
 					<p class="paragraph">Crea una nuova professionlità che sarà
 						resa disponibile a tutti gli utenti della piattaforma.</p>
 					<form action="<%=ctx%>/admin/create" method="post">
-						<div class="inputLine">
-							<label for="abilityName">Nome</label> <input
-								type="text" name="abilityName" id="abilityName"
-								class="inputtext" />
-						</div>
-						<div class="inputLine">
-							<label for="abilityDescription">Descrizione</label> <input
-								type="text" name="abilityDescription" id="abilityDescription"
-								class="inputtext" />
-						</div>
-						<div class="submitLine">
-							<input type=submit class="inputsubmit" value="Aggiungi" />
+						<div class="propertyList reducedWidth">
+							<div class="property">
+								<label for="abilityName" class="propertyName">Nome</label>
+								<div class="propertyValue">
+									<input type="text" name="abilityName" id="abilityName"
+										class="inputtext" />
+								</div>
+							</div>
+							<div class="property">
+								<label for="abilityDescription" class="propertyName">Descrizione</label>
+								<div class="propertyValue">
+									<input type="text" name="abilityDescription"
+										id="abilityDescription" class="inputtext" />
+								</div>
+							</div>
+							<div class="submitLine">
+								<input type=submit class="inputsubmit" value="Aggiungi" />
+							</div>
 						</div>
 					</form>
 					<%

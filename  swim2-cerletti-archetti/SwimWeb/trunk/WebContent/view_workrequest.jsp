@@ -1,3 +1,4 @@
+<%@page import="it.polimi.swim.business.entity.Feedback"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.util.List"%>
 <%@page import="it.polimi.swim.business.entity.Message"%>
@@ -69,9 +70,40 @@
 		endDate = Misc.DATE_TIME_FORMAT.format(workReq.getEndDate());
 	}
 
+	//Feedback
+	Feedback feedback = (Feedback) request.getAttribute(Misc.FEEDBACK);
+	Boolean hasFeedback = (feedback != null);
+
+	String reply = hasFeedback ? feedback.getReply() : null;
+	Boolean hasReply = (reply != null);
+
+	String feedbackMessage = null;
+
+	Boolean showFeedbackInsert = requestCompleted && isSender
+			&& !hasFeedback;
+	Boolean showFeedbackReply = !isSender && requestCompleted
+			&& hasFeedback && !hasReply;
+
+	if (!hasFeedback) {
+		feedbackMessage = isSender ? "Una volta completata la richiesta potrai esprimere un parere sull'utente che ha effettuato il lavoro."
+				: "Una volta completata la richiesta il mittente potr&agrave; esprimere un parere sul tuo operato.";
+	} else if (hasFeedback && !hasReply) {
+		feedbackMessage = isSender ? "Hai inviato il seguente feedback. Ora l'altro utente può rispondere."
+				: "Hai ricevuto il seguente feedback. Ora puoi rispondere se lo ritieni necesario.";
+	} else if (hasFeedback && hasReply) {
+		feedbackMessage = "NON LO SO!!!";
+	}
+
+	//Put mark in request to include feedbackMarker.jsp
+	if (hasFeedback) {
+		request.setAttribute(Misc.MARK_VALUE, feedback.getMark());
+	}
+
 	//Retrieve message list
-	Boolean canSendMessage = !requestCompleted;
-	List<?> messageList = (List<?>) request.getAttribute(Misc.MESSAGE_LIST);
+	Boolean canSendMessage = !selfDeclined && !interlocutorDeclined
+			&& !requestCompleted;
+	List<?> messageList = (List<?>) request
+			.getAttribute(Misc.MESSAGE_LIST);
 	//request.getAttribute(Misc.MESSAGE_LIST);
 %>
 <%@ include file="shared/head.jsp"%>
@@ -99,7 +131,7 @@
 							</span>
 						</div>
 						<div class="property">
-							<span class="propertyName">Per abilità:</span> <span
+							<span class="propertyName">Per professionalit&agrave;:</span> <span
 								class="propertyValue"> <%=requiredAbility.getName()%>
 							</span>
 						</div>
@@ -130,7 +162,6 @@
 							//Request status informations
 							if (requestConfirmed && !requestCompleted) {
 						%>
-
 						<p class="paragraph">Richiesta in corso di svolgimento.</p>
 						<%
 							} else if (interlocutorDeclined) {
@@ -173,7 +204,8 @@
 							//Request complete
 							if (requestCompleted) {
 						%>
-						<p class="paragraph">La richiesta di lavoro è completata.</p>
+						<p class="paragraph">La richiesta di lavoro &egrave;
+							completata.</p>
 						<%
 							} else if (showCompletionControl) {
 						%>
@@ -197,30 +229,87 @@
 					</div>
 				</div>
 
+				<!-- Feedback -->
 				<h2 class="partTitle">Feedback</h2>
 				<div class="part">
+					<p class="paragraph"><%=feedbackMessage%></p>
 					<%
-						if (!isSender) {
+						if (hasFeedback) {
+							//Show feedback
+							String authorClass = (isSender ? "self" : "other");
 					%>
-					<p class="paragraph">Una volta completata la richiesta il
-						mittente potrà esprimere un parere sul tuo operato.</p>
-					<%
-						} else {
-							if (!requestCompleted) {
-					%>
-					<p class="paragraph">Una volta completata la richiesta potrai
-						esprimere un parere sull'utente che ha effettuato il lavoro.</p>
-					<%
-						} else {
-					%>
-					<p class="paragraph">Esprimi un parere sull'operato
-						dell'utente.</p>
+					<div class="messageContainer clearfix <%=authorClass%>">
+						<div class="arrow">&nbsp;</div>
+						<div class="message feedbackMessage">
+							<%@include file="shared/feedbackMarker.jsp"%>
+							<p class="messageText"><%=feedback.getReview()%></p>
+						</div>
+					</div>
 					<%
 						}
+
+						if (showFeedbackInsert) {
+							//Show form to insert feedback
+					%>
+					<form action="<%=ctx%>/works/insertfeedback" method="post">
+						<p class="paragraph">
+							<label for="feedbackReview">Esprimi un parere
+								sull'operato dell'utente.</label>
+						</p>
+						<div class="messageContainer clearfix self">
+							<div class="arrow">&nbsp;</div>
+							<div class="message feedbackMessage">
+								<input type="hidden" name="w" value="<%=workReq.getId()%>" /> <input
+									type="hidden" name="mark" value="" id="feedbackReview" />
+								<div id="marker">
+									<a href="javascript:" class="markExpression">&nbsp;</a> <a
+										href="javascript:" class="markExpression">&nbsp;</a> <a
+										href="javascript:" class="markExpression">&nbsp;</a> <a
+										href="javascript:" class="markExpression">&nbsp;</a> <a
+										href="javascript:" class="markExpression">&nbsp;</a>
+								</div>
+								<textarea name="review" id="feedbackReview" class="messageInput"></textarea>
+								<div class="submitLine">
+									<input type="submit" class="inputsubmit" value="Invia feedback"></input>
+								</div>
+							</div>
+						</div>
+					</form>
+					<%
+						}
+
+						if (showFeedbackReply) {
+					%>
+					<div class="messageContainer clearfix self">
+						<div class="arrow">&nbsp;</div>
+						<div class="message feedbackReply">
+							<form action="<%=context%>/works/replyfeedback" method="post">
+								<input type="hidden" name="w" value="<%=workReq.getId()%>" />
+								<textarea name="reply" class="messageInput"></textarea>
+								<div class="submitLine">
+									<input type="submit" class="inputsubmit" value="Rispondi"></input>
+								</div>
+							</form>
+						</div>
+					</div>
+					<%
+						}
+
+						if (hasReply) {
+					%>
+					<div class="messageContainer clearfix self">
+						<div class="arrow">&nbsp;</div>
+						<div class="message feedbackReply">
+							<p class="messageText"><%=reply%></p>
+						</div>
+					</div>
+					<%
 						}
 					%>
 				</div>
-				<h2 class="partTitle">Conversazioni</h2>
+
+				<!-- Conversation -->
+				<h2 class="partTitle">Conversazione</h2>
 				<div class="part">
 					<div class="messageList">
 						<%
@@ -257,11 +346,13 @@
 								<form action="<%=ctx%>/works/sendmsg" method="post">
 									<input type="hidden" name="w" value="<%=workReq.getId()%>" />
 									<p>
-										<label class="sendText">Invia un messaggio:</label>
+										<label class="sendText" for="messageText">Invia un
+											messaggio:</label>
 									</p>
 									<textarea name="messageText" id="messageText"></textarea>
 									<div class="submitLine">
-										<input type="submit" class="inputsubmit" value="invia"></input>
+										<input type="submit" class="inputsubmit"
+											value="Invia messaggio"></input>
 									</div>
 								</form>
 							</div>
@@ -269,7 +360,8 @@
 						<%
 							} else {
 						%>
-						<p class="paragraph">Non è più possibile inviare messaggi.</p>
+						<p class="paragraph">Non &egrave; più possibile inviare
+							messaggi.</p>
 						<%
 							}
 						%>

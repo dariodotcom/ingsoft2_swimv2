@@ -37,8 +37,9 @@ public class Misc {
 
 	public static final String MESSAGE_LIST = "messageList";
 
-	/* JSP list */
+	public static final String MARK_VALUE = "markValue";
 
+	// JSP list
 	public static final String HOME_JSP = "/home.jsp";
 	public static final String ERROR_JSP = "/error.jsp";
 	public static final String LANDING_JSP = "/landing.jsp";
@@ -51,6 +52,8 @@ public class Misc {
 	public static final String ADMIN_JSP = "/admin.jsp";
 	public static final String CREATE_WORKREQUEST_JSP = "/create_workrequest.jsp";
 	public static final String VIEW_WORKREQUEST_JSP = "/view_workrequest.jsp";
+	public static final String MAILVALIDATION_JSP = "/mailvalidation.jsp";
+	public static final String PASSWORD_RESET_JSP = "/passwordreset.jsp";
 
 	/* Utils */
 
@@ -62,6 +65,10 @@ public class Misc {
 			"dd/MM/yyyy HH:mm");
 
 	public static final int MIN_PASSWORD_LENGTH = 8;
+	public static final int MAX_MARK = 5;
+	public static final String FEEDBACK = "feedback";
+	public static final String MAIL_VALIDATION_PENDING = "mailValidationPending";
+	public static final String CUSTOMER_EMAIL = "customerEmail";
 
 	/* Helpers */
 
@@ -124,6 +131,7 @@ public class Misc {
 		public static final String FRIENDSHIP = "FriendshipController/remote";
 		public static final String ABILITY = "AbilityController/remote";
 		public static final String WORKREQUEST = "WorkRequestController/remote";
+		public static final String FEEDBACK = "FeedbackController/remote";
 	}
 
 	/**

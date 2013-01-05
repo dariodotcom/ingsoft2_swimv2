@@ -25,9 +25,6 @@
 								<input type="text" id="name" name="name" class="inputtext" />
 							</div>
 						</div>
-
-
-
 						<div class="property">
 							<label class="propertyName" class="inputLabel" for="surname">Cognome</label>
 							<div class="propertyValue">
@@ -42,10 +39,10 @@
 							</div>
 						</div>
 						<div class="property">
-							<label class="propertyName" class="inputLabel" for="ability">Abilit&agrave;
-								richiesta</label>
+							<label class="propertyName" class="inputLabel" for="ability">Professionalit&agrave;
+								richiesta*</label>
 							<div class="propertyValue">
-								<input type="text" id="ability" name="ability" class="inputtext" />
+								<input type="text" id="ability" name="ability" class="inputtext abilityInput" />
 							</div>
 						</div>
 						<%

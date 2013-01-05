@@ -8,10 +8,10 @@ public enum ErrorType {
 
 	BAD_REQUEST(
 			"Bad Request",
-			"C'è un errore nella tua richiesta. Se hai digitato l'url controlla di non aver fatto errori."),
+			"C'&egrave; un errore nella tua richiesta. Se hai digitato l'url controlla di non aver fatto errori."),
 	INVALID_REQUEST(
 			"Richiesta non valida",
-			"Non è possibile portare a termine la richiesta effettuata perchè non è valida."),
+			"Non &egrave; possibile portare a termine la richiesta effettuata perch&egrave; non &egrave; valida."),
 	UNAUTHORIZED_REQUEST(
 			"Richiesta non autorizzata",
 			"Non sei autorizzato ad effettuare la richiesta da te inviata."
@@ -21,23 +21,23 @@ public enum ErrorType {
 			"Sembra che uno degli sviluppatori sia stato pigro nel trattare questo errore..."),
 	LOGIN_REQUIRED(
 			"Login Required",
-			"Non puoi accedere alla funzionalità che hai richiesto perchè essa è disponibile solo per gli utenti registrati."
+			"Non puoi accedere alla funzionalit&agrave; che hai richiesto perch&egrave; essa &egrave; disponibile solo per gli utenti registrati."
 			),
 	BAD_EMAIL(
 			"Email non valida",
-			"L'indirizzo email inserito non è valido."
+			"L'indirizzo email inserito non &egrave; valido."
 			),
 	INCORRECT_PASSWORD(
 			"Password non corretta",
-			"La password corrente inserita non è corretta."
+			"La password corrente inserita non &egrave; corretta."
 			),
 	INVALID_PASSWORD(
 			"Password non valida",
-			"La nuova password inserita inserita non è valida."
+			"La nuova password inserita inserita non &egrave; valida."
 			),
 	EMAIL_NOT_AVAILABLE(
 			"Email non libera",
-			"L'indirizzo email inserito è già in uso."
+			"L'indirizzo email inserito &egrave; gi&agrave; in uso."
 			),
 	EMPTY_FIELDS(
 			"Empty Fields",
@@ -45,7 +45,7 @@ public enum ErrorType {
 			),
 	USERNAME_NOT_AVAILABLE(
 			"Username non disponibile",
-			"Lo username che hai scelto non è disponibile."
+			"Lo username che hai scelto non &egrave; disponibile."
 			),
 	INVALID_CREDENTIALS(
 			"Credenziali non valide",
@@ -53,7 +53,7 @@ public enum ErrorType {
 			), 
 	BAD_DATE(
 			"Data non valida",
-			"La data inserita non è valida."
+			"La data inserita non &egrave; valida."
 			),
 	BAD_ABILITY_NAME(
 			"Nome non valido",
@@ -73,8 +73,18 @@ public enum ErrorType {
 			),
 	INVALID_ABILITY_SELECTION(
 			"Selezione professionalit&agrave; non valida",
-			"La selezione della professionalit&agrave; del destinatario non è valida."
-			);
+			"La selezione della professionalit&agrave; del destinatario non &egrave; valida."
+			),
+	USER_HAS_NO_ABILITIES(
+			"L'utente non ha professionalit&agrave.",
+			"L'utente non può ricevere richieste di lavoro perch&egrave; non ha dichiarato nessuna professionalit&agrave;"),
+	VALIDATION_NOT_REQUIRED(
+			"Validazione non richiesta.",
+			"Non &egrave; richiesto di convalidare il tuo indirizzo email perch&egrave; &egrave; gi&agrave; convalidato oppure &egrave; gi&agrave; in corso una convalida."
+			),
+	VALIDATION_REQUIRED(
+			"Convalida email richiesta",
+			"Per proseguire &egrave; necessario convalidare la propria email");
 	
 	private String errorName, errorDescription;
 
