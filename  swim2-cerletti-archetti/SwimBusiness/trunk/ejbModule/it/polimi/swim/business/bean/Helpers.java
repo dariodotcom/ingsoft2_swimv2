@@ -50,7 +50,14 @@ public class Helpers {
 	public static boolean isStringValid(String s) {
 		return s != null && s.length() > 0;
 	}
-	
+
+	/**
+	 * This method generates a random string of a given lenght.
+	 * 
+	 * @param length
+	 *            an integer that contains the length of the String to generate.
+	 * @return the generated String.
+	 */
 	public static String generateRandomString(int length) {
 		return new BigInteger(length * 5, random).toString(32);
 	}

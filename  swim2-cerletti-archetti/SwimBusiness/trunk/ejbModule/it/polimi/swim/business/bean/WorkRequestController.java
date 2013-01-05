@@ -126,7 +126,6 @@ public class WorkRequestController implements WorkRequestControllerRemote {
 	}
 
 	/**
-	 * @throws InvalidStateException 
 	 * @see WorkRequestControllerRemote
 	 */
 	public void sendMessage(String messageAuthorUsr, String text,
@@ -186,6 +185,7 @@ public class WorkRequestController implements WorkRequestControllerRemote {
 	}
 	
 	/* Helpers */
+	
 	private Customer getCustomer(String username) throws BadRequestException {
 		Customer customer = manager.find(Customer.class, username);
 		if (customer == null) {
