@@ -17,9 +17,18 @@ import javax.persistence.Table;
 @Table(name = "passwordresetrequests")
 public class PasswordResetRequest {
 
+	/**
+	 * Class constructor.
+	 */
 	public PasswordResetRequest() {
 	}
 
+	/**
+	 * Class constructor.
+	 * 
+	 * @param author
+	 *            a Customer that is the author of the password reset request.
+	 */
 	public PasswordResetRequest(Customer author) {
 		this.author = author;
 		this.key = Helpers.generateRandomString(32);
