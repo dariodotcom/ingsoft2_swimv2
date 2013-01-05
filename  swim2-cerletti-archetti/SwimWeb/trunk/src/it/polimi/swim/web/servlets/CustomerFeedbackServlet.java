@@ -1,14 +1,18 @@
 package it.polimi.swim.web.servlets;
 
+import it.polimi.swim.business.bean.remote.UserProfileControllerRemote;
 import it.polimi.swim.web.pagesupport.CustomerMenu;
+import it.polimi.swim.web.pagesupport.ErrorType;
 import it.polimi.swim.web.pagesupport.Misc;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  * Servlet implementation class FeedbackServlet.
@@ -113,6 +117,32 @@ public class CustomerFeedbackServlet extends SwimServlet {
 	private void showSection(CustomerFeedbackSection section,
 			HttpServletRequest req, HttpServletResponse resp)
 			throws IOException, ServletException {
+		HttpSession session = req.getSession();
+
+		if (!isCustomerLoggedIn(session)) {
+			sendError(req, resp, ErrorType.LOGIN_REQUIRED);
+			return;
+		}
+
+		String username = getUsername(session);
+		List<?> feedbackList = null;
+
+		UserProfileControllerRemote profileCtrl = lookupBean(
+				UserProfileControllerRemote.class, Misc.BeanNames.PROFILE);
+
+		switch (section) {
+		case SENT_FEEDBACKS:
+			feedbackList = profileCtrl.getSentFeedbacks(username);
+			break;
+		case RECEIVED_FEEDBACKS:
+			feedbackList = profileCtrl.getReceivedFeedbacks(username);
+			break;
+		}
+
+		System.out.println(feedbackList);
+
+		req.setAttribute(Misc.FEEDBACK_LIST, feedbackList);
+
 		req.setAttribute(Misc.SELECTED_TAB_ATTR, CustomerMenu.FEEDBACKS);
 		req.setAttribute(Misc.SELECTED_SECTION_ATTR, section);
 		req.getRequestDispatcher(Misc.FEEDBACKS_JSP).forward(req, resp);

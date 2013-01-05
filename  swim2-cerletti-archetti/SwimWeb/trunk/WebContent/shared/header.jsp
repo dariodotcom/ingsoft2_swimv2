@@ -41,6 +41,8 @@
 		}
 	}
 
+	String reqContext = request.getContextPath();
+	
 	MenuDescriptor selectedTab = (MenuDescriptor) request
 			.getAttribute("selectedTab");
 %>
@@ -83,6 +85,7 @@
 			<div class="loginInputContainer">
 				<input type="submit" class="buttoninput" value="Login" tabindex="3" />
 			</div>
+			<a class="loginLink" href="<%=reqContext%>/resetpassword/">Password dimenticata?</a>
 		</form>
 
 

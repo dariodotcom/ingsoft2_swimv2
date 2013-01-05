@@ -169,7 +169,7 @@
 							break;
 							case EDIT_ACCOUNT:
 						%>
-						<h2 class="partTitle">Modifica email</h2>
+						<h2 class="partTitle">Modifica password</h2>
 						<div class="part">
 							<form action="<%=ctx%>/home/changePassword" method="post">
 								<div class="propertyList reducedWidth">

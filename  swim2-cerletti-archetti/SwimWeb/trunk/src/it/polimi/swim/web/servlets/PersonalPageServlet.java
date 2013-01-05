@@ -364,14 +364,8 @@ public class PersonalPageServlet extends SwimServlet {
 		req.setAttribute(Misc.USER_TO_SHOW, c);
 
 		/* Put user ability list in request */
-		List<?> abilityList;
-		try {
-			abilityList = profile.getAbilityList(selfUsername);
-			req.setAttribute(Misc.ABILITY_LIST, abilityList);
-		} catch (BadRequestException e) {
-			sendError(req, resp, ErrorType.BAD_REQUEST);
-			return;
-		}
+		List<?> abilityList = profile.getAbilityList(selfUsername);
+		req.setAttribute(Misc.ABILITY_LIST, abilityList);
 
 		/* Set section to show */
 		req.setAttribute(Misc.SELECTED_TAB_ATTR, CustomerMenu.HOME);
@@ -398,12 +392,6 @@ public class PersonalPageServlet extends SwimServlet {
 	private void getAbilityList(HttpServletRequest req, HttpServletResponse resp)
 			throws IOException {
 		resp.setContentType("application/json");
-
-		HttpSession session = req.getSession();
-
-		if (!isCustomerLoggedIn(session)) {
-			return;
-		}
 
 		PrintWriter respWriter = resp.getWriter();
 

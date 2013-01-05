@@ -3,16 +3,13 @@
 	pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
 <%
-	String retry = (String) session.getAttribute("retry");
+	String retry = (String) request.getAttribute("retry");
 	Boolean showLanding = false, retryLogin = false, retryRegistration = false;
 
 	if (retry != null) {
-		session.removeAttribute("retry");
 		retryLogin = retry.equals("login");
 		retryRegistration = retry.equals("registration");
-		request.removeAttribute("retry");
 	} else {
 		showLanding = true;
 	}
@@ -20,33 +17,18 @@
 	String bodyClass = (showLanding ? "welcome" : "retry");
 	request.setAttribute("selectedTab", UnloggedMenu.HOME);
 
-	ErrorType error = (ErrorType) session.getAttribute(Misc.ERROR_ATTR);
-
-	if (error != null) {
-		session.removeAttribute(Misc.ERROR_ATTR);
-	}
+	String pageHeading = showLanding ? "Benvenuto su Swim."
+			: retryLogin ? "Login." : "Registrazione";
 %>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <%@ include file="shared/head.jsp"%>
 <body class="swim <%=bodyClass%>">
 	<%@include file="shared/header.jsp"%>
 	<div id="swimContentContainer">
 		<div id="swimContent" class="topWidthElement">
 			<div class="pageHeading">
-				<%
-					if (showLanding) {
-				%>
-				<h1 class="pageTitle">Benvenuto su Swim</h1>
-				<%
-					}
-
-					if (error != null) {
-				%>
-				<p class="error">
-					<%=error.getErrorDescription()%>
-				</p>
-				<%
-					}
-				%>
+				<%@include file="shared/messageNotifier.jsp"%>
+				<h1 class="pageTitle"><%=pageHeading%></h1>
 			</div>
 			<div class="monoPageContent">
 				<%

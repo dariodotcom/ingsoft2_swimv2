@@ -30,7 +30,7 @@ public class AdministrationServlet extends SwimServlet {
 	 * possible sections accessible from the home page of an administrator.
 	 */
 	public enum AdministrationSection {
-		REQUEST("Richieste", ""), MANAGEMENT("Gestione", "manage");
+		REQUEST("Richieste", ""), MANAGEMENT("Amministrazione", "manage");
 
 		private String sectionName, sectionIdentifier;
 
@@ -144,7 +144,7 @@ public class AdministrationServlet extends SwimServlet {
 			req.getRequestDispatcher(Misc.ADMIN_JSP).forward(req, resp);
 			return;
 		} catch (InvalidStateException e) {
-			req.setAttribute(Misc.ERROR_ATTR, ErrorType.INVALID_REQUEST);
+			req.setAttribute(Misc.ERROR_ATTR, ErrorType.ABILITY_NAME_TAKEN);
 			req.getRequestDispatcher(Misc.ADMIN_JSP).forward(req, resp);
 			return;
 		}
@@ -177,7 +177,6 @@ public class AdministrationServlet extends SwimServlet {
 		AbilityControllerRemote ability = lookupBean(
 				AbilityControllerRemote.class, Misc.BeanNames.ABILITY);
 		List<?> abilityReqList = ability.getAbilityRequestList();
-		System.out.println(abilityReqList);
 		req.setAttribute(Misc.ABILITY_LIST, abilityReqList);
 
 		/* Forward */

@@ -2,6 +2,8 @@ package it.polimi.swim.web.servlets;
 
 import it.polimi.swim.business.bean.UserType;
 import it.polimi.swim.business.bean.remote.AuthenticationControllerRemote;
+import it.polimi.swim.business.bean.remote.UserProfileControllerRemote;
+import it.polimi.swim.business.entity.Customer;
 import it.polimi.swim.business.exceptions.AuthenticationFailedException;
 import it.polimi.swim.business.exceptions.EmailAlreadyTakenException;
 import it.polimi.swim.business.exceptions.UsernameAlreadyTakenException;
@@ -60,8 +62,6 @@ public class AuthenticationServlet extends SwimServlet {
 
 		registerGetActionMapping("landing", showPage);
 
-		registerGetActionMapping("retry", showPage);
-
 		registerGetActionMapping("logout", new ServletAction() {
 			public void runAction(HttpServletRequest req,
 					HttpServletResponse resp) throws IOException,
@@ -91,7 +91,7 @@ public class AuthenticationServlet extends SwimServlet {
 	}
 
 	/* Methods to respond to different requests */
-	
+
 	private void doLogin(HttpServletRequest req, HttpServletResponse resp)
 			throws IOException, ServletException {
 		HttpSession session = req.getSession();
@@ -102,15 +102,16 @@ public class AuthenticationServlet extends SwimServlet {
 				Misc.BeanNames.AUTHENTICATION);
 
 		/* Check user is not already logged in */
-		if (!isUserLoggedIn(session)) {
+		if (isUserLoggedIn(session)) {
+			// If so, send him to his homepage
+			redirectToRightHome(req, resp);
+		} else {
 			String username = (String) req.getParameter("username")
 					.toLowerCase();
 			String password = (String) req.getParameter("password");
 
 			if (Misc.isStringEmpty(password) || Misc.isStringEmpty(username)) {
-				session.setAttribute(Misc.ERROR_ATTR, ErrorType.EMPTY_FIELDS);
-				session.setAttribute("retry", "login");
-				resp.sendRedirect(req.getContextPath() + "/retry");
+				retry("login", ErrorType.EMPTY_FIELDS, req, resp);
 				return;
 			}
 
@@ -119,23 +120,36 @@ public class AuthenticationServlet extends SwimServlet {
 			/* Check user login details are valid */
 			try {
 				loggedUserType = auth.authenticateUser(username, password);
-
-				// Log in user
-				session.setAttribute(LOGGED_ATTRIBUTE, true);
-				session.setAttribute(LOGGED_USERNAME, username);
-				session.setAttribute(LOGGED_USERTYPE, loggedUserType);
-
 			} catch (AuthenticationFailedException e) {
-				session.setAttribute("retry", "login");
-				session.setAttribute(Misc.ERROR_ATTR,
-						ErrorType.INVALID_CREDENTIALS);
-				resp.sendRedirect(req.getContextPath() + "/retry");
+				retry("login", ErrorType.INVALID_CREDENTIALS, req, resp);
 				return;
 			}
-		}
+			
+			// Check that customer email is validated
+			if (loggedUserType.equals(UserType.CUSTOMER)) {
 
-		/* Forward request to /home servlet */
-		redirectToRightHome(req, resp);
+				UserProfileControllerRemote profileCtrl = lookupBean(
+						UserProfileControllerRemote.class,
+						Misc.BeanNames.PROFILE);
+
+				Customer c = profileCtrl.getByUsername(username);
+
+				if (!c.isEmailConfirmed()) {
+					// User has to validate its email address
+					req.setAttribute(Misc.ERROR_ATTR,
+							ErrorType.VALIDATION_REQUIRED);
+					req.getRequestDispatcher(Misc.MAILVALIDATION_JSP).forward(
+							req, resp);
+					return;
+				}
+			}
+
+			// Log in user
+			session.setAttribute(LOGGED_ATTRIBUTE, true);
+			session.setAttribute(LOGGED_USERNAME, username);
+			session.setAttribute(LOGGED_USERTYPE, loggedUserType);
+			redirectToRightHome(req, resp);
+		}
 	}
 
 	private void doLogout(HttpServletRequest req, HttpServletResponse resp)
@@ -201,9 +215,10 @@ public class AuthenticationServlet extends SwimServlet {
 			return;
 		}
 
-		/* Redirect user to home for the moment  */
-		//TODO
-		resp.sendRedirect(req.getContextPath() + "/landing");
+		session.setAttribute(Misc.LOGGED_USERNAME, values.get("username"));
+		session.setAttribute(Misc.MAIL_VALIDATION_PENDING, true);
+
+		resp.sendRedirect(req.getContextPath() + "/validatemail/");
 	}
 
 	private void showPage(HttpServletRequest req, HttpServletResponse resp)
@@ -222,4 +237,11 @@ public class AuthenticationServlet extends SwimServlet {
 		req.getRequestDispatcher(Misc.ABOUT_JSP).forward(req, resp);
 	}
 
+	private void retry(String identifier, ErrorType err,
+			HttpServletRequest req, HttpServletResponse resp)
+			throws ServletException, IOException {
+		req.setAttribute("retry", "login");
+		req.setAttribute(Misc.ERROR_ATTR, ErrorType.INVALID_CREDENTIALS);
+		req.getRequestDispatcher(Misc.LANDING_JSP).forward(req, resp);
+	}
 }

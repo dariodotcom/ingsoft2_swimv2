@@ -1,7 +1,9 @@
 package it.polimi.swim.web.servlets;
 
+import it.polimi.swim.business.bean.remote.FeedbackControllerRemote;
 import it.polimi.swim.business.bean.remote.UserProfileControllerRemote;
 import it.polimi.swim.business.bean.remote.WorkRequestControllerRemote;
+import it.polimi.swim.business.entity.Feedback;
 import it.polimi.swim.business.entity.WorkRequest;
 import it.polimi.swim.business.exceptions.BadRequestException;
 import it.polimi.swim.business.exceptions.InvalidStateException;
@@ -27,6 +29,7 @@ public class CustomerWorkrequestServlet extends SwimServlet {
 	private static final long serialVersionUID = -4086600990410926694L;
 
 	public static final String CONTEXT_NAME = "works";
+	public final static String WORK_REQUEST_PARAM = "w";
 
 	public enum CustomerWorkRequestSection {
 		ACTIVE_REQUESTS("Richieste attive", ""), ARCHIVED_REQUESTS(
@@ -120,14 +123,16 @@ public class CustomerWorkrequestServlet extends SwimServlet {
 
 		registerPostActionMapping("insertfeedback", new ServletAction() {
 			public void runAction(HttpServletRequest req,
-					HttpServletResponse resp) {
+					HttpServletResponse resp) throws IOException,
+					ServletException {
 				doInsertFeedback(req, resp);
 			}
 		});
 
 		registerPostActionMapping("replyfeedback", new ServletAction() {
 			public void runAction(HttpServletRequest req,
-					HttpServletResponse resp) {
+					HttpServletResponse resp) throws IOException,
+					ServletException {
 				doReplyToFeedback(req, resp);
 			}
 		});
@@ -169,7 +174,7 @@ public class CustomerWorkrequestServlet extends SwimServlet {
 			return;
 		}
 
-		resp.sendRedirect(req.getContextPath() + "/works/view?w=" + reqId);
+		redirectToRequestView(req, resp, reqId);
 	}
 
 	private void doMarkRequestAsCompleted(HttpServletRequest req,
@@ -205,7 +210,7 @@ public class CustomerWorkrequestServlet extends SwimServlet {
 			return;
 		}
 
-		resp.sendRedirect(req.getContextPath() + "/works/view?w=" + reqId);
+		redirectToRequestView(req, resp, reqId);
 	}
 
 	private void doSendMessage(HttpServletRequest req, HttpServletResponse resp)
@@ -238,17 +243,89 @@ public class CustomerWorkrequestServlet extends SwimServlet {
 		} catch (BadRequestException e) {
 			sendError(req, resp, ErrorType.BAD_REQUEST);
 			return;
+		} catch (InvalidStateException e) {
+			sendError(req, resp, ErrorType.INVALID_REQUEST);
+			return;
 		}
 
-		resp.sendRedirect(req.getContextPath() + "/works/view?w=" + reqId);
+		redirectToRequestView(req, resp, reqId);
 	}
 
 	private void doInsertFeedback(HttpServletRequest req,
-			HttpServletResponse resp) {
+			HttpServletResponse resp) throws IOException, ServletException {
+		HttpSession session = req.getSession();
+
+		System.out.println(1);
+
+		if (!isCustomerLoggedIn(session)) {
+			sendError(req, resp, ErrorType.LOGIN_REQUIRED);
+			return;
+		}
+
+		String authorUsr = getUsername(session);
+		Integer reqId = getWorkRequestId(req);
+		String review = req.getParameter("review");
+		Integer mark = getMark(req);
+		System.out.println(2);
+		if (reqId == null || review == null || mark == null) {
+			sendError(req, resp, ErrorType.BAD_REQUEST);
+			return;
+		}
+
+		FeedbackControllerRemote feedbackCtrl = lookupBean(
+				FeedbackControllerRemote.class, Misc.BeanNames.FEEDBACK);
+		System.out.println(3);
+		try {
+			feedbackCtrl.createFeedback(reqId, authorUsr, mark, review);
+		} catch (BadRequestException e) {
+			sendError(req, resp, ErrorType.BAD_REQUEST);
+			return;
+		} catch (UnauthorizedRequestException e) {
+			sendError(req, resp, ErrorType.UNAUTHORIZED_REQUEST);
+			return;
+		} catch (InvalidStateException e) {
+			sendError(req, resp, ErrorType.INVALID_REQUEST);
+			return;
+		}
+		System.out.println(4);
+
+		redirectToRequestView(req, resp, reqId);
 	}
 
 	private void doReplyToFeedback(HttpServletRequest req,
-			HttpServletResponse resp) {
+			HttpServletResponse resp) throws IOException, ServletException {
+		HttpSession session = req.getSession();
+		if (!isCustomerLoggedIn(session)) {
+			sendError(req, resp, ErrorType.LOGIN_REQUIRED);
+			return;
+		}
+
+		Integer reqId = getWorkRequestId(req);
+		String username = getUsername(session);
+		String reply = req.getParameter("reply");
+
+		if (reqId == null || Misc.isStringEmpty(reply)) {
+			sendError(req, resp, ErrorType.BAD_REQUEST);
+			return;
+		}
+
+		FeedbackControllerRemote feedbackCtrl = lookupBean(
+				FeedbackControllerRemote.class, Misc.BeanNames.FEEDBACK);
+
+		try {
+			feedbackCtrl.replyToFeedback(reqId, username, reply);
+		} catch (UnauthorizedRequestException e) {
+			sendError(req, resp, ErrorType.UNAUTHORIZED_REQUEST);
+			return;
+		} catch (BadRequestException e) {
+			sendError(req, resp, ErrorType.BAD_REQUEST);
+			return;
+		} catch (InvalidStateException e) {
+			sendError(req, resp, ErrorType.INVALID_REQUEST);
+			return;
+		}
+
+		redirectToRequestView(req, resp, reqId);
 	}
 
 	private void showSection(CustomerWorkRequestSection section,
@@ -332,6 +409,9 @@ public class CustomerWorkrequestServlet extends SwimServlet {
 			return;
 		}
 
+		Feedback f = workReqCtrl.getFeedback(reqId);
+
+		req.setAttribute(Misc.FEEDBACK, f);
 		req.setAttribute(Misc.MESSAGE_LIST, messageList);
 		req.setAttribute(Misc.TARGET_WORKREQUEST, workReq);
 		req.setAttribute(Misc.SELECTED_TAB_ATTR, CustomerMenu.WORKS);
@@ -350,5 +430,20 @@ public class CustomerWorkrequestServlet extends SwimServlet {
 	private Boolean getCustomerResponse(HttpServletRequest req) {
 		String desc = req.getParameter("a");
 		return Boolean.valueOf(desc);
+	}
+
+	private Integer getMark(HttpServletRequest req) {
+		try {
+			return Integer.parseInt(req.getParameter("mark"));
+		} catch (NumberFormatException e) {
+			return null;
+		}
+	}
+
+	public static void redirectToRequestView(HttpServletRequest req,
+			HttpServletResponse resp, int reqId) throws IOException {
+		String link = String.format("%s/%s/view?%s=%s", req.getContextPath(),
+				CONTEXT_NAME, WORK_REQUEST_PARAM, reqId);
+		resp.sendRedirect(link);
 	}
 }

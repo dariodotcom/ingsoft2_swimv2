@@ -43,6 +43,14 @@
   <servlet-name>Administration</servlet-name>
   <servlet-class>it.polimi.swim.web.servlets.AdministrationServlet</servlet-class>
  </servlet>
+ <servlet>
+  <servlet-name>MailValidation</servlet-name>
+  <servlet-class>it.polimi.swim.web.servlets.MailValidationServlet</servlet-class>
+ </servlet>
+ <servlet>
+  <servlet-name>PasswordReset</servlet-name>
+  <servlet-class>it.polimi.swim.web.servlets.PasswordResetServlet</servlet-class>
+ </servlet>
  <servlet-mapping>
   <servlet-name>PersonalPage</servlet-name>
   <url-pattern>/home/*</url-pattern>
@@ -72,6 +80,10 @@
   <url-pattern>/search/*</url-pattern>
  </servlet-mapping>
  <servlet-mapping>
+  <servlet-name>MailValidation</servlet-name>
+  <url-pattern>/validatemail/*</url-pattern>
+ </servlet-mapping>
+ <servlet-mapping>
   <servlet-name>Authentication</servlet-name>
   <url-pattern>/landing</url-pattern>
  </servlet-mapping>
@@ -94,6 +106,10 @@
  <servlet-mapping>
   <servlet-name>Authentication</servlet-name>
   <url-pattern>/about</url-pattern>
+ </servlet-mapping>
+ <servlet-mapping>
+  <servlet-name>PasswordReset</servlet-name>
+  <url-pattern>/resetpassword/*</url-pattern>
  </servlet-mapping>
  <welcome-file-list>
   <welcome-file>landing</welcome-file>

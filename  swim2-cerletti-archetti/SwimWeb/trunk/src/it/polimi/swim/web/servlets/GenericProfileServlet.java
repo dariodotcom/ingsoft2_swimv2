@@ -167,16 +167,15 @@ public class GenericProfileServlet extends SwimServlet {
 					}
 				});
 
-		/* POST request actions */
-
-		registerPostActionMapping("sendworkrequest", new ServletAction() {
+		registerGetActionMapping("sendworkrequest", new ServletAction() {
 			public void runAction(HttpServletRequest req,
 					HttpServletResponse resp) throws IOException,
 					ServletException {
 				showCreateWorkRequest(req, resp);
 			}
 		});
-
+		
+		/* POST request actions */
 		registerPostActionMapping("sendfriendship", new ServletAction() {
 			public void runAction(HttpServletRequest req,
 					HttpServletResponse resp) throws IOException,
@@ -195,7 +194,7 @@ public class GenericProfileServlet extends SwimServlet {
 	}
 
 	/* Methods to respond to different requests */
-	
+
 	private void showSection(GenericProfileSection section,
 			HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
@@ -246,6 +245,14 @@ public class GenericProfileServlet extends SwimServlet {
 
 		req.setAttribute(Misc.FRIENDSHIP_STATUS, status);
 
+		/* Ability List */
+		List<?> abilityList = profile.getAbilityList(targetUsername);
+		req.setAttribute(Misc.ABILITY_LIST, abilityList);
+
+		/* Feedback list */
+		List<?> feedbackList = profile.getReceivedFeedbacks(targetUsername);
+		req.setAttribute(Misc.FEEDBACK_LIST, feedbackList);
+
 		/* Friend list */
 		List<?> friendList = profile.getConfirmedFriendshipList(targetUsername);
 		req.setAttribute(Misc.FRIENDLIST_ATTR, friendList);
@@ -257,6 +264,7 @@ public class GenericProfileServlet extends SwimServlet {
 		req.setAttribute(Misc.SELECTED_TAB_ATTR, selectedTab);
 		req.setAttribute(Misc.SELECTED_SECTION_ATTR, section);
 		req.getRequestDispatcher(Misc.USER_JSP).forward(req, resp);
+
 	}
 
 	private void showCreateWorkRequest(HttpServletRequest req,
@@ -276,15 +284,14 @@ public class GenericProfileServlet extends SwimServlet {
 		Customer targetCustomer = profile.getByUsername(targetUsername);
 		req.setAttribute(Misc.USER_TO_SHOW, targetCustomer);
 
-		List<?> abilityList;
-		try {
-			abilityList = profile.getAbilityList(targetUsername);
-			req.setAttribute(Misc.ABILITY_LIST, abilityList);
-		} catch (BadRequestException e) {
-			sendError(req, resp, ErrorType.BAD_REQUEST);
+		List<?> abilityList = profile.getAbilityList(targetUsername);
+
+		if (abilityList.size() == 0) {
+			sendError(req, resp, ErrorType.USER_HAS_NO_ABILITIES);
 			return;
 		}
 
+		req.setAttribute(Misc.ABILITY_LIST, abilityList);
 		req.getRequestDispatcher(Misc.CREATE_WORKREQUEST_JSP)
 				.forward(req, resp);
 		return;
@@ -401,7 +408,7 @@ public class GenericProfileServlet extends SwimServlet {
 			return;
 		}
 
-		resp.sendRedirect(req.getContextPath() + "/works/view?id=" + id);
+		CustomerWorkrequestServlet.redirectToRequestView(req, resp, id);
 	}
 
 	private Date parseDate(String date, String hour) throws ParseException {

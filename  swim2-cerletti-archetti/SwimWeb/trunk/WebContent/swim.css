@@ -430,16 +430,64 @@ span.propertyValue{
 	color: #444444;
 }
 
+#swimContent .disabledButton,
+#swimContent a.button,
 #swimContent .inputsubmit{
-    border: 1px solid #154869;
-	padding: 5px;
 	border-radius: 2px;
 	color: rgba(255,255,255,.9);
-	background-color: #228dd1;
 	box-shadow: 0 -1px 0 rgba(255,255,255,.3) inset;
-	text-shadow: 0 0 1px  #154869;
 	font-weight: bold;
 	display: block;
+}
+	
+#swimContent a.button,
+#swimContent .inputsubmit{
+	border: 1px solid #154869;
+	background-color: #228dd1;
+	text-shadow: 0 0 1px  #154869;
+}
+
+#swimContent .disabledButton{
+	border: 1px solid #3f3f3f;
+	background-color: #797979;
+	text-shadow: 0 0 1px  #696969;
+}
+	
+#swimContent .inputsubmit{
+	padding: 5px;
+}
+
+#swimContent .disabledButton,
+#swimContent a.button{
+	padding: 6px;
+	text-decoration: none;
+    font-size: 13.3px;
+    font-weight: bold;
+    line-height: 16px;
+}
+
+#swimContent .disabledButton{
+	cursor: default;
+}
+
+#swimContent a.button:hover,
+#swimContent .inputsubmit:hover{
+    background-color: #259ce5 !important;
+    box-shadow: 0 -1px 0 rgba(255, 255, 255, 0.5) inset;
+}
+
+#swimContent a.button:hover:active,
+#swimContent .inputsubmit:hover:active{
+    background-color: #1a5780 !important;
+    box-shadow: 0 -1px 1px 0 rgba(0,0,0,.3) inset;
+}
+
+#swimContent .inputsubmit:hover:active{
+    padding: 6px 5px 4px !important;
+}
+
+#swimContent a.button:hover:active{
+	padding: 7px 6px 5px;
 }
 
 #swimContent .inputLine{
@@ -564,7 +612,8 @@ body.welcome .formContainer h2{
 	font-weight: 100;
 }
 
-#profileHeader .username .bold{
+#profileHeader .username .bold,
+ .bold{
 	font-weight: bold;
 }
 
@@ -681,4 +730,49 @@ form.actionForm{
 
 #swimContent .messageContainer .message .submitLine .inputsubmit{
 	margin-top: 15px;
+}
+
+.messageContainer .message.feedbackMessage{
+    width: 500px ;
+}
+
+.messageContainer .message.feedbackMessage  .messageinput{
+    width: 494px ;
+    height: 150px ;
+}
+
+.messageContainer .message .messageinput{
+	width: 244px;
+}
+
+.marker{
+    margin-bottom: 15px ;
+}
+
+.markExpression{
+    display: inline-block ;
+    height: 20px ;
+    width: 20px ;
+    text-decoration: none ;
+    background: url('resources/star_empty.png') center center no-repeat ;
+}
+
+.markExpression.full{
+    background-image: url('resources/star_full.png') ;
+}
+
+.feedback a.button{
+    float: right;
+}
+
+.feedback{
+    padding-bottom: 25px;
+	background: #f1f1f1;
+}
+
+.feedback .heading,
+.feedback .review,
+.feedback .reply{
+    padding: 25px 25px 0 ;  
+    line-height: 30px ;
 }
