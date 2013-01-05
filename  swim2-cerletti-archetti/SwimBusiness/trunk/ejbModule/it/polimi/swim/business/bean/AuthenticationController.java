@@ -115,6 +115,9 @@ public class AuthenticationController implements AuthenticationControllerRemote 
 		return req.getKey();
 	}
 
+	/**
+	 * @see AuthenticationControllerRemote
+	 */
 	public void validateCustomerEmail(String emailValidationKey)
 			throws BadRequestException, InvalidStateException {
 		Query q = manager
@@ -155,6 +158,9 @@ public class AuthenticationController implements AuthenticationControllerRemote 
 		return req.getId();
 	}
 
+	/**
+	 * @see AuthenticationControllerRemote
+	 */
 	public String resetCustomerPassword(String reqId)
 			throws BadRequestException {
 		PasswordResetRequest req = Helpers.getEntityChecked(manager,
