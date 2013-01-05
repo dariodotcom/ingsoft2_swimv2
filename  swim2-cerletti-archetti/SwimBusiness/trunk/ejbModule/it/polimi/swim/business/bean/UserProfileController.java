@@ -290,6 +290,7 @@ public class UserProfileController implements UserProfileControllerRemote {
 	}
 
 	/* Helpers */
+	
 	private boolean isEmailAvailable(String email) {
 		Query q = manager.createQuery("FROM Customer c WHERE c.email=:email");
 		q.setParameter("email", email);
