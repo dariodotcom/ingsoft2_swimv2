@@ -88,7 +88,7 @@ public interface AuthenticationControllerRemote {
 			throws BadRequestException, InvalidStateException;
 
 	public String createPasswordResetRequest(String authorUsr)
-			throws BadRequestException, InvalidStateException;
+			throws BadRequestException;
 
 	/**
 	 * This method manages the reset password request made by a user.
@@ -100,5 +100,7 @@ public interface AuthenticationControllerRemote {
 	 *             the user has not been found.
 	 */
 	public String resetCustomerPassword(String reqId)
-			throws BadRequestException, InvalidStateException;
+			throws BadRequestException;
+
+	public String getPasswordResetEmail(String reqId) throws BadRequestException;
 }
