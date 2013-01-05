@@ -72,12 +72,15 @@ public class FeedbackController implements FeedbackControllerRemote {
 			throw new BadRequestException();
 		}
 
+		Feedback feedback = targetRequest.getFeedback();
+
 		/* Check state */
 		Boolean rightCustomer = targetRequest.getReceiver().equals(
 				feedbackAuthor);
-		Boolean hasFeedback = targetRequest.getFeedback() != null;
+		Boolean hasFeedback = (feedback != null);
+		Boolean hasReply = hasFeedback ? feedback.getReply() != null : false;
 
-		if (!rightCustomer || !hasFeedback) {
+		if (!rightCustomer || !hasFeedback || hasReply) {
 			throw new InvalidStateException();
 		}
 

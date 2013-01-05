@@ -68,7 +68,7 @@ public class UserProfileController implements UserProfileControllerRemote {
 	 */
 	public List<?> getSentFeedbacks(String username) {
 		Query q = manager
-				.createQuery("SELECT f FROM Feedback f JOIN (f.linkedRequest) r WHERE r.sender.username=:username");
+				.createQuery("FROM Feedback f WHERE f.linkedRequest.sender.username=:username");
 
 		q.setParameter("username", username);
 		return q.getResultList();
@@ -77,9 +77,9 @@ public class UserProfileController implements UserProfileControllerRemote {
 	/**
 	 * @see UserProfileControllerRemote
 	 */
-	public List<?> getReceivedFeedacks(String username) {
+	public List<?> getReceivedFeedbacks(String username) {
 		Query q = manager
-				.createQuery("SELECT f FROM Feedback f JOIN (f.linkedRequest) r WHERE r.receiver.username=:username");
+				.createQuery("FROM Feedback f WHERE f.linkedRequest.receiver.username=:username");
 
 		q.setParameter("username", username);
 		return q.getResultList();
@@ -194,7 +194,7 @@ public class UserProfileController implements UserProfileControllerRemote {
 	/**
 	 * @see UserProfileControllerRemote
 	 */
-	public List<?> getAbilityList(String username) throws BadRequestException {
+	public List<?> getAbilityList(String username) {
 		Query q = manager
 				.createQuery("SELECT a FROM Customer c, IN (c.declaredAbilities) a WHERE c.username=:username");
 		q.setParameter("username", username);
@@ -241,9 +241,11 @@ public class UserProfileController implements UserProfileControllerRemote {
 	public List<?> getReceivedActiveWorkRequest(String username) {
 		Query q = manager
 				.createQuery("FROM WorkRequest w WHERE w.receiver.username=:u "
-						+ "AND (w.senderCompleted=false OR w.receiverCompleted=false)");
-		q.setParameter("u", username);
+						+ "AND NOT w.senderCompleted=true AND NOT w.receiverCompleted=true "
+						+ "AND (w.senderConfirmed IS NULL OR w.senderConfirmed=true) "
+						+ "AND (w.receiverConfirmed IS NULL OR w.receiverConfirmed=true)");
 
+		q.setParameter("u", username);
 		return q.getResultList();
 	}
 
@@ -253,7 +255,9 @@ public class UserProfileController implements UserProfileControllerRemote {
 	public List<?> getSentActiveWorkRequest(String username) {
 		Query q = manager
 				.createQuery("FROM WorkRequest w WHERE w.sender.username=:u "
-						+ "AND (w.senderCompleted=false OR w.receiverCompleted=false)");
+						+ "AND NOT w.senderCompleted=true AND NOT w.receiverCompleted=true "
+						+ "AND (w.senderConfirmed IS NULL OR w.senderConfirmed=true) "
+						+ "AND (w.receiverConfirmed IS NULL OR w.receiverConfirmed=true)");
 		q.setParameter("u", username);
 
 		return q.getResultList();

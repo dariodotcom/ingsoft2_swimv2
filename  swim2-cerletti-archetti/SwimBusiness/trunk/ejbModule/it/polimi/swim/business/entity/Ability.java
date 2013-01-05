@@ -16,6 +16,12 @@ import javax.persistence.Table;
 @Table(name = "ability")
 public class Ability {
 
+	@Override
+	public String toString() {
+		return getName();
+	}
+
+
 	public Ability() {
 	}
 	
@@ -53,7 +59,7 @@ public class Ability {
 	 * @return a String that contains the ability name.
 	 */
 	public String getName() {
-		return name;
+		return name.toLowerCase();
 	}
 
 	/**

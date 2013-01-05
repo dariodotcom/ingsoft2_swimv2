@@ -52,6 +52,7 @@ public class WorkRequestController implements WorkRequestControllerRemote {
 
 		/* We can't send a work request to a user that has no declared abilities */
 		if (receiverAbilities.size() == 0 || !receiverAbilities.contains(a)) {
+			System.out.println(receiverAbilities + " " + a);
 			throw new InvalidStateException();
 		}
 
@@ -125,11 +126,12 @@ public class WorkRequestController implements WorkRequestControllerRemote {
 	}
 
 	/**
+	 * @throws InvalidStateException 
 	 * @see WorkRequestControllerRemote
 	 */
 	public void sendMessage(String messageAuthorUsr, String text,
 			int workRequestId) throws UnauthorizedRequestException,
-			BadRequestException {
+			BadRequestException, InvalidStateException {
 
 		Customer author = getCustomer(messageAuthorUsr);
 		WorkRequest request = getRequest(workRequestId);
@@ -144,6 +146,10 @@ public class WorkRequestController implements WorkRequestControllerRemote {
 			throw new UnauthorizedRequestException();
 		}
 
+		if(request.isCompleted() || request.isDeclined()){
+			throw new InvalidStateException();
+		}
+		
 		Message m = new Message(request, author, text);
 		manager.persist(m);
 	}
