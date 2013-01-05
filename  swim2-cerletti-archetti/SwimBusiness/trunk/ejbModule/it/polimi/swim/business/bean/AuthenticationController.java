@@ -139,16 +139,18 @@ public class AuthenticationController implements AuthenticationControllerRemote 
 	}
 
 	public String createPasswordResetRequest(String authorUsr)
-			throws BadRequestException, InvalidStateException {
+			throws BadRequestException {
 		Customer author = Helpers.getEntityChecked(manager, Customer.class,
 				authorUsr);
 
 		PasswordResetRequest req = new PasswordResetRequest(author);
+		manager.persist(req);
+		
 		return req.getId();
 	}
 
 	public String resetCustomerPassword(String reqId)
-			throws BadRequestException, InvalidStateException {
+			throws BadRequestException {
 		PasswordResetRequest req = Helpers.getEntityChecked(manager,
 				PasswordResetRequest.class, reqId);
 
@@ -156,7 +158,16 @@ public class AuthenticationController implements AuthenticationControllerRemote 
 		String password = Helpers.generateRandomString(NEW_PASSWORD_LENGTH);
 
 		c.setPassword(password);
+		manager.remove(req);
 		return password;
+	}
+
+	public String getPasswordResetEmail(String reqId)
+			throws BadRequestException {
+		PasswordResetRequest req = Helpers.getEntityChecked(manager,
+				PasswordResetRequest.class, reqId);
+
+		return req.getAuthor().getEmail();
 	}
 
 	/* Helpers */
