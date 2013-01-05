@@ -25,8 +25,7 @@ public class WorkRequest {
 	 * Class constructor.
 	 */
 	public WorkRequest() {
-		this.receiverCompleted = false;
-		this.senderCompleted = false;
+
 	}
 
 	/**
@@ -38,9 +37,10 @@ public class WorkRequest {
 	 *            the Customer which has received the work request.
 	 */
 	public WorkRequest(Customer sender, Customer receiver) {
-		super();
 		this.sender = sender;
 		this.receiver = receiver;
+		this.receiverCompleted = false;
+		this.senderCompleted = false;
 	}
 
 	@Id
@@ -63,10 +63,10 @@ public class WorkRequest {
 	private Boolean receiverConfirmed;
 
 	@Column(name = "sendercompleted")
-	private Boolean senderCompleted;
+	private boolean senderCompleted;
 
 	@Column(name = "receivercompleted")
-	private Boolean receiverCompleted;
+	private boolean receiverCompleted;
 
 	@Column(name = "description")
 	private String description;
@@ -178,10 +178,6 @@ public class WorkRequest {
 	 *         finish, false otherwise.
 	 */
 	public Boolean getSenderCompleted() {
-		if (senderCompleted == null) {
-			return false;
-		}
-
 		return senderCompleted;
 	}
 
@@ -199,10 +195,6 @@ public class WorkRequest {
 	 *         its finish, false otherwise.
 	 */
 	public Boolean getReceiverCompleted() {
-		if (receiverCompleted == null) {
-			return false;
-		}
-
 		return receiverCompleted;
 	}
 
@@ -377,7 +369,7 @@ public class WorkRequest {
 	 *         request, false otherwise.
 	 */
 	public Boolean isDeclined() {
-		if (receiverCompleted == null || senderCompleted == null) {
+		if (receiverConfirmed == null || senderConfirmed == null) {
 			return false;
 		}
 

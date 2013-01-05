@@ -1,5 +1,8 @@
 package it.polimi.swim.business.bean;
 
+import java.math.BigInteger;
+import java.security.SecureRandom;
+
 import javax.persistence.EntityManager;
 
 import it.polimi.swim.business.exceptions.BadRequestException;
@@ -8,6 +11,7 @@ import it.polimi.swim.business.exceptions.BadRequestException;
  * Helpers is a class that contains helper methods useful to the implementation.
  */
 public class Helpers {
+	private static SecureRandom random = new SecureRandom();
 
 	/**
 	 * This method provides the entire entity associated to the given key.
@@ -45,5 +49,9 @@ public class Helpers {
 	 */
 	public static boolean isStringValid(String s) {
 		return s != null && s.length() > 0;
+	}
+	
+	public static String generateRandomString(int length) {
+		return new BigInteger(length * 5, random).toString(32);
 	}
 }

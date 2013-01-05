@@ -85,9 +85,10 @@ public interface WorkRequestControllerRemote {
 	 * @throws UnauthorizedRequestException
 	 *             when user who performed the action is not involved in the
 	 *             request.
+	 * @throws InvalidStateException 
 	 */
 	public void sendMessage(String authorUsr, String text, int workRequestId)
-			throws UnauthorizedRequestException, BadRequestException;
+			throws UnauthorizedRequestException, BadRequestException, InvalidStateException;
 
 	/**
 	 * This method provides a work request associated to a given identifier.

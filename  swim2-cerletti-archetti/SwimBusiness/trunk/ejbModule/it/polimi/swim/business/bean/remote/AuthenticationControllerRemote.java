@@ -2,7 +2,9 @@ package it.polimi.swim.business.bean.remote;
 
 import it.polimi.swim.business.bean.UserType;
 import it.polimi.swim.business.exceptions.AuthenticationFailedException;
+import it.polimi.swim.business.exceptions.BadRequestException;
 import it.polimi.swim.business.exceptions.EmailAlreadyTakenException;
+import it.polimi.swim.business.exceptions.InvalidStateException;
 import it.polimi.swim.business.exceptions.UserNotFoundException;
 import it.polimi.swim.business.exceptions.UsernameAlreadyTakenException;
 
@@ -71,28 +73,32 @@ public interface AuthenticationControllerRemote {
 	public void createAdministrator(String username, String password)
 			throws UsernameAlreadyTakenException;
 
+	public String createEmailValidationRequest(String authorUsr)
+			throws BadRequestException, InvalidStateException;
+
 	/**
 	 * This method manages the confirmation of a user email address.
 	 * 
-	 * @param username
-	 *            a String that contains the username of the user we want to
-	 *            confirm the email address.
+	 * @param emailValidationKey
+	 *            the mail validation request key.
 	 * @throws UserNotFoundException
 	 *             the user has not been found.
 	 */
-	public void confirmUserEmailAddress(String username)
-			throws UserNotFoundException;
+	public void validateCustomerEmail(String emailValidationKey)
+			throws BadRequestException, InvalidStateException;
+
+	public String createPasswordResetRequest(String authorUsr)
+			throws BadRequestException, InvalidStateException;
 
 	/**
 	 * This method manages the reset password request made by a user.
 	 * 
-	 * @param username
-	 *            a String that contains the username of the user that wants to
-	 *            reset his password.
+	 * @param reqId
+	 *            a String that is the key of a Password Reset request
 	 * @return a String which contains the user new password.
 	 * @throws UserNotFoundException
 	 *             the user has not been found.
 	 */
-	public String resetUserPassword(String username)
-			throws UserNotFoundException;
+	public String resetCustomerPassword(String reqId)
+			throws BadRequestException, InvalidStateException;
 }

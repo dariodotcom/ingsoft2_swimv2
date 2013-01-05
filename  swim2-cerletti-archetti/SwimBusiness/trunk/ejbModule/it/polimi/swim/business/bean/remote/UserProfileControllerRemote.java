@@ -62,10 +62,8 @@ public interface UserProfileControllerRemote {
 	 *            a String that contains the username of the user we want to
 	 *            know the declared abilities.
 	 * @return a List of abilities declared by a user.
-	 * @throws BadRequestException
-	 *             a request that does not fit.
 	 */
-	public List<?> getAbilityList(String username) throws BadRequestException;
+	public List<?> getAbilityList(String username);
 
 	/**
 	 * Getter method useful to provide the list of feedback received by an user.
@@ -75,7 +73,7 @@ public interface UserProfileControllerRemote {
 	 *            know the received feedbacks.
 	 * @return the List of the user received feedbacks.
 	 */
-	public List<?> getReceivedFeedacks(String username);
+	public List<?> getReceivedFeedbacks(String username);
 
 	/**
 	 * Getter method that provides a list of work requests received by a user

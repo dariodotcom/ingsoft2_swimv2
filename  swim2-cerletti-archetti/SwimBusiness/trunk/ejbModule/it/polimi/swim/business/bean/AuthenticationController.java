@@ -1,15 +1,15 @@
 package it.polimi.swim.business.bean;
 
-import java.math.BigInteger;
-import java.security.SecureRandom;
-
 import it.polimi.swim.business.bean.remote.AuthenticationControllerRemote;
 import it.polimi.swim.business.entity.Administrator;
 import it.polimi.swim.business.entity.Customer;
+import it.polimi.swim.business.entity.EmailValidationRequest;
+import it.polimi.swim.business.entity.PasswordResetRequest;
 import it.polimi.swim.business.entity.User;
 import it.polimi.swim.business.exceptions.AuthenticationFailedException;
+import it.polimi.swim.business.exceptions.BadRequestException;
 import it.polimi.swim.business.exceptions.EmailAlreadyTakenException;
-import it.polimi.swim.business.exceptions.UserNotFoundException;
+import it.polimi.swim.business.exceptions.InvalidStateException;
 import it.polimi.swim.business.exceptions.UsernameAlreadyTakenException;
 
 import javax.ejb.Stateless;
@@ -25,10 +25,9 @@ import javax.persistence.Query;
 @Stateless
 public class AuthenticationController implements AuthenticationControllerRemote {
 
+	private static final int NEW_PASSWORD_LENGTH = 8;
 	@PersistenceContext(unitName = "swim")
 	EntityManager manager;
-
-	SecureRandom random = new SecureRandom();
 
 	/**
 	 * Default constructor.
@@ -61,11 +60,8 @@ public class AuthenticationController implements AuthenticationControllerRemote 
 
 		if (user instanceof Administrator) {
 			return UserType.ADMINISTRATOR;
-		} else if (user instanceof Customer) {
-			return UserType.CUSTOMER;
 		} else {
-			throw new ClassCastException(); // TODO: Solve this exception in a
-											// better way
+			return UserType.CUSTOMER;
 		}
 	}
 
@@ -91,26 +87,6 @@ public class AuthenticationController implements AuthenticationControllerRemote 
 	/**
 	 * @see AuthenticationControllerRemote
 	 */
-	public void confirmUserEmailAddress(String username)
-			throws UserNotFoundException {
-		findCustomerByUsername(username).setEmailConfirmed();
-	}
-
-	/**
-	 * @see AuthenticationControllerRemote
-	 */
-	public String resetUserPassword(String username)
-			throws UserNotFoundException {
-		Customer c = findCustomerByUsername(username);
-		String newPassword = generateRandomString(10); // TODO: move 10 to
-														// external config class
-		c.setPassword(newPassword);
-		return newPassword;
-	}
-
-	/**
-	 * @see AuthenticationControllerRemote
-	 */
 	public void createAdministrator(String username, String password)
 			throws UsernameAlreadyTakenException {
 		if (!isUsernameAvailable(username)) {
@@ -121,8 +97,69 @@ public class AuthenticationController implements AuthenticationControllerRemote 
 		manager.persist(a);
 	}
 
-	/* Helpers */
+	public String createEmailValidationRequest(String authorUsr)
+			throws BadRequestException, InvalidStateException {
+		Customer author = Helpers.getEntityChecked(manager, Customer.class,
+				authorUsr);
 
+		if (author.isEmailConfirmed() || !canStartValidation(author)) {
+			throw new InvalidStateException();
+		}
+
+		EmailValidationRequest req = new EmailValidationRequest(author);
+		manager.persist(req);
+
+		return req.getKey();
+	}
+
+	public void validateCustomerEmail(String emailValidationKey)
+			throws BadRequestException, InvalidStateException {
+		Query q = manager
+				.createQuery("From EmailValidationRequest r WHERE r.reqKey=:key");
+		q.setParameter("key", emailValidationKey);
+
+		EmailValidationRequest req;
+
+		try {
+			req = (EmailValidationRequest) q.getSingleResult();
+		} catch (NoResultException e) {
+			throw new BadRequestException();
+		}
+
+		Customer c = req.getAuthor();
+
+		if (c.isEmailConfirmed()) {
+			throw new InvalidStateException();
+		}
+
+		c.setEmailConfirmed();
+		manager.remove(req);
+
+		return;
+	}
+
+	public String createPasswordResetRequest(String authorUsr)
+			throws BadRequestException, InvalidStateException {
+		Customer author = Helpers.getEntityChecked(manager, Customer.class,
+				authorUsr);
+
+		PasswordResetRequest req = new PasswordResetRequest(author);
+		return req.getId();
+	}
+
+	public String resetCustomerPassword(String reqId)
+			throws BadRequestException, InvalidStateException {
+		PasswordResetRequest req = Helpers.getEntityChecked(manager,
+				PasswordResetRequest.class, reqId);
+
+		Customer c = req.getAuthor();
+		String password = Helpers.generateRandomString(NEW_PASSWORD_LENGTH);
+
+		c.setPassword(password);
+		return password;
+	}
+
+	/* Helpers */
 	private boolean isEmailAvailable(String email) {
 		Query q = manager.createQuery("FROM Customer c WHERE c.email=:email");
 		q.setParameter("email", email);
@@ -138,17 +175,11 @@ public class AuthenticationController implements AuthenticationControllerRemote 
 		return q.getResultList().size() == 0;
 	}
 
-	private Customer findCustomerByUsername(String username)
-			throws UserNotFoundException {
-		try {
-			return manager.find(Customer.class, username);
-		} catch (NoResultException nre) {
-			throw new UserNotFoundException();
-		}
-	}
+	private boolean canStartValidation(Customer a) {
+		Query q = manager
+				.createQuery("FROM EmailValidationRequest r WHERE r.author=:author");
+		q.setParameter("author", a);
 
-	private String generateRandomString(int length) {
-		return new BigInteger(length * 5, random).toString(32);
+		return q.getResultList().size() == 0;
 	}
-
 }
