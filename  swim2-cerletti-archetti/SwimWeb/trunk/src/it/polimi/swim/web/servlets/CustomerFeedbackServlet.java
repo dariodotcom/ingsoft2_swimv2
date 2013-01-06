@@ -139,8 +139,6 @@ public class CustomerFeedbackServlet extends SwimServlet {
 			break;
 		}
 
-		System.out.println(feedbackList);
-
 		req.setAttribute(Misc.FEEDBACK_LIST, feedbackList);
 
 		req.setAttribute(Misc.SELECTED_TAB_ATTR, CustomerMenu.FEEDBACKS);
