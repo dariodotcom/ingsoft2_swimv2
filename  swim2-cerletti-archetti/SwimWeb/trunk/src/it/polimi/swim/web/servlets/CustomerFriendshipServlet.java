@@ -167,8 +167,6 @@ public class CustomerFriendshipServlet extends SwimServlet {
 			return;
 		}
 
-		System.out.println(1);
-		
 		String selfUsername = (String) session
 				.getAttribute(AuthenticationServlet.LOGGED_USERNAME);
 
@@ -181,8 +179,6 @@ public class CustomerFriendshipServlet extends SwimServlet {
 			sendError(req, resp, ErrorType.BAD_REQUEST);
 			return;
 		}
-		
-		System.out.println(2);
 
 		// Lookup bean
 		FriendshipControllerRemote friendship = lookupBean(
@@ -201,12 +197,9 @@ public class CustomerFriendshipServlet extends SwimServlet {
 			sendError(req, resp, ErrorType.UNAUTHORIZED_REQUEST);
 			return;
 		}
-		
-		System.out.println(3);
 
 		// Show friend list page
 		resp.sendRedirect(req.getContextPath() + "/friends/");
-		System.out.println(4);
 		return;
 	}
 

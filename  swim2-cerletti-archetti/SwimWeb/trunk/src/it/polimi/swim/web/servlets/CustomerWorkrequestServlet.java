@@ -255,8 +255,6 @@ public class CustomerWorkrequestServlet extends SwimServlet {
 			HttpServletResponse resp) throws IOException, ServletException {
 		HttpSession session = req.getSession();
 
-		System.out.println(1);
-
 		if (!isCustomerLoggedIn(session)) {
 			sendError(req, resp, ErrorType.LOGIN_REQUIRED);
 			return;
@@ -266,7 +264,7 @@ public class CustomerWorkrequestServlet extends SwimServlet {
 		Integer reqId = getWorkRequestId(req);
 		String review = req.getParameter("review");
 		Integer mark = getMark(req);
-		System.out.println(2);
+
 		if (reqId == null || review == null || mark == null) {
 			sendError(req, resp, ErrorType.BAD_REQUEST);
 			return;
@@ -274,7 +272,7 @@ public class CustomerWorkrequestServlet extends SwimServlet {
 
 		FeedbackControllerRemote feedbackCtrl = lookupBean(
 				FeedbackControllerRemote.class, Misc.BeanNames.FEEDBACK);
-		System.out.println(3);
+
 		try {
 			feedbackCtrl.createFeedback(reqId, authorUsr, mark, review);
 		} catch (BadRequestException e) {
@@ -287,7 +285,6 @@ public class CustomerWorkrequestServlet extends SwimServlet {
 			sendError(req, resp, ErrorType.INVALID_REQUEST);
 			return;
 		}
-		System.out.println(4);
 
 		redirectToRequestView(req, resp, reqId);
 	}
