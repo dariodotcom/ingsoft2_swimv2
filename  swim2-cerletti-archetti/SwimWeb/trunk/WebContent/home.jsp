@@ -119,7 +119,7 @@
 
 										<div class="propertyValue">
 											<input type="text" id="addAbilityInput" name="abilityName"
-												class="inputtext" />
+												class="inputtext abilityInput" />
 										</div>
 									</div>
 									<div class="submitLine">
@@ -127,6 +127,10 @@
 									</div>
 								</div>
 							</form>
+							<p class="paragraph">
+								Non hai trovato la professionalit&agrave; che cercavi? <a
+									href="<%=context%>/abilityrequest/">Richiedila ora!</a>
+							</p>
 						</div>
 
 						<h2 class="partTitle">Gestisci professionalit&agrave;</h2>

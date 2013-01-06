@@ -3,12 +3,56 @@ $(function() {
 	$(".abilityInput").autocomplete({
 		source : "/SwimWeb/home/abilityList",
 		autoFocus : true,
-		delay : 500
+		delay : 250
 	});
 
+	var currentForm = null;
+
+	// review options
+	window.createReviewForm = function(reqId, accept, node) {
+		var target = node.parentNode.parentNode;
+
+		if (currentForm) {
+			currentForm.remove();
+		}
+
+		// Create HTML
+		var messageBox = $('<div class="messageContainer reviewMessage"></div>')
+				.hide();
+		var message = $('<div class="message"></div>');
+		var arrow = $('<div class="arrow">&nbsp;</div>');
+		messageBox.append(arrow);
+		messageBox.append(message);
+
+		var form = $('<form action="/SwimWeb/admin/respond" method="post"></form>');
+		form.append($('<input type="hidden" name="accept" value="' + accept
+				+ '"/>'));
+		form.append($('<input type="hidden" name="request" value="' + reqId
+				+ '"/>'));
+		form.append($('<textarea class="inputtext" name="review"></textarea>'));
+		form
+				.append($('<div class="submitLine"></div>')
+						.append(
+								$('<input type="submit" class="inputsubmit" value="Rispondi"/>')));
+		message.append(form);
+
+		// Append form
+		currentForm = messageBox;
+		$(target).append(messageBox);
+
+		// Compute element position
+		var ground = $(target).offset().left;
+
+		var nodeOffset = $(node).offset().left - ground;
+		var arrowOffset = parseInt($(arrow).css("marginLeft").replace("px", ""));
+
+		messageBox.css("marginLeft", nodeOffset - arrowOffset + 7);
+		$(messageBox).show();
+	};
+
 	// Feedback mark selector
-	const MIN_MARK = 1;
-	const MAX_MARK = 5;
+	var MIN_MARK = 1;
+	var MAX_MARK = 5;
 
 	function FeedbackMarker(markerNode, inputNode) {
 		this.inputNode = inputNode;

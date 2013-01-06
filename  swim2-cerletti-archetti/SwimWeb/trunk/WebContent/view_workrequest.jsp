@@ -10,16 +10,23 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <%
+	String selfUsername = (String) session
+			.getAttribute(Misc.LOGGED_USERNAME);
+
 	WorkRequest workReq = (WorkRequest) request
 			.getAttribute(Misc.TARGET_WORKREQUEST);
 	Customer sender = workReq.getSender(), receiver = workReq
 			.getReceiver();
-	Ability requiredAbility = workReq.getRequiredAbility();
-
-	String selfUsername = (String) session
-			.getAttribute(Misc.LOGGED_USERNAME);
+	Customer self = sender.getUsername().equals(selfUsername) ? sender
+			: receiver;
 
 	String ctx = request.getContextPath();
+
+	String senderThumb = ctx + Misc.getThumbnailPhotoUrl(sender);
+	String receiverThumb = ctx + Misc.getThumbnailPhotoUrl(receiver);
+	String selfThumb = ctx + Misc.getThumbnailPhotoUrl(self);
+
+	Ability requiredAbility = workReq.getRequiredAbility();
 
 	//Find out the state of the request
 	Boolean isSender = selfUsername.equals(sender.getUsername());
@@ -104,7 +111,6 @@
 			&& !requestCompleted;
 	List<?> messageList = (List<?>) request
 			.getAttribute(Misc.MESSAGE_LIST);
-	//request.getAttribute(Misc.MESSAGE_LIST);
 %>
 <%@ include file="shared/head.jsp"%>
 <body class="swim">
@@ -230,6 +236,8 @@
 				</div>
 
 				<!-- Feedback -->
+				<%%>
+
 				<h2 class="partTitle">Feedback</h2>
 				<div class="part">
 					<p class="paragraph"><%=feedbackMessage%></p>
@@ -239,9 +247,14 @@
 							String authorClass = (isSender ? "self" : "other");
 					%>
 					<div class="messageContainer clearfix <%=authorClass%>">
+						<div class="smallImageFrame">
+							<img src="<%=senderThumb%>" alt="User image" />
+						</div>
 						<div class="arrow">&nbsp;</div>
 						<div class="message feedbackMessage">
-							<%@include file="shared/feedbackMarker.jsp"%>
+							<p class="messageHeading"><%@include
+									file="shared/feedbackMarker.jsp"%>
+							</p>
 							<p class="messageText"><%=feedback.getReview()%></p>
 						</div>
 					</div>
@@ -257,18 +270,21 @@
 								sull'operato dell'utente.</label>
 						</p>
 						<div class="messageContainer clearfix self">
+							<div class="smallImageFrame">
+								<img src="<%=senderThumb%>" alt="User image" />
+							</div>
 							<div class="arrow">&nbsp;</div>
 							<div class="message feedbackMessage">
 								<input type="hidden" name="w" value="<%=workReq.getId()%>" /> <input
 									type="hidden" name="mark" value="" id="feedbackReview" />
-								<div id="marker">
+								<div id="marker" class="messageHeading">
 									<a href="javascript:" class="markExpression">&nbsp;</a> <a
 										href="javascript:" class="markExpression">&nbsp;</a> <a
 										href="javascript:" class="markExpression">&nbsp;</a> <a
 										href="javascript:" class="markExpression">&nbsp;</a> <a
 										href="javascript:" class="markExpression">&nbsp;</a>
 								</div>
-								<textarea name="review" id="feedbackReview" class="messageInput"></textarea>
+								<textarea name="review" class="inputtext"></textarea>
 								<div class="submitLine">
 									<input type="submit" class="inputsubmit" value="Invia feedback"></input>
 								</div>
@@ -281,11 +297,14 @@
 						if (showFeedbackReply) {
 					%>
 					<div class="messageContainer clearfix self">
+						<div class="smallImageFrame">
+							<img src="<%=receiverThumb%>" alt="User image" />
+						</div>
 						<div class="arrow">&nbsp;</div>
 						<div class="message feedbackReply">
 							<form action="<%=context%>/works/replyfeedback" method="post">
 								<input type="hidden" name="w" value="<%=workReq.getId()%>" />
-								<textarea name="reply" class="messageInput"></textarea>
+								<textarea name="reply" class="inputtext"></textarea>
 								<div class="submitLine">
 									<input type="submit" class="inputsubmit" value="Rispondi"></input>
 								</div>
@@ -298,6 +317,9 @@
 						if (hasReply) {
 					%>
 					<div class="messageContainer clearfix self">
+						<div class="smallImageFrame">
+							<img src="<%=receiverThumb%>" alt="User image" />
+						</div>
 						<div class="arrow">&nbsp;</div>
 						<div class="message feedbackReply">
 							<p class="messageText"><%=reply%></p>
@@ -321,14 +343,20 @@
 
 								for (Object o : messageList) {
 									Message message = (Message) o;
-									Boolean selfIsAuthor = message.getSender().getUsername()
-											.equals(selfUsername);
+									Customer mexSender = message.getSender();
+									Boolean selfIsAuthor = mexSender.getUsername().equals(
+											selfUsername);
 									String messageClassName = (selfIsAuthor ? "self" : "other");
+									String thumbnailUrl = ctx
+											+ Misc.getThumbnailPhotoUrl(mexSender);
 						%>
 						<div class="messageContainer clearfix <%=messageClassName%>">
+							<div class="smallImageFrame">
+								<img src="<%=thumbnailUrl%>" alt="User image" />
+							</div>
 							<div class="arrow">&nbsp;</div>
 							<div class="message">
-								<p class="messageDate"><%=Misc.DATE_TIME_FORMAT.format(message
+								<p class="messageHeading"><%=Misc.DATE_TIME_FORMAT.format(message
 							.getSentDate())%></p>
 								<p class="messageText"><%=message.getMessage()%></p>
 							</div>
@@ -341,15 +369,17 @@
 							if (canSendMessage) {
 						%>
 						<div class="messageContainer clearfix self">
+							<div class="smallImageFrame">
+								<img src="<%=selfThumb%>" alt="User image" />
+							</div>
 							<div class="arrow">&nbsp;</div>
 							<div class="message">
 								<form action="<%=ctx%>/works/sendmsg" method="post">
 									<input type="hidden" name="w" value="<%=workReq.getId()%>" />
-									<p>
-										<label class="sendText" for="messageText">Invia un
-											messaggio:</label>
+									<p class="messageHeading">
+										<label for="messageText">Invia un messaggio:</label>
 									</p>
-									<textarea name="messageText" id="messageText"></textarea>
+									<textarea name="messageText" id="messageText" class="inputtext"></textarea>
 									<div class="submitLine">
 										<input type="submit" class="inputsubmit"
 											value="Invia messaggio"></input>

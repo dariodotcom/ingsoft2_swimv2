@@ -57,11 +57,19 @@
 					<%
 						if (feedbackList.size() == 0) {
 					%>
-					<p class="paragraph">Non sono stati ancora ricevuti feedback.</p>
+					<p class="paragraph">
+						Non sono stati ancora
+						<%=verb%>
+						feedback.
+					</p>
 					<%
 						} else {
 					%>
-					<p class="paragraph">Sono stati ricevuti i seguenti feedbacks</p>
+					<p class="paragraph">
+						Sono stati
+						<%=verb%>
+						i seguenti feedbacks
+					</p>
 					<div class="feedbackList">
 						<%
 							for (Object o : feedbackList) {

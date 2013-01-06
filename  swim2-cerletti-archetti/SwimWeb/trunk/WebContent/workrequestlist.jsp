@@ -55,11 +55,12 @@
 						<%
 							if (receivedList.size() == 0) {
 						%>
-						<p class="text">Non sono presenti richieste di lavoro attive.</p>
+						<p class="text">Non sono presenti richieste di lavoro
+							ricevute.</p>
 						<%
 							} else {
 						%>
-						<div class="propertyList">
+						<div class="propertyList withImage reducedWidth">
 							<%
 								for (Object o : receivedList) {
 										WorkRequest w = (WorkRequest) o;
@@ -67,14 +68,20 @@
 										Ability requiredAbility = w.getRequiredAbility();
 										Customer c = w.getSender();
 										String identity = c.getName() + " " + c.getSurname();
-										String link = context + "/works/view?w=" + w.getId();
+										String reqLink = context + "/works/view?w=" + w.getId();
+										String usrLink = context + "/user/?u="
+												+ sender.getUsername();
+										String thumbnailUrl = context
+												+ Misc.getThumbnailPhotoUrl(sender);
 							%>
 							<div class="property">
 								<div class="propertyName">
-									Da:
-									<%=identity%></div>
+									<span class="smallImageFrame"> <img
+										src="<%=thumbnailUrl%>" alt="User image" />
+									</span><a href="<%=usrLink%>" class="afterImage"><%=identity%></a>
+								</div>
 								<div class="propertyValue">
-									<a class="button" href="<%=link%>">Visualizza</a>
+									<a class="button" href="<%=reqLink%>">Visualizza</a>
 								</div>
 							</div>
 
@@ -97,22 +104,26 @@
 						<%
 							} else {
 						%>
-						<div class="propertyList">
+						<div class="propertyList reducedWidth withImage">
 							<%
 								for (Object o : sentList) {
 										WorkRequest w = (WorkRequest) o;
-										Customer sender = w.getSender();
-										Ability requiredAbility = w.getRequiredAbility();
-										Customer c = w.getReceiver();
-										String identity = c.getName() + " " + c.getSurname();
-										String link = context + "/works/view?w=" + w.getId();
+										Customer receiver = w.getReceiver();
+										String identity = receiver.getName() + " " + receiver.getSurname();
+										String reqLink = context + "/works/view?w=" + w.getId();
+										String usrLink = context + "/user/?u="
+												+ receiver.getUsername();
+										String thumbnailUrl = context
+												+ Misc.getThumbnailPhotoUrl(receiver);
 							%>
 							<div class="property">
 								<div class="propertyName">
-									A:
-									<%=identity%></div>
+									<span class="smallImageFrame"> <img
+										src="<%=thumbnailUrl%>" alt="User image" />
+									</span><a href="<%=usrLink%>" class="afterImage"><%=identity%></a>
+								</div>
 								<div class="propertyValue">
-									<a class="button" href="<%=link%>">Visualizza</a>
+									<a class="button" href="<%=reqLink%>">Visualizza</a>
 								</div>
 							</div>
 							<%
