@@ -43,10 +43,14 @@ public class AbilityController implements AbilityControllerRemote {
 
 		Customer author = getEntity(manager, Customer.class, authorUsr);
 
-		if (author == null || !isAbilityNameAvailable(name)) {
+		if (author == null){  
 			throw new BadRequestException();
 		}
 
+		if(!isAbilityNameAvailable(name)){
+			throw new InvalidStateException();
+		}
+		
 		AbilityRequest r = new AbilityRequest(author, name, description);
 		manager.persist(r);
 	}

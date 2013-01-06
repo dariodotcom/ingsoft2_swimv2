@@ -1,6 +1,5 @@
 package it.polimi.swim.business.bean;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Date;
 import java.util.HashMap;
@@ -94,40 +93,42 @@ public class UserProfileController implements UserProfileControllerRemote {
 		Map<String, Method> setters = new HashMap<String, Method>();
 		Class<Customer> custClass = Customer.class;
 
-		Customer c = manager.find(Customer.class, username);
+		Customer customer = manager.find(Customer.class, username);
 
-		Class<?>[] paramList = new Class<?>[] { String.class };
+		Class<?>[] stringParam = new Class<?>[] { String.class };
+		Class<?>[] dateParam = new Class<?>[] { Date.class };
 
+		// Initialize setter list
 		try {
-			setters.put("name", custClass.getMethod("setName", paramList));
-			setters.put("surname", custClass.getMethod("setSurname", paramList));
-			setters.put("birthdate", custClass.getMethod("setBirthDate",
-					new Class<?>[] { Date.class }));
+			setters.put("name", custClass.getMethod("setName", stringParam));
+			setters.put("surname",
+					custClass.getMethod("setSurname", stringParam));
+			setters.put("birthdate",
+					custClass.getMethod("setBirthDate", dateParam));
 			setters.put("location",
-					custClass.getMethod("setLocation", paramList));
-
-			for (String field : setters.keySet()) {
-				if (values.containsKey(field)) {
-					Object value = values.get(field);
-					setters.get(field).invoke(c, new Object[] { value });
-				}
-			}
-
-			/*
-			 * List of exceptions related to reflection. They shouldn't happen
-			 * since all methods name are hardcoded.
-			 */
-		} catch (SecurityException e) {
-			e.printStackTrace();
-		} catch (NoSuchMethodException e) {
-			e.printStackTrace();
-		} catch (IllegalArgumentException e) {
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			e.printStackTrace();
-		} catch (InvocationTargetException e) {
-			e.printStackTrace();
+					custClass.getMethod("setLocation", stringParam));
+		} catch (Exception e) {
 		}
+
+		for (String field : setters.keySet()) {
+			if (values.containsKey(field)) {
+				Object value = values.get(field);
+				Object[] params = new Object[] { value };
+				try {
+					setters.get(field).invoke(customer, params);
+				} catch (Exception e) {
+					System.out.println("Exception while setting field " + field
+							+ " value");
+					e.printStackTrace();
+				}
+
+			}
+		}
+
+		/*
+		 * List of exceptions related to reflection. They shouldn't happen since
+		 * all methods name are hardcoded.
+		 */
 	}
 
 	/**
@@ -241,7 +242,7 @@ public class UserProfileController implements UserProfileControllerRemote {
 	public List<?> getReceivedActiveWorkRequest(String username) {
 		Query q = manager
 				.createQuery("FROM WorkRequest w WHERE w.receiver.username=:u "
-						+ "AND NOT w.senderCompleted=true AND NOT w.receiverCompleted=true "
+						+ "AND NOT (w.senderCompleted=true AND w.receiverCompleted=true) "
 						+ "AND (w.senderConfirmed IS NULL OR w.senderConfirmed=true) "
 						+ "AND (w.receiverConfirmed IS NULL OR w.receiverConfirmed=true)");
 
@@ -255,7 +256,7 @@ public class UserProfileController implements UserProfileControllerRemote {
 	public List<?> getSentActiveWorkRequest(String username) {
 		Query q = manager
 				.createQuery("FROM WorkRequest w WHERE w.sender.username=:u "
-						+ "AND NOT w.senderCompleted=true AND NOT w.receiverCompleted=true "
+						+ "AND NOT (w.senderCompleted=true AND w.receiverCompleted=true) "
 						+ "AND (w.senderConfirmed IS NULL OR w.senderConfirmed=true) "
 						+ "AND (w.receiverConfirmed IS NULL OR w.receiverConfirmed=true)");
 		q.setParameter("u", username);
@@ -286,6 +287,16 @@ public class UserProfileController implements UserProfileControllerRemote {
 						+ "w.senderConfirmed=false OR w.receiverConfirmed=false)");
 		q.setParameter("u", username);
 
+		return q.getResultList();
+	}
+
+	/**
+	 * @see UserProfileControllerRemote
+	 */
+	public List<?> getSentAbilityRequest(String username) {
+		Query q = manager
+				.createQuery("From AbilityRequest r WHERE r.requestAuthor.username=:username");
+		q.setParameter("username", username);
 		return q.getResultList();
 	}
 

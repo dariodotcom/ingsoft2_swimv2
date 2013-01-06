@@ -99,25 +99,35 @@ public interface UserProfileControllerRemote {
 
 	/**
 	 * Getter method that provides a list of work requests received by a user
-	 * that are conclused.
+	 * that are concluded.
 	 * 
 	 * @param username
 	 *            a String that contains the username of the user we want to
-	 *            know a list of the conclused received work requests.
-	 * @return a List of conclused work requests received by a user.
+	 *            know a list of the concluded received work requests.
+	 * @return a List of concluded work requests received by a user.
 	 */
 	public List<?> getReceivedArchivedWorkRequest(String username);
 
 	/**
 	 * Getter method that provides a list of work requests sent by a user that
-	 * are conclused.
+	 * are concluded.
 	 * 
 	 * @param username
 	 *            a String that contains the username of the user we want to
-	 *            know a list of the conclused sent work requests.
-	 * @return a List of conclused work requests sent by a user.
+	 *            know a list of the concluded sent work requests.
+	 * @return a List of concluded work requests sent by a user.
 	 */
 	public List<?> getSentArchivedWorkRequest(String username);
+
+	/**
+	 * Getter method that provides the list of ability request sent by an user
+	 * 
+	 * @param username
+	 *            a String that contains the username of the user we want to
+	 *            know a list of the sent ability requests
+	 * @return a List of sent ability reuests
+	 */
+	public List<?> getSentAbilityRequest(String username);
 
 	/**
 	 * This method manages the update of a set (one or more) user details, i.e.
