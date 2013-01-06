@@ -59,8 +59,6 @@ public class FriendshipController implements FriendshipControllerRemote {
 				Customer.class, responseAuthorUsr);
 
 		if (!friendship.getReceiver().equals(responseAuthor)) {
-			System.out.println(friendship.getReceiver().getUsername() + " "
-					+ responseAuthorUsr);
 			throw new UnauthorizedRequestException();
 		}
 
