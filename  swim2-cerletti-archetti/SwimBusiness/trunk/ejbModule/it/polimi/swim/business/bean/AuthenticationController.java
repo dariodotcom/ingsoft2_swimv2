@@ -105,12 +105,16 @@ public class AuthenticationController implements AuthenticationControllerRemote 
 		Customer author = Helpers.getEntityChecked(manager, Customer.class,
 				authorUsr);
 
-		if (author.isEmailConfirmed() || !canStartValidation(author)) {
+		if (author.isEmailConfirmed()) {
 			throw new InvalidStateException();
 		}
 
-		EmailValidationRequest req = new EmailValidationRequest(author);
-		manager.persist(req);
+		EmailValidationRequest req = getExsistingMailValidationRequest(author);
+
+		if (req == null) {
+			req = new EmailValidationRequest(author);
+			manager.persist(req);
+		}
 
 		return req.getKey();
 	}
@@ -154,7 +158,7 @@ public class AuthenticationController implements AuthenticationControllerRemote 
 
 		PasswordResetRequest req = new PasswordResetRequest(author);
 		manager.persist(req);
-		
+
 		return req.getId();
 	}
 
@@ -201,11 +205,15 @@ public class AuthenticationController implements AuthenticationControllerRemote 
 		return q.getResultList().size() == 0;
 	}
 
-	private boolean canStartValidation(Customer a) {
+	private EmailValidationRequest getExsistingMailValidationRequest(Customer a) {
 		Query q = manager
 				.createQuery("FROM EmailValidationRequest r WHERE r.author=:author");
 		q.setParameter("author", a);
 
-		return q.getResultList().size() == 0;
+		try {
+			return (EmailValidationRequest) q.getSingleResult();
+		} catch (NoResultException e) {
+			return null;
+		}
 	}
 }

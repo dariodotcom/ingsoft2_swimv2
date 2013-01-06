@@ -68,6 +68,9 @@ public class Customer extends User {
 	@Column(name = "photourl", nullable = true)
 	private String photourl;
 
+	@Column(name = "thumbnail", nullable = true)
+	private String thumbnail;
+
 	@Column(name = "emailactive", nullable = false)
 	private Boolean emailConfirmed;
 
@@ -195,6 +198,14 @@ public class Customer extends User {
 	 */
 	public void setPhotourl(String photourl) {
 		this.photourl = photourl;
+	}
+
+	public String getThumbnailUrl() {
+		return thumbnail;
+	}
+
+	public void setThumbnailUrl(String thumbnail) {
+		this.thumbnail = thumbnail;
 	}
 
 	/**
