@@ -117,18 +117,11 @@ public class UserProfileController implements UserProfileControllerRemote {
 				try {
 					setters.get(field).invoke(customer, params);
 				} catch (Exception e) {
-					System.out.println("Exception while setting field " + field
-							+ " value");
 					e.printStackTrace();
 				}
 
 			}
 		}
-
-		/*
-		 * List of exceptions related to reflection. They shouldn't happen since
-		 * all methods name are hardcoded.
-		 */
 	}
 
 	/**

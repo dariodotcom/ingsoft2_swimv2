@@ -52,7 +52,6 @@ public class WorkRequestController implements WorkRequestControllerRemote {
 
 		/* We can't send a work request to a user that has no declared abilities */
 		if (receiverAbilities.size() == 0 || !receiverAbilities.contains(a)) {
-			System.out.println(receiverAbilities + " " + a);
 			throw new InvalidStateException();
 		}
 
@@ -105,7 +104,7 @@ public class WorkRequestController implements WorkRequestControllerRemote {
 	public void markRequestAsCompleted(String responseAuthorUsr,
 			int workRequestId) throws UnauthorizedRequestException,
 			BadRequestException, InvalidStateException {
-		System.out.println("lol");
+
 		Customer author = getCustomer(responseAuthorUsr);
 		WorkRequest request = getRequest(workRequestId);
 
@@ -145,14 +144,14 @@ public class WorkRequestController implements WorkRequestControllerRemote {
 			throw new UnauthorizedRequestException();
 		}
 
-		if(request.isCompleted() || request.isDeclined()){
+		if (request.isCompleted() || request.isDeclined()) {
 			throw new InvalidStateException();
 		}
-		
+
 		Message m = new Message(request, author, text);
 		manager.persist(m);
 	}
-	
+
 	/**
 	 * @see WorkRequestControllerRemote
 	 */
@@ -173,19 +172,20 @@ public class WorkRequestController implements WorkRequestControllerRemote {
 	/**
 	 * @see WorkRequestControllerRemote
 	 */
-	public Feedback getFeedback(int reqId){
-		Query q = manager.createQuery("SELECT w.feedback FROM WorkRequest w WHERE w.id=:id");
+	public Feedback getFeedback(int reqId) {
+		Query q = manager
+				.createQuery("SELECT w.feedback FROM WorkRequest w WHERE w.id=:id");
 		q.setParameter("id", reqId);
-		
-		try{
+
+		try {
 			return (Feedback) q.getSingleResult();
 		} catch (NoResultException e) {
 			return null;
 		}
 	}
-	
+
 	/* Helpers */
-	
+
 	private Customer getCustomer(String username) throws BadRequestException {
 		Customer customer = manager.find(Customer.class, username);
 		if (customer == null) {
