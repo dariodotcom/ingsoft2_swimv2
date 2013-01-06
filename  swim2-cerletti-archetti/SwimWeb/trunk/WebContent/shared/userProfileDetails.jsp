@@ -21,13 +21,15 @@
 	details.add(new UserDetail("Email", true, "getEmail"));
 	details.add(new UserDetail("Data di nascita", false, "getBirthDate"));
 	details.add(new UserDetail("Luogo di residenza", false,
-	"getLocation"));
+			"getLocation"));
 
 	Boolean showOwnProfile;
 
+	String photoUrl = request.getContextPath() + Misc.getPhotoUrl(cust);
+
 	if (SwimServlet.isCustomerLoggedIn(session)) {
 		String loggedUsername = (String) session
-		.getAttribute(AuthenticationServlet.LOGGED_USERNAME);
+				.getAttribute(AuthenticationServlet.LOGGED_USERNAME);
 		showOwnProfile = loggedUsername.equals(cust.getUsername());
 	} else {
 		showOwnProfile = false;
@@ -37,8 +39,7 @@
 <div id="userProfileDetails" class="profilePage">
 	<div class="column" id="photoColumn">
 		<div class="imageFrame">
-			<img src="<%=request.getContextPath()%>/resources/big-user-img.png"
-				alt="user image" />
+			<img src="<%=photoUrl%>" alt="user image" />
 		</div>
 	</div>
 	<div class="column propertyList" id="detailColumn">
@@ -47,9 +48,8 @@
 				Method getter = custClass.getMethod(d.getGetterName(),
 						(Class<?>[]) null);
 				Object retVal = getter.invoke(cust, (Object[]) null);
-				String detailValue = ( retVal != null ? 
-						retVal instanceof Date ? Misc.DATE_FORMAT.format(retVal) :
-							retVal.toString()
+				String detailValue = (retVal != null ? retVal instanceof Date ? Misc.DATE_FORMAT
+						.format(retVal) : retVal.toString()
 						: "Non impostato");
 				String additionalClass = retVal == null ? " unset" : "";
 

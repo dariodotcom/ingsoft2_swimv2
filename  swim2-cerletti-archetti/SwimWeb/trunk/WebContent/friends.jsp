@@ -71,12 +71,16 @@
 
 										String friendIdentity = String.format("%s %s",
 												friend.getName(), friend.getSurname());
+										String thumbnailUrl = ctx
+												+ Misc.getThumbnailPhotoUrl(friend);
 						%>
 						<div class="property">
-							<span class="smallImageFrame"> <img
-								src="<%=ctx%>/resources/user-img.png" alt="User image" />
-							</span> <span class="propertyName"> <a
-								href="<%=ctx%>/user/?u=<%=friend.getUsername()%>"><%=friendIdentity%></a></span>
+							<div class="propertyName">
+								<span class="smallImageFrame"> <img
+									src="<%=thumbnailUrl%>" alt="User image" />
+								</span> <span class="afterImage"> <a
+									href="<%=ctx%>/user/?u=<%=friend.getUsername()%>"><%=friendIdentity%></a></span>
+							</div>
 							<form action="<%=ctx%>/friends/remove" method="post"
 								class="propertyValue">
 								<input type="hidden" name="f" value="<%=f.getId()%>" /> <input
@@ -109,13 +113,16 @@
 										Customer sender = f.getSender();
 										String senderIdentity = sender.getName() + " "
 												+ sender.getSurname();
+										String thumbnailUrl = ctx
+												+ Misc.getThumbnailPhotoUrl(sender);
 						%>
 						<div class="property">
-							<span class="smallImageFrame">
-								<img src="<%=ctx%>/resources/user-img.png" alt="User image" />
-							</span>
-							<span class="propertyName"><a
-								href="<%=ctx%>/user/?u=<%=sender.getUsername()%>"><%=senderIdentity%></a></span>
+							<div class="propertyName">
+								<span class="smallImageFrame"> <img
+									src="<%=thumbnailUrl%>" alt="User image" />
+								</span> <span class="afterImage"><a
+									href="<%=ctx%>/user/?u=<%=sender.getUsername()%>"><%=senderIdentity%></a></span>
+							</div>
 							<form action="<%=ctx%>/friends/accept" method="post"
 								class="propertyValue">
 								<input type="hidden" name="f" value="<%=f.getId()%>" /> <input

@@ -3,6 +3,7 @@ package it.polimi.swim.web.servlets;
 import it.polimi.swim.business.bean.remote.AbilityControllerRemote;
 import it.polimi.swim.business.exceptions.BadRequestException;
 import it.polimi.swim.business.exceptions.InvalidStateException;
+import it.polimi.swim.web.pagesupport.AdminMenu;
 import it.polimi.swim.web.pagesupport.ErrorType;
 import it.polimi.swim.web.pagesupport.Misc;
 import it.polimi.swim.web.pagesupport.NotificationMessages;
@@ -24,6 +25,9 @@ public class AdministrationServlet extends SwimServlet {
 	private static final long serialVersionUID = -1318042817980004978L;
 	private static final String ABILITY_NAME = "abilityName";
 	private static final String ABILITY_DESC = "abilityDescription";
+	private static final String ABILITY_REVIEW = "review";
+	private static final String REVIEW_ACCEPT = "accept";
+	private static final String REVIEW_REQUEST = "request";
 
 	/**
 	 * AdministrationSection is an enumeration useful to provide all the
@@ -100,17 +104,11 @@ public class AdministrationServlet extends SwimServlet {
 			}
 		});
 
-		registerPostActionMapping("accept", new ServletAction() {
+		registerPostActionMapping("respond", new ServletAction() {
 			public void runAction(HttpServletRequest req,
-					HttpServletResponse resp) throws IOException {
-				doAcceptAbilityRequest(req, resp);
-			}
-		});
-
-		registerPostActionMapping("decline", new ServletAction() {
-			public void runAction(HttpServletRequest req,
-					HttpServletResponse resp) throws IOException {
-				doDeclineAbilityRequest(req, resp);
+					HttpServletResponse resp) throws IOException,
+					ServletException {
+				doRespondToAbilityRequest(req, resp);
 			}
 		});
 	}
@@ -155,12 +153,51 @@ public class AdministrationServlet extends SwimServlet {
 		return;
 	}
 
-	private void doAcceptAbilityRequest(HttpServletRequest req,
-			HttpServletResponse resp) {
-	}
+	private void doRespondToAbilityRequest(HttpServletRequest req,
+			HttpServletResponse resp) throws IOException, ServletException {
+		HttpSession session = req.getSession();
+		String adminUsr = getUsername(session);
 
-	private void doDeclineAbilityRequest(HttpServletRequest req,
-			HttpServletResponse resp) {
+		if (!isAdministratorLoggedIn(session)) {
+			sendError(req, resp, ErrorType.LOGIN_REQUIRED);
+			return;
+		}
+
+		String review = req.getParameter(ABILITY_REVIEW);
+		Boolean accept = Boolean.valueOf(req.getParameter(REVIEW_ACCEPT));
+		int reqId;
+
+		try {
+			reqId = Integer.parseInt(req.getParameter(REVIEW_REQUEST));
+		} catch (NumberFormatException e) {
+			sendError(req, resp, ErrorType.BAD_REQUEST);
+			return;
+		}
+
+		if (Misc.isStringEmpty(review) || accept == null) {
+			sendError(req, resp, ErrorType.BAD_REQUEST);
+			return;
+		}
+
+		AbilityControllerRemote abilityCtrl = lookupBean(
+				AbilityControllerRemote.class, Misc.BeanNames.ABILITY);
+
+		try {
+			abilityCtrl.reviewAbilityRequest(adminUsr, reqId, accept, review);
+		} catch (BadRequestException e) {
+			sendError(req, resp, ErrorType.BAD_REQUEST);
+			return;
+		} catch (InvalidStateException e) {
+			req.setAttribute(Misc.ERROR_ATTR, ErrorType.ABILITY_NAME_TAKEN);
+			return;
+		}
+
+		NotificationMessages mess = accept ? NotificationMessages.ABILITY_ADDED
+				: NotificationMessages.ABILITY_REQ_REFUSED;
+		
+		req.setAttribute(Misc.NOTIFICATION_ATTR, mess);
+		showSection(AdministrationSection.REQUEST, req, resp);
+
 	}
 
 	private void showSection(AdministrationSection section,
@@ -180,6 +217,7 @@ public class AdministrationServlet extends SwimServlet {
 		req.setAttribute(Misc.ABILITY_LIST, abilityReqList);
 
 		/* Forward */
+		req.setAttribute(Misc.SELECTED_TAB_ATTR, AdminMenu.MANAGEMENT);
 		req.setAttribute(Misc.SELECTED_SECTION_ATTR, section);
 		req.getRequestDispatcher(Misc.ADMIN_JSP).forward(req, resp);
 	}

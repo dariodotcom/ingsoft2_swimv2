@@ -124,7 +124,7 @@ public class AuthenticationServlet extends SwimServlet {
 				retry("login", ErrorType.INVALID_CREDENTIALS, req, resp);
 				return;
 			}
-			
+
 			// Check that customer email is validated
 			if (loggedUserType.equals(UserType.CUSTOMER)) {
 
@@ -136,10 +136,8 @@ public class AuthenticationServlet extends SwimServlet {
 
 				if (!c.isEmailConfirmed()) {
 					// User has to validate its email address
-					req.setAttribute(Misc.ERROR_ATTR,
-							ErrorType.VALIDATION_REQUIRED);
-					req.getRequestDispatcher(Misc.MAILVALIDATION_JSP).forward(
-							req, resp);
+					session.setAttribute(Misc.LOGGED_USERNAME, username);
+					resp.sendRedirect(req.getContextPath() + "/validatemail/");
 					return;
 				}
 			}
@@ -159,6 +157,7 @@ public class AuthenticationServlet extends SwimServlet {
 		/* Check that user is logged in */
 		if (!isUserLoggedIn(session)) {
 			sendError(req, resp, ErrorType.LOGIN_REQUIRED);
+			return;
 		}
 
 		/* Remove parameters from session */
@@ -223,8 +222,8 @@ public class AuthenticationServlet extends SwimServlet {
 
 	private void showPage(HttpServletRequest req, HttpServletResponse resp)
 			throws IOException, ServletException {
-		if (isCustomerLoggedIn(req.getSession())) {
-			resp.sendRedirect(req.getContextPath() + "/home/");
+		if (isUserLoggedIn(req.getSession())) {
+			redirectToRightHome(req, resp);
 			return;
 		}
 

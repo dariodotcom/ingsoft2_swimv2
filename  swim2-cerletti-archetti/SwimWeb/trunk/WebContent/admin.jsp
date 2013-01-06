@@ -56,14 +56,28 @@
 						} else {
 					%>
 					<p class="paragraph">Richieste:</p>
-					<div class="list">
+					<div class="propertyList">
 						<%
 							for (Object o : abilityReqList) {
 										AbilityRequest a = (AbilityRequest) o;
 										Customer requestAuthor = a.getRequestAuthor();
 										String name = a.getAbilityName();
 										String description = a.getAbilityDescription();
-									}
+						%>
+						<div id="abilityRequestList" class="property">
+							<span class="propertyName"> <span class="bold">Nome:&nbsp;</span><%=a.getAbilityName()%>&emsp;
+								<span class="bold">Descrizione:&nbsp;</span><%=a.getAbilityDescription()%>
+							</span>
+							<div class="propertyValue">
+								<a class="button yes" href="javascript:"
+									onclick="javascript:createReviewForm(<%=a.getId()%>, true, this)">Accetta</a>&nbsp;
+								<a class="button no" href="javascript:"
+									onclick="javascript:createReviewForm(<%=a.getId()%>, false, this)">Rifiuta</a>
+							</div>
+						</div>
+
+						<%
+							}
 						%>
 					</div>
 					<%

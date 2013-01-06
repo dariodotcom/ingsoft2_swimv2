@@ -1,5 +1,7 @@
 package it.polimi.swim.web.pagesupport;
 
+import it.polimi.swim.business.entity.Customer;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -54,6 +56,7 @@ public class Misc {
 	public static final String VIEW_WORKREQUEST_JSP = "/view_workrequest.jsp";
 	public static final String MAILVALIDATION_JSP = "/mailvalidation.jsp";
 	public static final String PASSWORD_RESET_JSP = "/passwordreset.jsp";
+	public static final String ABILITY_REQUEST_JSP = "/suggestability.jsp";
 
 	/* Utils */
 
@@ -69,6 +72,9 @@ public class Misc {
 	public static final String FEEDBACK = "feedback";
 	public static final String MAIL_VALIDATION_PENDING = "mailValidationPending";
 	public static final String CUSTOMER_EMAIL = "customerEmail";
+	public static final String SEARCH_RESULTS = "searchResults";
+	private static final String DEFAULT_PHOTO_URL = "resources/user.png";
+	private static final String DEFAULT_THUMBNAIL_URL = "resources/user_th.png";
 
 	/* Helpers */
 
@@ -121,6 +127,16 @@ public class Misc {
 		return (b == null ? false : b);
 	}
 
+	public static String getThumbnailPhotoUrl(Customer c) {
+		String url = c.getThumbnailUrl();
+		return "/" + (url == null ? DEFAULT_THUMBNAIL_URL : url);
+	}
+
+	public static String getPhotoUrl(Customer c) {
+		String url = c.getPhotourl();
+		return "/" + (url == null ? DEFAULT_PHOTO_URL : url);
+	}
+
 	/**
 	 * Class BeanNames contains a set of value that represents the name of all
 	 * the beans.
@@ -132,6 +148,7 @@ public class Misc {
 		public static final String ABILITY = "AbilityController/remote";
 		public static final String WORKREQUEST = "WorkRequestController/remote";
 		public static final String FEEDBACK = "FeedbackController/remote";
+		public static final String SEARCH = "SearchController/remote";
 	}
 
 	/**

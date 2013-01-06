@@ -28,15 +28,14 @@
 				<form action="<%=context%>/resetpassword/start" method="post">
 					<div class="propertyList reducedWidth">
 						<div class="property">
-							<label class="propertyName">Username:</label>
-
+							<label class="propertyName" for="username">Username:</label>
 							<div class="propertyValue">
 								<input type="text" class="inputtext" name="username"
 									id="username" />
 							</div>
 						</div>
 						<div class="submitLine">
-							<input type="submit" class="inputsubmit" value="invia" />
+							<input type="submit" class="inputsubmit" value="Invia" />
 						</div>
 					</div>
 				</form>

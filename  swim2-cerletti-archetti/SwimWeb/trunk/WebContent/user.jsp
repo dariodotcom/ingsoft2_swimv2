@@ -197,13 +197,18 @@
 
 										String friendIdentity = String.format("%s %s",
 												friend.getName(), friend.getSurname());
+										String usrLink = context + "/user/?u="
+												+ friend.getUsername();
+										String thumb = context
+												+ Misc.getThumbnailPhotoUrl(friend);
 						%>
 						<div class="property">
-							<div class="smallImageFrame">
-								<img src="<%=ctx%>/resources/user-img.png" alt="User image" />
+							<div class="propertyName">
+								<div class="smallImageFrame">
+									<img src="<%=thumb%>" alt="User image" />
+								</div>
+								<span class="afterImage"><a href="<%=usrLink%>"><%=friendIdentity%></a></span>
 							</div>
-							<span class="propertyName"><a
-								href="<%=ctx%>/user/?u=<%=friend.getUsername()%>"><%=friendIdentity%></a></span>
 						</div>
 						<%
 							}

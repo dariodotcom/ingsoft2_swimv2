@@ -17,7 +17,6 @@ import it.polimi.swim.web.pagesupport.NotificationMessages;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.ParseException;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -237,43 +236,50 @@ public class PersonalPageServlet extends SwimServlet {
 			return;
 		}
 
-		req.setAttribute(Misc.NOTIFICATION_ATTR,
-				NotificationMessages.EMAIL_CHANGED);
-		showSection(PersonalPageSection.EDIT_ACCOUNT, req, resp);
+		session.removeAttribute(Misc.LOGGED_ATTRIBUTE);
+		resp.sendRedirect(req.getContextPath() + "/validatemail/");
 	}
 
 	private void doChangeUserInformations(HttpServletRequest req,
 			HttpServletResponse resp) throws ServletException, IOException {
-
 		HttpSession session = req.getSession();
-		String username = getUsername(session);
 
-		String[] fields = { "name", "surname", "birthdate", "location" };
-		String[] nonNullableFields = { "name", "surname" };
+		if (!isCustomerLoggedIn(session)) {
+			sendError(req, resp, ErrorType.LOGIN_REQUIRED);
+			return;
+		}
+
+		String username = getUsername(session);
 		Map<String, Object> values = new HashMap<String, Object>();
 
-		for (String field : fields) {
-			String value = req.getParameter(field);
+		for (DetailField field : DetailField.values()) {
+			String name = field.getName();
+			String value = req.getParameter(name);
 
-			if (Misc.isStringEmpty(value)
-					&& Arrays.asList(nonNullableFields).contains(field)) {
-				req.setAttribute(Misc.ERROR_ATTR, ErrorType.EMPTY_FIELDS);
-				showSection(PersonalPageSection.EDIT_PROFILE, req, resp);
-				return;
-			}
-
-			/* For the field birthdate, convert it into a date. */
-			if (field.equals("birthdate")) {
-				try {
-					Date d = Misc.DATE_FORMAT.parse(value);
-					values.put(field, d);
-				} catch (ParseException e) {
-					req.setAttribute(Misc.ERROR_ATTR, ErrorType.BAD_DATE);
+			if (Misc.isStringEmpty(value)) {
+				if (field.isMandatory()) {
+					req.setAttribute(Misc.ERROR_ATTR, ErrorType.EMPTY_FIELDS);
 					showSection(PersonalPageSection.EDIT_PROFILE, req, resp);
 					return;
+				} else {
+					values.put(name, null);
 				}
+				
 			} else {
-				values.put(field, value);
+
+				/* For the field birthdate, convert it into a date. */
+				if (name.equals("birthdate") && !Misc.isStringEmpty(value)) {
+					try {
+						Date date = Misc.DATE_FORMAT.parse(value);
+						values.put(name, date);
+					} catch (ParseException e) {
+						req.setAttribute(Misc.ERROR_ATTR, ErrorType.BAD_DATE);
+						showSection(PersonalPageSection.EDIT_PROFILE, req, resp);
+						return;
+					}
+				} else {
+					values.put(name, value);
+				}
 			}
 		}
 
@@ -420,5 +426,28 @@ public class PersonalPageServlet extends SwimServlet {
 		}
 
 		respWriter.print("]");
+	}
+
+	/* Helpers */
+
+	private enum DetailField {
+		NAME("name", true), SURNAME("surname", true), BIRTHDATE("birthdate",
+				false), LOCATION("location", false);
+
+		private String name;
+		private Boolean mandatory;
+
+		private DetailField(String name, Boolean mandatory) {
+			this.name = name;
+			this.mandatory = mandatory;
+		}
+
+		public String getName() {
+			return name;
+		}
+
+		public Boolean isMandatory() {
+			return mandatory;
+		}
 	}
 }

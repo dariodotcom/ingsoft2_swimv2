@@ -82,13 +82,14 @@ body.swim{
 	margin-right: 5px;
 }
 
+.loginLink,
 #loginForm .label{
     color: white;
     font-size: 12px;
     line-height: 15px;
     vertical-align: text-top;
 	color: white;
-	text-shadow: 0 0 1px rgba(0,0,0,.9);
+	text-shadow: 0 0 2px rgba(0,0,0,.9);
 }
 
 #loginForm .textinput{
@@ -104,11 +105,24 @@ body.swim{
 	background: rgba(255,255,255,1);
 }
 
-#loginForm #submit{
+#loginForm .inputsubmit{
 	border-radius: 1px;
 	border: none;
-	box-shadow: 0 0 1px 0 rgba(0,0,0,.9);
+	box-shadow: 0 0 1px 0 rgba(0,0,0,.9),
+				0 -1px 0 0 white inset;
 	padding: 1px 4px;
+	background: #eeeeee;
+	color: #3c3c3c;
+	font-weight: bold;
+	text-shadow: 0 0 1px white;
+}
+
+#loginForm .inputsubmit:hover{
+	background: #ffffff;
+}
+
+#loginForm .inputsubmit:hover:active{
+	box-shadow: 0 0 3px 0 rgba(0,0,0,.3) inset;
 }
 
 /* Swim menu */
@@ -381,6 +395,11 @@ h2.partTitle{
 	vertical-align: middle;
 }
 
+.propertyList .property .propertyValue a.button{
+	float: right;
+	margin-left: 15px;
+}
+
 span.propertyValue{
     line-height: 36px;
 }
@@ -395,11 +414,23 @@ span.propertyValue{
 
 .propertyList.withImage .propertyName{
 	line-height: 34px;
+}
+
+.propertyList.withImage .propertyName .afterImage{
 	margin-left: 15px;
 }
 
 .propertyList.withImage .smallImageFrame{
 	float: left;
+}
+
+.propertyList.withImage .property a.button,
+.propertyList.withImage .property .inputsubmit{
+	margin: 2px 2px 0 0;
+}
+
+.propertyList.withImage .property{
+	height: 34px;
 }
 
 .propertyList.spaceUnder{
@@ -472,18 +503,18 @@ span.propertyValue{
 
 #swimContent a.button:hover,
 #swimContent .inputsubmit:hover{
-    background-color: #259ce5 !important;
+    background-color: #259ce5 ;
     box-shadow: 0 -1px 0 rgba(255, 255, 255, 0.5) inset;
 }
 
 #swimContent a.button:hover:active,
 #swimContent .inputsubmit:hover:active{
-    background-color: #1a5780 !important;
+    background-color: #1a5780 ;
     box-shadow: 0 -1px 1px 0 rgba(0,0,0,.3) inset;
 }
 
 #swimContent .inputsubmit:hover:active{
-    padding: 6px 5px 4px !important;
+    padding: 6px 5px 4px ;
 }
 
 #swimContent a.button:hover:active{
@@ -666,7 +697,7 @@ body.search .formContainer{
 .smallImageFrame{
     display: inline-block;
     background-color: white;
-    box-shadow: 0 0 2px 0 #000000;
+    box-shadow: 0 0 2px 0 rgba(0,0,0,.5);
     padding: 2px;
 }
 
@@ -681,17 +712,17 @@ form.actionForm{
 }
 
 /*WORKREQUESTS*/
-.messageContainer{
+#swimContent .messageContainer{
 	margin-bottom: 25px;
 }
 
-.messageContainer .message,
-.messageContainer .arrow{
+#swimContent .messageContainer .message,
+#swimContent .messageContainer .arrow{
     display: inline-block;
     position: relative;
 }
 
-.messageContainer .message{
+#swimContent .messageContainer .message{
     width: 250px;
     padding: 15px;
     border: 1px solid #acacac;
@@ -700,12 +731,18 @@ form.actionForm{
     z-index: 20;
 }
 
-.messageContainer .message .messageDate{
+#swimContent .messageContainer .message .messageHeading{
     font-size: 14px;
     margin-bottom: 15px;
+    color: #222222;
 }
 
-.messageContainer .arrow{
+#swimContent .messageContainer .message .inputtext{
+    width: 238px;
+	height: 75px;
+}
+
+#swimContent .messageContainer .arrow{
     width: 22px;
     height: 28px;
     margin-top: 20px;
@@ -713,16 +750,16 @@ form.actionForm{
     z-index: 500000;
 }
 
-.messageContainer.other .arrow{
+#swimContent .messageContainer.other .arrow{
     margin-right: -6px;
     background: url("resources/arrow.png");
 }
 
-.messageContainer.self .message{
+#swimContent .messageContainer.self .message{
     float: right;
 }
 
-.messageContainer.self .arrow{
+#swimContent .messageContainer.self .arrow{
     float: right;
     margin-left: -1px;
     background: url("resources/arrow-left.png");
@@ -732,24 +769,28 @@ form.actionForm{
 	margin-top: 15px;
 }
 
-.messageContainer .message.feedbackMessage{
-    width: 500px ;
+#swimContent .messageContainer .message.feedbackMessage{
+    width: 350px ;
 }
 
-.messageContainer .message.feedbackMessage  .messageinput{
-    width: 494px ;
+#swimContent .messageContainer .message.feedbackMessage .inputtext{
+    width: 344px ;
     height: 150px ;
 }
 
-.messageContainer .message .messageinput{
+#swimContent .messageContainer .message .messageinput{
 	width: 244px;
 }
 
-.marker{
+#swimContent .marker{
     margin-bottom: 15px ;
 }
 
-.markExpression{
+#swimContent .marker.noselect .markExpression{
+    cursor: default;
+}
+
+#swimContent .markExpression{
     display: inline-block ;
     height: 20px ;
     width: 20px ;
@@ -757,11 +798,11 @@ form.actionForm{
     background: url('resources/star_empty.png') center center no-repeat ;
 }
 
-.markExpression.full{
+#swimContent .markExpression.full{
     background-image: url('resources/star_full.png') ;
 }
 
-.feedback a.button{
+#swimContent .feedback a.button{
     float: right;
 }
 
@@ -775,4 +816,57 @@ form.actionForm{
 .feedback .reply{
     padding: 25px 25px 0 ;  
     line-height: 30px ;
+}
+
+#swimContent .messageContainer.reviewMessage{
+    position: relative ;
+    position: relative ;
+    margin-top: 20px;
+}
+
+#swimContent .messageContainer.reviewMessage .message .inputtext{
+    width: 238px ;
+    height: 150px;
+}
+
+#swimContent .messageContainer.reviewMessage .arrow{
+    background: url('resources/arrow-top.png');
+    display: block ;
+    width: 28px ;
+    height: 22px ;
+    margin: 0 0 -1px 225px ;
+}
+
+#swimContent .messageContainer.reviewMessage .message{
+	background: #ffffff ;
+}
+
+.rejected{
+    color: #751616;
+}
+
+.accepted{
+    color: #1a7516;
+}
+
+/*Workrequest messages*/
+.messageContainer.other .smallImageFrame{
+    float: left;
+}
+
+.messageContainer .smallImageFrame,
+.messageContainer .smallImageFrame + .arrow{
+    margin-top: 10px;
+}
+
+.messageContainer.other .smallImageFrame + .arrow{
+    margin-left: -7px;
+}
+
+.messageContainer.self .smallImageFrame{
+    float: right;
+}
+
+.messageContainer.self .smallImageFrame + .arrow{
+    margin-right: -7px;
 }
