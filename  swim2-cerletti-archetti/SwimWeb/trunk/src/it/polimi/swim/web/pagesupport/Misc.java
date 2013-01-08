@@ -1,6 +1,7 @@
 package it.polimi.swim.web.pagesupport;
 
 import it.polimi.swim.business.entity.Customer;
+import it.polimi.swim.web.servlets.CustomerImageServlet;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -73,8 +74,10 @@ public class Misc {
 	public static final String MAIL_VALIDATION_PENDING = "mailValidationPending";
 	public static final String CUSTOMER_EMAIL = "customerEmail";
 	public static final String SEARCH_RESULTS = "searchResults";
-	private static final String DEFAULT_PHOTO_URL = "resources/user.png";
-	private static final String DEFAULT_THUMBNAIL_URL = "resources/user_th.png";
+	public static final String DEFAULT_PHOTO_FULL_URL = "/resources/user.png";
+	public static final String DEFAULT_PHOTO_THUMB_URL = "/resources/user_th.png";
+	public static final String CUSTOMER_PHOTO_FULL_URL = "/userphoto/full.png";
+	public static final String CUSTOMER_PHOTO_THUMB_URL = "/userphoto/thumb.png";
 
 	/* Helpers */
 
@@ -127,14 +130,14 @@ public class Misc {
 		return (b == null ? false : b);
 	}
 
-	public static String getThumbnailPhotoUrl(Customer c) {
-		String url = c.getThumbnailUrl();
-		return "/" + (url == null ? DEFAULT_THUMBNAIL_URL : url);
+	public static String getPhotoUrl(Customer c) {
+		return String.format("%s?%s=%s", CUSTOMER_PHOTO_FULL_URL,
+				CustomerImageServlet.USER_PARAM, c.getUsername());
 	}
 
-	public static String getPhotoUrl(Customer c) {
-		String url = c.getPhotourl();
-		return "/" + (url == null ? DEFAULT_PHOTO_URL : url);
+	public static String getThumbnailPhotoUrl(Customer c) {
+		return String.format("%s?%s=%s", CUSTOMER_PHOTO_THUMB_URL,
+				CustomerImageServlet.USER_PARAM, c.getUsername());
 	}
 
 	/**
