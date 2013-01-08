@@ -9,6 +9,15 @@ body.swim{
 	margin-right: auto;
 }
 
+#swimContent a,
+#swimContent a:visited{
+    color: #555555 !important;    
+}
+
+#swimContent a:hover{
+    color: rgb(28,120,179) !important;    
+}
+
 /*Header*/
 #swimHeaderContainer{
 	height: 100px;
