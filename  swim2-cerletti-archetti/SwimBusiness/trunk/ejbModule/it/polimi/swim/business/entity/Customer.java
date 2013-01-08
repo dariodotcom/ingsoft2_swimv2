@@ -1,11 +1,13 @@
 package it.polimi.swim.business.entity;
 
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -65,11 +67,13 @@ public class Customer extends User {
 	@Column(name = "location")
 	private String location;
 
+	@Lob
 	@Column(name = "photourl", nullable = true)
-	private String photourl;
+	private BufferedImage customerPhoto;
 
+	@Lob
 	@Column(name = "thumbnail", nullable = true)
-	private String thumbnail;
+	private BufferedImage customerThumbnail;
 
 	@Column(name = "emailactive", nullable = false)
 	private Boolean emailConfirmed;
@@ -181,31 +185,20 @@ public class Customer extends User {
 		this.location = location;
 	}
 
-	/**
-	 * Getter method.
-	 * 
-	 * @return a String which contains the url of the customer photo-profile.
-	 */
-	public String getPhotourl() {
-		return photourl;
+	public BufferedImage getCustomerPhoto() {
+		return customerPhoto;
 	}
 
-	/**
-	 * Setter method.
-	 * 
-	 * @param photourl
-	 *            a String which contains the url of the customer photo-profile.
-	 */
-	public void setPhotourl(String photourl) {
-		this.photourl = photourl;
+	public void setCustomerPhoto(BufferedImage customerPhoto) {
+		this.customerPhoto = customerPhoto;
 	}
 
-	public String getThumbnailUrl() {
-		return thumbnail;
+	public BufferedImage getCustomerThumbnail() {
+		return customerThumbnail;
 	}
 
-	public void setThumbnailUrl(String thumbnail) {
-		this.thumbnail = thumbnail;
+	public void setCustomerThumbnail(BufferedImage customerThumbnail) {
+		this.customerThumbnail = customerThumbnail;
 	}
 
 	/**
