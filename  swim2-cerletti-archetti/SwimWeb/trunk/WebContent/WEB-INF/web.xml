@@ -55,6 +55,11 @@
   <servlet-name>AbilityRequest</servlet-name>
   <servlet-class>it.polimi.swim.web.servlets.AbilityRequestServlet</servlet-class>
  </servlet>
+ <servlet>
+  <display-name>CustomerImageServlet</display-name>
+  <servlet-name>CustomerImageServlet</servlet-name>
+  <servlet-class>it.polimi.swim.web.servlets.CustomerImageServlet</servlet-class>
+ </servlet>
  <servlet-mapping>
   <servlet-name>PersonalPage</servlet-name>
   <url-pattern>/home/*</url-pattern>
@@ -86,6 +91,14 @@
  <servlet-mapping>
   <servlet-name>MailValidation</servlet-name>
   <url-pattern>/validatemail/*</url-pattern>
+ </servlet-mapping>
+ <servlet-mapping>
+  <servlet-name>CustomerImageServlet</servlet-name>
+  <url-pattern>/userphoto/full.png</url-pattern>
+ </servlet-mapping>
+ <servlet-mapping>
+  <servlet-name>CustomerImageServlet</servlet-name>
+  <url-pattern>/userphoto/thumb.png</url-pattern>
  </servlet-mapping>
  <servlet-mapping>
   <servlet-name>Authentication</servlet-name>
