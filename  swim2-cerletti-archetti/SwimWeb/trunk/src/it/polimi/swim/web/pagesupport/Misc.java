@@ -5,6 +5,7 @@ import it.polimi.swim.web.servlets.CustomerImageServlet;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.regex.Pattern;
 
 public class Misc {
 
@@ -79,6 +80,9 @@ public class Misc {
 	public static final String CUSTOMER_PHOTO_FULL_URL = "/userphoto/full.png";
 	public static final String CUSTOMER_PHOTO_THUMB_URL = "/userphoto/thumb.png";
 
+	private static final String emailPattern = "^[_A-Za-z0-9-\\+]+(\\."
+			+ "[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$;";
+
 	/* Helpers */
 
 	/**
@@ -115,6 +119,10 @@ public class Misc {
 	 */
 	public static boolean isStringEmpty(String input) {
 		return input == null || input.length() == 0;
+	}
+
+	public static boolean isEmailValid(String email){
+		return Pattern.matches(emailPattern, email);
 	}
 
 	/**
