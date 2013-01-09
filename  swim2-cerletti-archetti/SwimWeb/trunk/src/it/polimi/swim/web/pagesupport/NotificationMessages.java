@@ -13,7 +13,8 @@ public enum NotificationMessages {
 	REQUEST_SENT("La richiesta è stata inviata."),
 	ABILITY_REMOVED("L'abilit&agrave; &egrave; stata rimossa."),
 	EMAIL_VALIDATED("L'indirizzo email è stato convalidato."),
-	ABILITY_REQ_REFUSED("La richiesta è stata rifiutata.");
+	ABILITY_REQ_REFUSED("La richiesta è stata rifiutata."),
+	PHOTO_CHANGED("La tua foto del profilo è stata modificata.");
 
 	private String description;
 

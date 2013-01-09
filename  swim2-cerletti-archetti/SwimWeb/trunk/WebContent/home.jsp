@@ -109,6 +109,18 @@
 							</form>
 						</div>
 
+						<h2 class="partTitle">Modifica la foto del profilo</h2>
+						<div class="part">
+							<form method="post" enctype="multipart/form-data"
+								action="<%=context%>/home/changePhoto">
+								<input type="file" name="customerphoto" value="Select a File..." /><br />
+								<div class="submitLine">
+									<input type="submit" class="inputsubmit" value="Salva" />
+								</div>
+							</form>
+
+						</div>
+
 						<h2 class="partTitle">Aggiungi professionalit&agrave;</h2>
 						<div class="part">
 							<form action="<%=ctx%>/home/addAbility" method="post">

@@ -9,11 +9,13 @@ import it.polimi.swim.business.exceptions.AuthenticationFailedException;
 import it.polimi.swim.business.exceptions.BadRequestException;
 import it.polimi.swim.business.exceptions.EmailAlreadyTakenException;
 import it.polimi.swim.business.exceptions.InvalidStateException;
+import it.polimi.swim.business.helpers.SerializableImage;
 import it.polimi.swim.web.pagesupport.CustomerMenu;
 import it.polimi.swim.web.pagesupport.ErrorType;
 import it.polimi.swim.web.pagesupport.Misc;
 import it.polimi.swim.web.pagesupport.NotificationMessages;
 
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.ParseException;
@@ -22,11 +24,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.imageio.ImageIO;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
+import org.apache.commons.fileupload.FileItemIterator;
+import org.apache.commons.fileupload.FileItemStream;
+import org.apache.commons.fileupload.FileUploadException;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
 
 /**
  * Servlet implementation class PersonalPageServlet.
@@ -130,6 +138,14 @@ public class PersonalPageServlet extends SwimServlet {
 			}
 		});
 
+		registerPostActionMapping("changePhoto", new ServletAction() {
+			public void runAction(HttpServletRequest req,
+					HttpServletResponse resp) throws IOException,
+					ServletException {
+				doChangePhoto(req, resp);
+			}
+		});
+
 		registerPostActionMapping("changePassword", new ServletAction() {
 			public void runAction(HttpServletRequest req,
 					HttpServletResponse resp) throws IOException,
@@ -161,6 +177,62 @@ public class PersonalPageServlet extends SwimServlet {
 				manageCustomerAbility(req, resp, false);
 			}
 		});
+	}
+
+	protected void doChangePhoto(HttpServletRequest req,
+			HttpServletResponse resp) throws IOException, ServletException {
+		HttpSession session = req.getSession();
+
+		if (!isCustomerLoggedIn(session)) {
+			sendError(req, resp, ErrorType.LOGIN_REQUIRED);
+			return;
+		}
+
+		if (!ServletFileUpload.isMultipartContent(req)) {
+			sendError(req, resp, ErrorType.BAD_REQUEST);
+			return;
+		}
+
+		BufferedImage customerPhoto = null;
+		ServletFileUpload upload = new ServletFileUpload();
+
+		try {
+			FileItemIterator iterator = upload.getItemIterator(req);
+			while (iterator.hasNext()) {
+				FileItemStream item = iterator.next();
+				String fieldName = item.getFieldName();
+
+				if (fieldName.equals("customerphoto")) {
+					customerPhoto = ImageIO.read(item.openStream());
+				}
+			}
+		} catch (FileUploadException e) {
+			sendError(req, resp, ErrorType.BAD_REQUEST);
+			return;
+		}
+
+		if (customerPhoto == null) {
+			sendError(req, resp, ErrorType.BAD_REQUEST);
+			return;
+		}
+
+		System.out.println("customerPhoto: " + customerPhoto);
+
+		UserProfileControllerRemote profileCtrl = lookupBean(
+				UserProfileControllerRemote.class, Misc.BeanNames.PROFILE);
+		String username = getUsername(session);
+
+		try {
+			SerializableImage img = new SerializableImage(customerPhoto);
+			profileCtrl.changeCustomerPhoto(username, img);
+		} catch (BadRequestException e) {
+			sendError(req, resp, ErrorType.BAD_REQUEST);
+			return;
+		}
+
+		req.setAttribute(Misc.NOTIFICATION_ATTR,
+				NotificationMessages.PHOTO_CHANGED);
+		showSection(PersonalPageSection.EDIT_ACCOUNT, req, resp);
 	}
 
 	/* Methods to respond to different requests */
@@ -264,7 +336,7 @@ public class PersonalPageServlet extends SwimServlet {
 				} else {
 					values.put(name, null);
 				}
-				
+
 			} else {
 
 				/* For the field birthdate, convert it into a date. */
