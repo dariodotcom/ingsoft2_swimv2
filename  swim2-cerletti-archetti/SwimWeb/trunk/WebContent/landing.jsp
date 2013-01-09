@@ -1,3 +1,5 @@
+<%@page
+	import="it.polimi.swim.web.servlets.AuthenticationServlet.RegistrationFields"%>
 <%@page import="it.polimi.swim.web.pagesupport.ErrorType"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
@@ -47,36 +49,29 @@
 						}
 
 						if (showLanding || retryRegistration) {
+							String propertyClass = retryRegistration ? " reducedWidth" : "";
 					%>
 					<form id="regForm" action="<%=request.getContextPath()%>/register"
 						method="post" class="welcomeForm">
-						<div class="inputLine">
-							<label class="inputLabel" for="username">Username</label> <input
-								type="text" id="username" name="username" class="inputtext" />
-						</div>
-						<div class="inputLine">
-							<label class="inputLabel" for="email">Email</label> <input
-								type="text" id="email" name="email" class="inputtext" />
-						</div>
-						<div class="inputLine">
-							<label class="inputLabel" for="name">Nome</label> <input
-								type="text" id="name" name="name" class="inputtext" />
-						</div>
-						<div class="inputLine">
-							<label class="inputLabel" for="surname">Cognome</label> <input
-								type="text" id="surname" name="surname" class="inputtext" />
-						</div>
-						<div class="inputLine">
-							<label class="inputLabel" for="password">Password</label> <input
-								type="password" id="password" name="password" class="inputtext" />
-						</div>
-						<div class="inputLine">
-							<label class="inputLabel" for="passwordrepeat">Ripeti
-								password</label> <input type="password" id="passwordrepeat"
-								name="passwordrepeat" class="inputtext" />
-						</div>
-						<div class="submitLine">
-							<input type="submit" value="Registrati" class="inputsubmit" />
+						<div class="propertyList<%=propertyClass%>">
+							<%
+								for (RegistrationFields field : RegistrationFields.values()) {
+										String name = field.getName(), label = field.getLabel(), type = field
+												.getType();
+							%>
+							<div class="property">
+								<label class="propertyName" for="<%=name%>"><%=label%></label>
+								<div class="propertyValue">
+									<input type="<%=type%>" id="<%=name%>" name="<%=name%>"
+										class="inputtext" />
+								</div>
+							</div>
+							<%
+								}
+							%>
+							<div class="submitLine">
+								<input type="submit" value="Registrati" class="inputsubmit"/>
+							</div>
 						</div>
 					</form>
 					<%

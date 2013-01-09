@@ -242,9 +242,22 @@ public class PersonalPageServlet extends SwimServlet {
 
 		String currentPassword = req.getParameter("currentpassword");
 		String newPassword = req.getParameter("password");
+		String repNewPassword = req.getParameter("passwordrepeat");
 
 		if (currentPassword == null || newPassword == null) {
 			req.setAttribute(Misc.ERROR_ATTR, ErrorType.EMPTY_FIELDS);
+			showSection(PersonalPageSection.EDIT_ACCOUNT, req, resp);
+			return;
+		}
+
+		if (!repNewPassword.equals(newPassword)) {
+			req.setAttribute(Misc.ERROR_ATTR, ErrorType.UNMATCHING_PASSWORDS);
+			showSection(PersonalPageSection.EDIT_ACCOUNT, req, resp);
+			return;
+		}
+
+		if (newPassword.length() < Misc.MIN_PASSWORD_LENGTH) {
+			req.setAttribute(Misc.ERROR_ATTR, ErrorType.INVALID_PASSWORD);
 			showSection(PersonalPageSection.EDIT_ACCOUNT, req, resp);
 			return;
 		}
@@ -285,7 +298,12 @@ public class PersonalPageServlet extends SwimServlet {
 		String newEmail = req.getParameter("newemail");
 
 		/* Check email */
-
+		if(!Misc.isEmailValid(newEmail)){
+			req.setAttribute(Misc.ERROR_ATTR, ErrorType.BAD_EMAIL);
+			showSection(PersonalPageSection.EDIT_ACCOUNT, req, resp);
+			return;
+		}
+		
 		/* Authenticate request */
 		if (!authenticateRequest(currentPassword, req)) {
 			/* Send error */

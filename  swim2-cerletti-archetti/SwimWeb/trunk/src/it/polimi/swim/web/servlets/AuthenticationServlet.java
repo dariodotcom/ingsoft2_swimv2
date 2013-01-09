@@ -32,6 +32,35 @@ public class AuthenticationServlet extends SwimServlet {
 
 	private static final long serialVersionUID = 2253528507384097557L;
 
+	public static enum RegistrationFields {
+		USERNAME("username", "Username", "text"), PASSWORD("password",
+				"Password", "password"), REPEATPASSWORD("repeatpassword",
+				"Ripeti password", "password"), EMAIL("email", "Email", "text"), NAME(
+				"name", "Nome", "text"), SURNAME("surname", "Cognome", "text");
+
+		private String type;
+		private String name;
+		private String label;
+
+		private RegistrationFields(String name, String label, String type) {
+			this.name = name;
+			this.label = label;
+			this.type = type;
+		}
+
+		public String getName() {
+			return name;
+		}
+
+		public String getLabel() {
+			return label;
+		}
+
+		public String getType() {
+			return type;
+		}
+	}
+
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
@@ -84,7 +113,8 @@ public class AuthenticationServlet extends SwimServlet {
 
 		registerPostActionMapping("register", new ServletAction() {
 			public void runAction(HttpServletRequest req,
-					HttpServletResponse resp) throws IOException {
+					HttpServletResponse resp) throws IOException,
+					ServletException {
 				doCreateUser(req, resp);
 			}
 		});
@@ -170,18 +200,16 @@ public class AuthenticationServlet extends SwimServlet {
 	}
 
 	private void doCreateUser(HttpServletRequest req, HttpServletResponse resp)
-			throws IOException {
-		String[] fields = { "username", "password", "email", "name", "surname" };
-		Map<String, String> values = new HashMap<String, String>();
+			throws IOException, ServletException {
 		HttpSession session = req.getSession();
+		Map<String, String> values = new HashMap<String, String>();
 
-		for (String fieldName : fields) {
+		for (RegistrationFields field : RegistrationFields.values()) {
+			String fieldName = field.getName();
 			String value = req.getParameter(fieldName);
 
 			if (Misc.isStringEmpty(value)) {
-				session.setAttribute("retry", "registration");
-				session.setAttribute(Misc.ERROR_ATTR, ErrorType.EMPTY_FIELDS);
-				resp.sendRedirect(req.getContextPath() + "/retry");
+				retry("registration", ErrorType.EMPTY_FIELDS, req, resp);
 				return;
 			}
 
@@ -190,6 +218,27 @@ public class AuthenticationServlet extends SwimServlet {
 			}
 
 			values.put(fieldName, value);
+		}
+
+		/* Check repeated password */
+		String pwd = values.get(RegistrationFields.PASSWORD.getName());
+		String rePwd = values.get(RegistrationFields.REPEATPASSWORD.getName());
+
+		if (pwd.length() < Misc.MIN_PASSWORD_LENGTH) {
+			retry("registration", ErrorType.INVALID_PASSWORD, req, resp);
+			return;
+		}
+
+		if (!pwd.equals(rePwd)) {
+			retry("registration", ErrorType.UNMATCHING_PASSWORDS, req, resp);
+			return;
+		}
+
+		/* Check email */
+		String email = values.get(RegistrationFields.EMAIL.getName());
+		if (!Misc.isEmailValid(email)) {
+			retry("registration", ErrorType.BAD_EMAIL, req, resp);
+			return;
 		}
 
 		/* Retrieve bean used for registration */
@@ -202,15 +251,10 @@ public class AuthenticationServlet extends SwimServlet {
 					values.get("email"), values.get("name"),
 					values.get("surname"));
 		} catch (UsernameAlreadyTakenException e) {
-			session.setAttribute("retry", "registration");
-			session.setAttribute(Misc.ERROR_ATTR,
-					ErrorType.USERNAME_NOT_AVAILABLE);
-			resp.sendRedirect(req.getContextPath() + "/retry");
+			retry("registration", ErrorType.USERNAME_NOT_AVAILABLE, req, resp);
 			return;
 		} catch (EmailAlreadyTakenException e) {
-			session.setAttribute("retry", "registration");
-			session.setAttribute(Misc.ERROR_ATTR, ErrorType.EMAIL_NOT_AVAILABLE);
-			resp.sendRedirect(req.getContextPath() + "/retry");
+			retry("registration", ErrorType.EMAIL_NOT_AVAILABLE, req, resp);
 			return;
 		}
 
@@ -239,8 +283,8 @@ public class AuthenticationServlet extends SwimServlet {
 	private void retry(String identifier, ErrorType err,
 			HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
-		req.setAttribute("retry", "login");
-		req.setAttribute(Misc.ERROR_ATTR, ErrorType.INVALID_CREDENTIALS);
+		req.setAttribute("retry", identifier);
+		req.setAttribute(Misc.ERROR_ATTR, err);
 		req.getRequestDispatcher(Misc.LANDING_JSP).forward(req, resp);
 	}
 }

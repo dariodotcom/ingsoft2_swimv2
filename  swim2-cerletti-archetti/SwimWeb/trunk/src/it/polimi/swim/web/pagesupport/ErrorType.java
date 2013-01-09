@@ -84,7 +84,10 @@ public enum ErrorType {
 			),
 	VALIDATION_REQUIRED(
 			"Convalida email richiesta",
-			"Per proseguire &egrave; necessario convalidare la propria email");
+			"Per proseguire &egrave; necessario convalidare la propria email"),
+	UNMATCHING_PASSWORDS(
+			"Password non corrispondenti",
+			"Le password inserite non corrispondono.");
 	
 	private String errorName, errorDescription;
 
