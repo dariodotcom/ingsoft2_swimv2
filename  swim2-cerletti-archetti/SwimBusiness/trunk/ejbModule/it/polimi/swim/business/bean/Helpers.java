@@ -1,5 +1,8 @@
 package it.polimi.swim.business.bean;
 
+import java.awt.Graphics2D;
+import java.awt.Image;
+import java.awt.image.BufferedImage;
 import java.math.BigInteger;
 import java.security.SecureRandom;
 
@@ -60,5 +63,17 @@ public class Helpers {
 	 */
 	public static String generateRandomString(int length) {
 		return new BigInteger(length * 5, random).toString(32);
+	}
+
+	public static BufferedImage toBufferedImage(Image in) {
+		if (in instanceof BufferedImage) {
+			return (BufferedImage) in;
+		} else {
+			BufferedImage bi = new BufferedImage(in.getWidth(null),
+					in.getHeight(null), BufferedImage.TYPE_INT_RGB);
+			final Graphics2D g2 = bi.createGraphics();
+			g2.drawImage(in, 0, 0, null);
+			return bi;
+		}
 	}
 }

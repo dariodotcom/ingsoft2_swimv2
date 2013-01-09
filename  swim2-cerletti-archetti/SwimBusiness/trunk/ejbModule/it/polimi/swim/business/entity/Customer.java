@@ -1,6 +1,5 @@
 package it.polimi.swim.business.entity;
 
-import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -69,11 +68,11 @@ public class Customer extends User {
 
 	@Lob
 	@Column(name = "photourl", nullable = true)
-	private BufferedImage customerPhoto;
+	private byte[] customerPhoto;
 
 	@Lob
 	@Column(name = "thumbnail", nullable = true)
-	private BufferedImage customerThumbnail;
+	private byte[] customerThumbnail;
 
 	@Column(name = "emailactive", nullable = false)
 	private Boolean emailConfirmed;
@@ -185,19 +184,19 @@ public class Customer extends User {
 		this.location = location;
 	}
 
-	public BufferedImage getCustomerPhoto() {
+	public byte[] getCustomerPhoto() {
 		return customerPhoto;
 	}
 
-	public void setCustomerPhoto(BufferedImage customerPhoto) {
+	public void setCustomerPhoto(byte[] customerPhoto) {
 		this.customerPhoto = customerPhoto;
 	}
 
-	public BufferedImage getCustomerThumbnail() {
+	public byte[] getCustomerThumbnail() {
 		return customerThumbnail;
 	}
 
-	public void setCustomerThumbnail(BufferedImage customerThumbnail) {
+	public void setCustomerThumbnail(byte[] customerThumbnail) {
 		this.customerThumbnail = customerThumbnail;
 	}
 

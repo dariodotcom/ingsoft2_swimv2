@@ -1,19 +1,25 @@
 package it.polimi.swim.business.bean;
 
-import java.lang.reflect.Method;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import it.polimi.swim.business.bean.remote.UserProfileControllerRemote;
 import it.polimi.swim.business.entity.Ability;
 import it.polimi.swim.business.entity.Customer;
 import it.polimi.swim.business.exceptions.BadRequestException;
 import it.polimi.swim.business.exceptions.EmailAlreadyTakenException;
 import it.polimi.swim.business.exceptions.InvalidStateException;
+import it.polimi.swim.business.helpers.SerializableImage;
+
+import java.awt.Image;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.lang.reflect.Method;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import javax.ejb.Stateless;
+import javax.imageio.ImageIO;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
@@ -24,6 +30,9 @@ import javax.persistence.Query;
  */
 @Stateless
 public class UserProfileController implements UserProfileControllerRemote {
+
+	private final int IMAGE_SIZE = 100;
+	private final int THUMB_SIZE = 30;
 
 	@PersistenceContext(unitName = "swim")
 	EntityManager manager;
@@ -294,7 +303,7 @@ public class UserProfileController implements UserProfileControllerRemote {
 	}
 
 	/* Helpers */
-	
+
 	private boolean isEmailAvailable(String email) {
 		Query q = manager.createQuery("FROM Customer c WHERE c.email=:email");
 		q.setParameter("email", email);
@@ -302,4 +311,34 @@ public class UserProfileController implements UserProfileControllerRemote {
 		return q.getResultList().size() == 0;
 	}
 
+	public void changeCustomerPhoto(String username, SerializableImage img)
+			throws BadRequestException {
+
+		Image fullPhoto = img.getImage();
+
+		// Check image size
+		if (fullPhoto.getWidth(null) != IMAGE_SIZE
+				|| fullPhoto.getHeight(null) != IMAGE_SIZE) {
+			throw new BadRequestException();
+		}
+
+		Image thumbPhoto = fullPhoto.getScaledInstance(THUMB_SIZE, THUMB_SIZE,
+				BufferedImage.SCALE_DEFAULT);
+
+		Customer target = Helpers.getEntityChecked(manager, Customer.class,
+				username);
+
+		ByteArrayOutputStream full = new ByteArrayOutputStream();
+		ByteArrayOutputStream thumb = new ByteArrayOutputStream();
+
+		try {
+			ImageIO.write(Helpers.toBufferedImage(fullPhoto), "png", full);
+			ImageIO.write(Helpers.toBufferedImage(thumbPhoto), "png", thumb);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		target.setCustomerPhoto(full.toByteArray());
+		target.setCustomerThumbnail(thumb.toByteArray());
+	}
 }
