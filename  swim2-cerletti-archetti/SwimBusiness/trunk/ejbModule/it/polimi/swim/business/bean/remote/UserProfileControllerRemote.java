@@ -4,6 +4,7 @@ import it.polimi.swim.business.entity.Customer;
 import it.polimi.swim.business.exceptions.BadRequestException;
 import it.polimi.swim.business.exceptions.EmailAlreadyTakenException;
 import it.polimi.swim.business.exceptions.InvalidStateException;
+import it.polimi.swim.business.helpers.SerializableImage;
 
 import java.util.List;
 import java.util.Map;
@@ -230,4 +231,6 @@ public interface UserProfileControllerRemote {
 	 */
 	public Boolean areFriends(String username1, String username2);
 
+	public void changeCustomerPhoto(String username, SerializableImage photo)
+			throws BadRequestException;
 }
