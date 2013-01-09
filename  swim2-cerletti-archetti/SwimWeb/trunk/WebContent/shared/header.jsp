@@ -25,15 +25,17 @@
 	String hUserIdentity = null, hUsername, hThumb = null;
 
 	if (userLoggedIn) {
-		hUserType = (UserType) session.getAttribute(Misc.LOGGED_USERTYPE);
+		hUserType = (UserType) session
+				.getAttribute(Misc.LOGGED_USERTYPE);
 		hUsername = (String) session.getAttribute(Misc.LOGGED_USERNAME);
-		
+
 		switch (hUserType) {
 		case ADMINISTRATOR:
 			menuElements = AdminMenu.values();
 			hUserIdentity = "Administrator (" + hUsername + ")";
-			hThumb = Misc.DEFAULT_PHOTO_THUMB_URL;
-			
+			hThumb = request.getContextPath()
+					+ Misc.DEFAULT_PHOTO_THUMB_URL;
+
 			break;
 		case CUSTOMER:
 			menuElements = CustomerMenu.values();
@@ -49,13 +51,13 @@
 
 			Customer c = profileCtrl.getByUsername(hUsername);
 			hUserIdentity = c.getName() + " " + c.getSurname();
-			hThumb = Misc.getThumbnailPhotoUrl(c);
+			hThumb = request.getContextPath()
+					+ Misc.getThumbnailPhotoUrl(c);
 			break;
 		}
 	} else {
 		menuElements = UnloggedMenu.values();
 	}
-
 
 	MenuDescriptor selectedTab = (MenuDescriptor) request
 			.getAttribute("selectedTab");
@@ -73,8 +75,7 @@
 		%>
 		<div id="swimUserAwareness">
 			<div id="userImageFrame">
-				<img src="<%=hThumb%>"
-					alt="user image" />
+				<img src="<%=hThumb%>" alt="user image" />
 			</div>
 			<span id="userControl"> <span id="userName"><%=hUserIdentity%></span><br />
 				<a id="userLogout" href="<%=request.getContextPath()%>/logout">Esci</a>
