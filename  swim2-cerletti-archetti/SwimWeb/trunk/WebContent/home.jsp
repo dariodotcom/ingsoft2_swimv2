@@ -97,7 +97,7 @@
 											di residenza</label>
 										<div class="propertyValue">
 											<input type="text" name="location"
-												value="<%=Misc.nullfix(customer.getLocation())%>"
+												value="<%=Misc.replaceEmpty(customer.getLocation(), "")%>"
 												id="editName" class="inputtext" />
 										</div>
 									</div>
