@@ -11,7 +11,7 @@ body.swim{
 
 #swimContent a,
 #swimContent a:visited{
-    color: #555555 !important;    
+    color: #555555;    
 }
 
 #swimContent a:hover{

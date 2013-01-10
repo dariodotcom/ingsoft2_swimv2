@@ -1,3 +1,4 @@
+<%@page import="it.polimi.swim.business.entity.Ability"%>
 <%@page import="java.util.Iterator"%>
 <%@page import="java.util.Date"%>
 <%@page import="it.polimi.swim.web.servlets.AuthenticationServlet"%>
@@ -21,7 +22,8 @@
 	Iterator<?> abIterator = usrAbilityList.iterator();
 
 	while (abIterator.hasNext()) {
-		usrAbilities.append((String) abIterator.next());
+		Ability a = (Ability) abIterator.next();
+		usrAbilities.append(a.getName());
 		if (abIterator.hasNext()) {
 			usrAbilities.append(", ");
 		}
@@ -48,6 +50,8 @@
 	} else {
 		showOwnProfile = false;
 	}
+
+	Integer feedbackAvg = (Integer) request.getAttribute(Misc.MARK_VALUE);
 %>
 
 <div id="userProfileDetails" class="profilePage">
@@ -60,17 +64,33 @@
 		<%
 			for (UserDetail d : details) {
 				String value = d.getValue();
-				String additionalClass = (value == null ? " unset" : "");
+				String additionalClass = (Misc.isStringEmpty(value) ? " unset"
+						: "");
 
 				if (showOwnProfile || !d.isDetailPrivate()) {
 		%>
 		<div class="property">
 			<div class="propertyName"><%=d.getDetailName()%></div>
-			<div class="propertyValue<%=additionalClass%>"><%=value%></div>
+			<div class="propertyValue<%=additionalClass%>"><%=Misc.replaceEmpty(value, "-")%></div>
 		</div>
 		<%
 			}
 			}
 		%>
+		<div class="property">
+			<div class="propertyName">Media feedback</div>
+			<%
+				if (feedbackAvg == null) {
+			%>
+			<div class="propertyValue unset">L'utente non ha feedback.</div>
+			<%
+				} else {
+			%>
+			<%@include file="feedbackMarker.jsp"%>
+			<%
+				}
+			%>
+
+		</div>
 	</div>
 </div>

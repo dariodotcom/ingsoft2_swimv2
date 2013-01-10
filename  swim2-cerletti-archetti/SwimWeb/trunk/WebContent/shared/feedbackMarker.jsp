@@ -2,15 +2,17 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <%
-	int mark = (Integer) request.getAttribute(Misc.MARK_VALUE);
+	Integer mark = (Integer) request.getAttribute(Misc.MARK_VALUE);
 %>
-<span class="marker noselect">
+<span class="marker noselect"> <%
+ 	if (mark != null) {
+ 		for (int i = 0; i < Misc.MAX_MARK; i++) {
+ 			String className = (i < mark ? " full" : "");
+ %> <a href="javascript:" class="markExpression<%=className%>">&nbsp;</a>
 	<%
-		for (int i = 0; i < Misc.MAX_MARK; i++) {
-			String className = (i < mark ? " full" : "");
-	%>
-	<a href="javascript:" class="markExpression<%=className%>">&nbsp;</a>
-	<%
+		}
+		} else {
+	%> - <%
 		}
 	%>
 </span>

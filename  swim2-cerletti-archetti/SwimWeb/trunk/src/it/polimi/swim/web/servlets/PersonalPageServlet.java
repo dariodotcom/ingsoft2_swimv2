@@ -5,6 +5,7 @@ import it.polimi.swim.business.bean.remote.AuthenticationControllerRemote;
 import it.polimi.swim.business.bean.remote.UserProfileControllerRemote;
 import it.polimi.swim.business.entity.Ability;
 import it.polimi.swim.business.entity.Customer;
+import it.polimi.swim.business.entity.Feedback;
 import it.polimi.swim.business.exceptions.AuthenticationFailedException;
 import it.polimi.swim.business.exceptions.BadRequestException;
 import it.polimi.swim.business.exceptions.EmailAlreadyTakenException;
@@ -456,6 +457,23 @@ public class PersonalPageServlet extends SwimServlet {
 
 		Customer c = profile.getByUsername(selfUsername);
 
+		/* Compute feedback average */
+		List<?> feedbackList = profile.getReceivedFeedbacks(selfUsername);
+		Integer mean = null;
+		
+		if(feedbackList.size() > 0){
+			int sum = 0;
+			for(Object o : feedbackList){
+				Feedback feedback = (Feedback) o;
+				sum += feedback.getMark();				
+			}
+			
+			// we want an integer mean
+			mean = sum / feedbackList.size();
+		}
+
+		req.setAttribute(Misc.MARK_VALUE, mean);
+		
 		/* Put user informations in request */
 		req.setAttribute(Misc.USER_TO_SHOW, c);
 

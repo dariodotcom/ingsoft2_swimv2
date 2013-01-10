@@ -97,16 +97,17 @@ public class Misc {
 	}
 
 	/**
-	 * This method analyzes a given input: if the input is empty retrieves an
-	 * empty string, if the input is not empty retrieves the corresponding
-	 * string.
+	 * This method replaces the given String input with given replacement if
+	 * input is null or empty.
 	 * 
 	 * @param input
 	 *            a String that contains the input value.
+	 * @param replacement a
+	 *            String that contains the replacement
 	 * @return the String corresponding to the given input.
 	 */
-	public static String nullfix(String input) {
-		return input == null ? "" : input;
+	public static String replaceEmpty(String input, String replacement) {
+		return isStringEmpty(input) ? replacement : input;
 	}
 
 	/**
@@ -121,7 +122,7 @@ public class Misc {
 		return input == null || input.length() == 0;
 	}
 
-	public static boolean isEmailValid(String email){
+	public static boolean isEmailValid(String email) {
 		return Pattern.matches(emailPattern, email);
 	}
 
