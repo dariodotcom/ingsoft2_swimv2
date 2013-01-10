@@ -4,6 +4,7 @@ import it.polimi.swim.business.bean.remote.FriendshipControllerRemote;
 import it.polimi.swim.business.bean.remote.UserProfileControllerRemote;
 import it.polimi.swim.business.bean.remote.WorkRequestControllerRemote;
 import it.polimi.swim.business.entity.Customer;
+import it.polimi.swim.business.entity.Feedback;
 import it.polimi.swim.business.exceptions.BadRequestException;
 import it.polimi.swim.business.exceptions.InvalidStateException;
 import it.polimi.swim.web.pagesupport.CustomerMenu;
@@ -174,7 +175,7 @@ public class GenericProfileServlet extends SwimServlet {
 				showCreateWorkRequest(req, resp);
 			}
 		});
-		
+
 		/* POST request actions */
 		registerPostActionMapping("sendfriendship", new ServletAction() {
 			public void runAction(HttpServletRequest req,
@@ -256,6 +257,20 @@ public class GenericProfileServlet extends SwimServlet {
 		/* Friend list */
 		List<?> friendList = profile.getConfirmedFriendshipList(targetUsername);
 		req.setAttribute(Misc.FRIENDLIST_ATTR, friendList);
+
+		/* Compute feedback average */
+		Integer average = null;
+
+		if (feedbackList.size() > 0) {
+			int sum = 0;
+			for (Object o : feedbackList) {
+				Feedback f = (Feedback) o;
+				sum += f.getMark();
+			}
+			average = sum / feedbackList.size();
+		}
+
+		req.setAttribute(Misc.MARK_VALUE, average);
 
 		req.setAttribute(Misc.USER_TO_SHOW, targetCustomer);
 		MenuDescriptor selectedTab = (isCustomerLoggedIn(req.getSession()) ? CustomerMenu.SEARCH
