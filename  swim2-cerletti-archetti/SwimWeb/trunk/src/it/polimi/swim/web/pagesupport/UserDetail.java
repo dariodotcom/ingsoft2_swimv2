@@ -3,13 +3,12 @@ package it.polimi.swim.web.pagesupport;
 public class UserDetail {
 	private String detailName;
 	private Boolean detailPrivate;
-	private String getterName;
+	private String value;
 
-	public UserDetail(String detailName, Boolean detailPrivate,
-			String getterName) {
+	public UserDetail(String detailName, Boolean detailPrivate, String value) {
 		this.detailName = detailName;
 		this.detailPrivate = detailPrivate;
-		this.getterName = getterName;
+		this.value = value;
 	}
 
 	public String getDetailName() {
@@ -20,7 +19,7 @@ public class UserDetail {
 		return detailPrivate;
 	}
 
-	public String getGetterName() {
-		return getterName;
+	public String getValue() {
+		return value;
 	}
 }

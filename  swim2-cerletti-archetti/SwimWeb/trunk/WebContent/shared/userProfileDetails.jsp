@@ -1,3 +1,4 @@
+<%@page import="java.util.Iterator"%>
 <%@page import="java.util.Date"%>
 <%@page import="it.polimi.swim.web.servlets.AuthenticationServlet"%>
 <%@page import="it.polimi.swim.web.servlets.SwimServlet"%>
@@ -11,17 +12,30 @@
 	pageEncoding="ISO-8859-1"%>
 <%
 	Customer cust = (Customer) request.getAttribute(Misc.USER_TO_SHOW);
-	Class<Customer> custClass = Customer.class;
-
 	List<UserDetail> details = new ArrayList<UserDetail>();
+	String birthDate = Misc.parseDate(cust.getBirthDate());
+	List<?> usrAbilityList = (List<?>) request
+			.getAttribute(Misc.ABILITY_LIST);
 
-	details.add(new UserDetail("Nome", false, "getName"));
-	details.add(new UserDetail("Cognome", false, "getSurname"));
-	details.add(new UserDetail("Username", true, "getUsername"));
-	details.add(new UserDetail("Email", true, "getEmail"));
-	details.add(new UserDetail("Data di nascita", false, "getBirthDate"));
-	details.add(new UserDetail("Luogo di residenza", false,
-			"getLocation"));
+	StringBuilder usrAbilities = new StringBuilder();
+	Iterator<?> abIterator = usrAbilityList.iterator();
+
+	while (abIterator.hasNext()) {
+		usrAbilities.append((String) abIterator.next());
+		if (abIterator.hasNext()) {
+			usrAbilities.append(", ");
+		}
+	}
+
+	details.add(new UserDetail("Nome", false, cust.getName()));
+	details.add(new UserDetail("Cognome", false, cust.getSurname()));
+	details.add(new UserDetail("Username", true, cust.getUsername()));
+	details.add(new UserDetail("Email", true, cust.getEmail()));
+	details.add(new UserDetail("Data di nascita", false, birthDate));
+	details.add(new UserDetail("Luogo di residenza", false, cust
+			.getLocation()));
+	details.add(new UserDetail("Professionalit&agrave dichiarate",
+			false, usrAbilities.toString()));
 
 	Boolean showOwnProfile;
 
@@ -45,19 +59,14 @@
 	<div class="column propertyList" id="detailColumn">
 		<%
 			for (UserDetail d : details) {
-				Method getter = custClass.getMethod(d.getGetterName(),
-						(Class<?>[]) null);
-				Object retVal = getter.invoke(cust, (Object[]) null);
-				String detailValue = (retVal != null ? retVal instanceof Date ? Misc.DATE_FORMAT
-						.format(retVal) : retVal.toString()
-						: "Non impostato");
-				String additionalClass = retVal == null ? " unset" : "";
+				String value = d.getValue();
+				String additionalClass = (value == null ? " unset" : "");
 
 				if (showOwnProfile || !d.isDetailPrivate()) {
 		%>
 		<div class="property">
 			<div class="propertyName"><%=d.getDetailName()%></div>
-			<div class="propertyValue<%=additionalClass%>"><%=detailValue%></div>
+			<div class="propertyValue<%=additionalClass%>"><%=value%></div>
 		</div>
 		<%
 			}
