@@ -15,7 +15,6 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 /**
  * Servlet implementation class CustomerImageServlet
@@ -60,7 +59,6 @@ public class CustomerImageServlet extends SwimServlet {
 
 	private void showCustomerImage(CustomerImage image, HttpServletRequest req,
 			HttpServletResponse resp) throws IOException, ServletException {
-		HttpSession session = req.getSession();
 		Image userImage = null;
 		String username = req.getParameter(USER_PARAM);
 
@@ -90,7 +88,7 @@ public class CustomerImageServlet extends SwimServlet {
 				if (imageBytes == null) {
 					String path = image.equals(CustomerImage.FULL) ? Misc.DEFAULT_PHOTO_FULL_URL
 							: Misc.DEFAULT_PHOTO_THUMB_URL;
-					userImage = loadImage(session, path);
+					userImage = loadImage(req, path);
 				} else {
 
 					ByteArrayInputStream in = new ByteArrayInputStream(
@@ -109,9 +107,9 @@ public class CustomerImageServlet extends SwimServlet {
 	}
 
 	/* Helpers */
-	private BufferedImage loadImage(HttpSession session, String path)
+	private BufferedImage loadImage(HttpServletRequest request, String path)
 			throws IOException {
-		ServletContext ctx = session.getServletContext();
+		ServletContext ctx = request.getSession().getServletContext();
 		InputStream input = ctx.getResourceAsStream(path);
 		return ImageIO.read(input);
 	}

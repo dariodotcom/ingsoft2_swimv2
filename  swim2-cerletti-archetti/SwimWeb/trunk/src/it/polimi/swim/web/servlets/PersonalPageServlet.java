@@ -298,12 +298,12 @@ public class PersonalPageServlet extends SwimServlet {
 		String newEmail = req.getParameter("newemail");
 
 		/* Check email */
-		if(!Misc.isEmailValid(newEmail)){
+		if (!Misc.isEmailValid(newEmail)) {
 			req.setAttribute(Misc.ERROR_ATTR, ErrorType.BAD_EMAIL);
 			showSection(PersonalPageSection.EDIT_ACCOUNT, req, resp);
 			return;
 		}
-		
+
 		/* Authenticate request */
 		if (!authenticateRequest(currentPassword, req)) {
 			/* Send error */
@@ -470,21 +470,6 @@ public class PersonalPageServlet extends SwimServlet {
 		return;
 	}
 
-	private Boolean authenticateRequest(String password, HttpServletRequest req) {
-		AuthenticationControllerRemote auth = lookupBean(
-				AuthenticationControllerRemote.class,
-				Misc.BeanNames.AUTHENTICATION);
-		HttpSession session = req.getSession();
-		String username = (String) getUsername(session);
-
-		try {
-			auth.authenticateUser(username, password);
-			return true;
-		} catch (AuthenticationFailedException e) {
-			return false;
-		}
-	}
-
 	private void getAbilityList(HttpServletRequest req, HttpServletResponse resp)
 			throws IOException {
 		resp.setContentType("application/json");
@@ -538,6 +523,21 @@ public class PersonalPageServlet extends SwimServlet {
 
 		public Boolean isMandatory() {
 			return mandatory;
+		}
+	}
+
+	private Boolean authenticateRequest(String password, HttpServletRequest req) {
+		AuthenticationControllerRemote auth = lookupBean(
+				AuthenticationControllerRemote.class,
+				Misc.BeanNames.AUTHENTICATION);
+		HttpSession session = req.getSession();
+		String username = (String) getUsername(session);
+
+		try {
+			auth.authenticateUser(username, password);
+			return true;
+		} catch (AuthenticationFailedException e) {
+			return false;
 		}
 	}
 }
