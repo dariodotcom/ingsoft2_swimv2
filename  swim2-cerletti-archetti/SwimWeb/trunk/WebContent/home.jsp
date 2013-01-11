@@ -113,9 +113,21 @@
 						<div class="part">
 							<form method="post" enctype="multipart/form-data"
 								action="<%=context%>/home/changePhoto">
-								<input type="file" name="customerphoto" value="Select a File..." /><br />
-								<div class="submitLine">
-									<input type="submit" class="inputsubmit" value="Salva" />
+								<div class="propertyList">
+									<div class="property">
+										<label class="propertyName" for="fakeImageInput">Immagine
+											del profilo (100px x 100px)</label>
+										<div class="propertyValue">
+											<input type=text id="fakeImageInput" class="inputtext" readonly/>
+											<a href="javascript:" id="fakeImageSubmit" class="button">Cerca</a>
+											
+											<input type="file" name="customerphoto"
+												id="realImageInput"/>
+										</div>
+									</div>
+									<div class="submitLine">
+										<input type="submit" class="inputsubmit" value="Salva" />
+									</div>
 								</div>
 							</form>
 
@@ -139,7 +151,7 @@
 									</div>
 								</div>
 							</form>
-							<p class="paragraph">
+							<p class="paragraph spaceTop">
 								Non hai trovato la professionalit&agrave; che cercavi? <a
 									href="<%=context%>/abilityrequest/">Richiedila ora!</a>
 							</p>

@@ -6,6 +6,25 @@ $(function() {
 		delay : 250
 	});
 
+	//Fake image input
+	var realInput = $('#realImageInput');
+	var fakeInput = $('#fakeImageInput');
+	var control = $('#fakeImageSubmit');
+
+	control.click(function(){
+	    realInput.click();
+	});
+
+	fakeInput.click(function(){
+	    realInput.click();
+	});
+
+	realInput.change(function(){
+	    text = $(this).val();
+	    fakeInput.val(text);
+	});
+	
+	
 	var currentForm = null;
 
 	// review options
