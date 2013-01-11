@@ -179,8 +179,10 @@ public class PersonalPageServlet extends SwimServlet {
 			}
 		});
 	}
+	
+	/* Methods to respond to different requests */
 
-	protected void doChangePhoto(HttpServletRequest req,
+	private void doChangePhoto(HttpServletRequest req,
 			HttpServletResponse resp) throws IOException, ServletException {
 		HttpSession session = req.getSession();
 
@@ -190,13 +192,15 @@ public class PersonalPageServlet extends SwimServlet {
 		}
 
 		if (!ServletFileUpload.isMultipartContent(req)) {
-			sendError(req, resp, ErrorType.BAD_REQUEST);
+			req.setAttribute(Misc.ERROR_ATTR, ErrorType.INVALID_IMAGE);
+			showSection(PersonalPageSection.EDIT_PROFILE, req, resp);
 			return;
 		}
 
 		BufferedImage customerPhoto = null;
 		ServletFileUpload upload = new ServletFileUpload();
 
+		//Retrieve uploaded photo from request
 		try {
 			FileItemIterator iterator = upload.getItemIterator(req);
 			while (iterator.hasNext()) {
@@ -208,17 +212,19 @@ public class PersonalPageServlet extends SwimServlet {
 				}
 			}
 		} catch (FileUploadException e) {
-			sendError(req, resp, ErrorType.BAD_REQUEST);
+			req.setAttribute(Misc.ERROR_ATTR, ErrorType.INVALID_IMAGE);
+			showSection(PersonalPageSection.EDIT_PROFILE, req, resp);
 			return;
 		}
 
+		//If user has not uploaded any photo, send error.
 		if (customerPhoto == null) {
-			sendError(req, resp, ErrorType.BAD_REQUEST);
+			req.setAttribute(Misc.ERROR_ATTR, ErrorType.INVALID_IMAGE);
+			showSection(PersonalPageSection.EDIT_PROFILE, req, resp);
 			return;
 		}
 
-		System.out.println("customerPhoto: " + customerPhoto);
-
+		//Lookup bean to update informations
 		UserProfileControllerRemote profileCtrl = lookupBean(
 				UserProfileControllerRemote.class, Misc.BeanNames.PROFILE);
 		String username = getUsername(session);
@@ -227,16 +233,16 @@ public class PersonalPageServlet extends SwimServlet {
 			SerializableImage img = new SerializableImage(customerPhoto);
 			profileCtrl.changeCustomerPhoto(username, img);
 		} catch (BadRequestException e) {
-			sendError(req, resp, ErrorType.BAD_REQUEST);
+			req.setAttribute(Misc.ERROR_ATTR, ErrorType.INVALID_IMAGE);
+			showSection(PersonalPageSection.EDIT_PROFILE, req, resp);
 			return;
 		}
 
+		//show profile edit page again
 		req.setAttribute(Misc.NOTIFICATION_ATTR,
 				NotificationMessages.PHOTO_CHANGED);
-		showSection(PersonalPageSection.EDIT_ACCOUNT, req, resp);
+		showSection(PersonalPageSection.EDIT_PROFILE, req, resp);
 	}
-
-	/* Methods to respond to different requests */
 
 	private void doChangePassword(HttpServletRequest req,
 			HttpServletResponse resp) throws IOException, ServletException {
