@@ -6,15 +6,15 @@ package it.polimi.swim.web.pagesupport;
  */
 public enum NotificationMessages {
 
-	EMAIL_CHANGED("L'indirizzo email è stato modificato."),
-	PASSWORD_CHANGED("La password è stata modificata."),
+	EMAIL_CHANGED("L'indirizzo email &egrave; stato modificato."),
+	PASSWORD_CHANGED("La password &egrave; stata modificata."),
 	DETAILS_CHANGED("I tuoi dati sono stati aggiornati."),
-	ABILITY_ADDED("La nuova professionalit&agrave; è stata aggiunta."),
-	REQUEST_SENT("La richiesta è stata inviata."),
+	ABILITY_ADDED("La nuova professionalit&agrave; &egrave; stata aggiunta."),
+	REQUEST_SENT("La richiesta &egrave; stata inviata."),
 	ABILITY_REMOVED("L'abilit&agrave; &egrave; stata rimossa."),
-	EMAIL_VALIDATED("L'indirizzo email è stato convalidato."),
-	ABILITY_REQ_REFUSED("La richiesta è stata rifiutata."),
-	PHOTO_CHANGED("La tua foto del profilo è stata modificata.");
+	EMAIL_VALIDATED("L'indirizzo email &egrave; stato convalidato."),
+	ABILITY_REQ_REFUSED("La richiesta &egrave; stata rifiutata."),
+	PHOTO_CHANGED("La tua foto del profilo &egrave; stata modificata.");
 
 	private String description;
 
