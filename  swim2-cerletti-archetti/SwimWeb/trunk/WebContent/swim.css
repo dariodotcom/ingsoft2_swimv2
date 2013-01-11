@@ -9,12 +9,12 @@ body.swim{
 	margin-right: auto;
 }
 
-#swimContent a,
-#swimContent a:visited{
+#swimContent a:not(.button),
+#swimContent a:not(.button):visited{
     color: #555555;    
 }
 
-#swimContent a:hover{
+#swimContent a:not(.button):hover{
     color: rgb(28,120,179) !important;    
 }
 
@@ -476,8 +476,10 @@ span.propertyValue{
 	border-radius: 2px;
 	color: rgba(255,255,255,.9);
 	box-shadow: 0 -1px 0 rgba(255,255,255,.3) inset;
+	font-size: 12px;
 	font-weight: bold;
 	display: block;
+    line-height: 14px;
 }
 	
 #swimContent a.button,
@@ -499,11 +501,9 @@ span.propertyValue{
 
 #swimContent .disabledButton,
 #swimContent a.button{
-	padding: 6px;
+	padding: 5px;
 	text-decoration: none;
-    font-size: 13.3px;
     font-weight: bold;
-    line-height: 16px;
 }
 
 #swimContent .disabledButton{
@@ -878,4 +878,12 @@ form.actionForm{
 
 .messageContainer.self .smallImageFrame + .arrow{
     margin-right: -7px;
+}
+
+#realImageInput{
+	display: none;
+}
+
+.spaceTop{
+	margin-top: 15px;
 }
