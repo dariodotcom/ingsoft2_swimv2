@@ -48,6 +48,7 @@ public class PasswordResetServlet extends SwimServlet {
 		});
 
 		/* POST request actions */
+
 		registerPostActionMapping("start", new ServletAction() {
 			public void runAction(HttpServletRequest req,
 					HttpServletResponse resp) throws IOException,
@@ -58,6 +59,7 @@ public class PasswordResetServlet extends SwimServlet {
 	}
 
 	/* Methods to respond to different requests */
+
 	private void startPasswordReset(HttpServletRequest req,
 			HttpServletResponse resp) throws IOException, ServletException {
 		String username = req.getParameter("username");
@@ -127,6 +129,7 @@ public class PasswordResetServlet extends SwimServlet {
 	}
 
 	/* Helpers */
+
 	private void showSection(PasswordResetSections section, ErrorType err,
 			HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
@@ -139,6 +142,11 @@ public class PasswordResetServlet extends SwimServlet {
 	}
 
 	/* Enumerations */
+
+	/**
+	 * PasswordResetSections is an enumeration useful to provide all the
+	 * possible title of the pages accessible during the password reset phases.
+	 */
 	public static enum PasswordResetSections {
 		LANDING("Reset password."), EMAIL_SENT("Email inviata."), CONFIRM(
 				"Password reimpostata.");
@@ -149,6 +157,12 @@ public class PasswordResetServlet extends SwimServlet {
 			this.pageTitle = title;
 		}
 
+		/**
+		 * Getter method.
+		 * 
+		 * @return a String that contains the title of this
+		 *         PasswordResetSections.
+		 */
 		public String getTitle() {
 			return pageTitle;
 		}
