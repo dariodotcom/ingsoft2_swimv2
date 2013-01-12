@@ -80,8 +80,8 @@ public class Misc {
 	public static final String CUSTOMER_PHOTO_FULL_URL = "/userphoto/full.png";
 	public static final String CUSTOMER_PHOTO_THUMB_URL = "/userphoto/thumb.png";
 
-	private static final String emailPattern = "^[_A-Za-z0-9-\\+]+(\\."
-			+ "[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$;";
+	private static final String emailPattern = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
+			+ "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
 
 	/* Helpers */
 
@@ -102,8 +102,8 @@ public class Misc {
 	 * 
 	 * @param input
 	 *            a String that contains the input value.
-	 * @param replacement a
-	 *            String that contains the replacement
+	 * @param replacement
+	 *            a String that contains the replacement
 	 * @return the String corresponding to the given input.
 	 */
 	public static String replaceEmpty(String input, String replacement) {
