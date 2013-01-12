@@ -21,11 +21,12 @@ public class Ability {
 		return getName();
 	}
 
-
+	/**
+	 * Class constructor.
+	 */
 	public Ability() {
 	}
-	
-	
+
 	/**
 	 * Class constructor.
 	 * 

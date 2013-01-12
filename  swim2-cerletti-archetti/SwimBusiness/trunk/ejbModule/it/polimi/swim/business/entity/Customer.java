@@ -184,18 +184,42 @@ public class Customer extends User {
 		this.location = location;
 	}
 
+	/**
+	 * Getter method.
+	 * 
+	 * @return an array of byte that represent a user profile image.
+	 */
 	public byte[] getCustomerPhoto() {
 		return customerPhoto;
 	}
 
+	/**
+	 * Setter method.
+	 * 
+	 * @param customerPhoto
+	 *            an array of byte that represent a user profile image.
+	 */
 	public void setCustomerPhoto(byte[] customerPhoto) {
 		this.customerPhoto = customerPhoto;
 	}
 
+	/**
+	 * Getter method.
+	 * 
+	 * @return a set of byte that represent the thumbnail associated to a user
+	 *         profile image.
+	 */
 	public byte[] getCustomerThumbnail() {
 		return customerThumbnail;
 	}
 
+	/**
+	 * Setter method.
+	 * 
+	 * @param customerThumbnail
+	 *            a set of byte that represent the thumbnail associated to a
+	 *            user profile image.
+	 */
 	public void setCustomerThumbnail(byte[] customerThumbnail) {
 		this.customerThumbnail = customerThumbnail;
 	}

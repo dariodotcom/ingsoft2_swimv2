@@ -9,6 +9,10 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+/**
+ * EmailValidationRequest is an entity is an entity which represents a request
+ * to validate an email.
+ */
 @Entity
 @Table(name = "emailvalidationrequest")
 public class EmailValidationRequest {
