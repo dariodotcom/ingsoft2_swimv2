@@ -425,6 +425,10 @@ public class CustomerWorkrequestServlet extends SwimServlet {
 
 	/* Enumerations */
 
+	/**
+	 * CustomerWorkRequestSection is an enumeration useful to provide all the
+	 * possible sections accessible from the work request page of a logged user.
+	 */
 	public enum CustomerWorkRequestSection {
 		ACTIVE_REQUESTS("Richieste attive", ""), ARCHIVED_REQUESTS(
 				"Richieste archiviate", "archived");
@@ -437,10 +441,22 @@ public class CustomerWorkrequestServlet extends SwimServlet {
 			this.sectionName = sectionName;
 		}
 
+		/**
+		 * Getter method.
+		 * 
+		 * @return a String that contains the name of this
+		 *         CustomerWorkRequestSection.
+		 */
 		public String getSectionName() {
 			return sectionName;
 		}
 
+		/**
+		 * Getter method.
+		 * 
+		 * @return a String that contains the identifier of this
+		 *         CustomerWorkRequestSection.
+		 */
 		public String getSectionIdentifier() {
 			return sectionIdentifier;
 		}
