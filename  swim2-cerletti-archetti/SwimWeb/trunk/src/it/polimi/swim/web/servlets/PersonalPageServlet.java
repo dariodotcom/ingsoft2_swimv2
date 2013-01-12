@@ -47,41 +47,6 @@ public class PersonalPageServlet extends SwimServlet {
 	public static final String USER_ATTR = "user";
 
 	/**
-	 * PersonalPageSection is an enumeration useful to provide all the possible
-	 * sections accessible from the home page of a logged user.
-	 */
-	public enum PersonalPageSection {
-		HOME("Il tuo profilo", ""), EDIT_PROFILE("Modifica profilo",
-				"editProfile"), EDIT_ACCOUNT("Modifica account", "editAccount");
-
-		private String sectionName, sectionIdentifier;
-
-		private PersonalPageSection(String sectionName, String sectionIdentifier) {
-			this.sectionIdentifier = sectionIdentifier;
-			this.sectionName = sectionName;
-		}
-
-		/**
-		 * Getter method.
-		 * 
-		 * @return a String that contains the name of this PersonalPageSection.
-		 */
-		public String getSectionName() {
-			return sectionName;
-		}
-
-		/**
-		 * Getter method.
-		 * 
-		 * @return a String that contains the identifier of this
-		 *         PersonalPageSection.
-		 */
-		public String getSectionIdentifier() {
-			return sectionIdentifier;
-		}
-	}
-
-	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
 	public PersonalPageServlet() {
@@ -563,6 +528,42 @@ public class PersonalPageServlet extends SwimServlet {
 			return true;
 		} catch (AuthenticationFailedException e) {
 			return false;
+		}
+	}
+
+	/* Enumerations */
+	/**
+	 * PersonalPageSection is an enumeration useful to provide all the possible
+	 * sections accessible from the home page of a logged user.
+	 */
+	public enum PersonalPageSection {
+		HOME("Il tuo profilo", ""), EDIT_PROFILE("Modifica profilo",
+				"editProfile"), EDIT_ACCOUNT("Modifica account", "editAccount");
+
+		private String sectionName, sectionIdentifier;
+
+		private PersonalPageSection(String sectionName, String sectionIdentifier) {
+			this.sectionIdentifier = sectionIdentifier;
+			this.sectionName = sectionName;
+		}
+
+		/**
+		 * Getter method.
+		 * 
+		 * @return a String that contains the name of this PersonalPageSection.
+		 */
+		public String getSectionName() {
+			return sectionName;
+		}
+
+		/**
+		 * Getter method.
+		 * 
+		 * @return a String that contains the identifier of this
+		 *         PersonalPageSection.
+		 */
+		public String getSectionIdentifier() {
+			return sectionIdentifier;
 		}
 	}
 }

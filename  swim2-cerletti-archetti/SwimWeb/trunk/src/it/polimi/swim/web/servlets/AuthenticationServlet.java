@@ -32,35 +32,6 @@ public class AuthenticationServlet extends SwimServlet {
 
 	private static final long serialVersionUID = 2253528507384097557L;
 
-	public static enum RegistrationFields {
-		USERNAME("username", "Username", "text"), PASSWORD("password",
-				"Password", "password"), REPEATPASSWORD("repeatpassword",
-				"Ripeti password", "password"), EMAIL("email", "Email", "text"), NAME(
-				"name", "Nome", "text"), SURNAME("surname", "Cognome", "text");
-
-		private String type;
-		private String name;
-		private String label;
-
-		private RegistrationFields(String name, String label, String type) {
-			this.name = name;
-			this.label = label;
-			this.type = type;
-		}
-
-		public String getName() {
-			return name;
-		}
-
-		public String getLabel() {
-			return label;
-		}
-
-		public String getType() {
-			return type;
-		}
-	}
-
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
@@ -235,11 +206,11 @@ public class AuthenticationServlet extends SwimServlet {
 		}
 
 		/* Check email */
-//		String email = values.get(RegistrationFields.EMAIL.getName());
-//		if (!Misc.isEmailValid(email)) {
-//			retry("registration", ErrorType.BAD_EMAIL, req, resp);
-//			return;
-//		}
+		// String email = values.get(RegistrationFields.EMAIL.getName());
+		// if (!Misc.isEmailValid(email)) {
+		// retry("registration", ErrorType.BAD_EMAIL, req, resp);
+		// return;
+		// }
 
 		/* Retrieve bean used for registration */
 		AuthenticationControllerRemote auth = lookupBean(
@@ -280,11 +251,43 @@ public class AuthenticationServlet extends SwimServlet {
 		req.getRequestDispatcher(Misc.ABOUT_JSP).forward(req, resp);
 	}
 
+	/* Helpers */
 	private void retry(String identifier, ErrorType err,
 			HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 		req.setAttribute("retry", identifier);
 		req.setAttribute(Misc.ERROR_ATTR, err);
 		req.getRequestDispatcher(Misc.LANDING_JSP).forward(req, resp);
+	}
+
+	/* Enumerations */
+
+	public static enum RegistrationFields {
+		USERNAME("username", "Username", "text"), PASSWORD("password",
+				"Password", "password"), REPEATPASSWORD("repeatpassword",
+				"Ripeti password", "password"), EMAIL("email", "Email", "text"), NAME(
+				"name", "Nome", "text"), SURNAME("surname", "Cognome", "text");
+
+		private String type;
+		private String name;
+		private String label;
+
+		private RegistrationFields(String name, String label, String type) {
+			this.name = name;
+			this.label = label;
+			this.type = type;
+		}
+
+		public String getName() {
+			return name;
+		}
+
+		public String getLabel() {
+			return label;
+		}
+
+		public String getType() {
+			return type;
+		}
 	}
 }
