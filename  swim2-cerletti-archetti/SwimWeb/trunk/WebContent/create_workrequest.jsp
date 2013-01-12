@@ -1,5 +1,5 @@
 <%@page
-	import="it.polimi.swim.web.servlets.GenericProfileServlet.createWRField"%>
+	import="it.polimi.swim.web.servlets.GenericProfileServlet.WorkRequestCreationField"%>
 <%@page import="it.polimi.swim.business.entity.Ability"%>
 <%@page import="java.util.List"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
@@ -35,13 +35,15 @@
 							</span>
 						</div>
 						<%
-							for (createWRField field : createWRField.values()) {
+							for (WorkRequestCreationField field : WorkRequestCreationField
+									.values()) {
 						%>
 						<div class="property">
-							<label for="<%=field.getName()%>" class="propertyName"><%=field.getLabelText() + (field.isMandatory() ? "*" : "")%></label>
+							<label for="<%=field.getName()%>" class="propertyName"><%=field.getLabelText()
+						+ (field.isMandatory() ? "*" : "")%></label>
 							<div class="propertyValue">
 								<%
-									if (field.equals(createWRField.SELECTED_ABILITY)) {
+									if (field.equals(WorkRequestCreationField.SELECTED_ABILITY)) {
 								%>
 								<select id="<%=field.getName()%>" name="<%=field.getName()%>"
 									class="inputselect">

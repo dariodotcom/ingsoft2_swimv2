@@ -118,7 +118,7 @@
 										<label class="propertyName" for="fakeImageInput">Immagine
 											del profilo (100px x 100px)</label>
 										<div class="propertyValue">
-											<input type=text id="fakeImageInput" class="inputtext" readonly/>
+											<input type=text id="fakeImageInput" class="inputtext" readonly="readonly"/>
 											<a href="javascript:" id="fakeImageSubmit" class="button">Cerca</a>
 											
 											<input type="file" name="customerphoto"
