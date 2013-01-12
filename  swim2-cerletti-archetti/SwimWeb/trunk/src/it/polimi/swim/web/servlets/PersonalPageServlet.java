@@ -165,7 +165,7 @@ public class PersonalPageServlet extends SwimServlet {
 		BufferedImage customerPhoto = null;
 		ServletFileUpload upload = new ServletFileUpload();
 
-		// Retrieve uploaded photo from request
+		/* Retrieve uploaded photo from request */
 		try {
 			FileItemIterator iterator = upload.getItemIterator(req);
 			while (iterator.hasNext()) {
@@ -182,14 +182,14 @@ public class PersonalPageServlet extends SwimServlet {
 			return;
 		}
 
-		// If user has not uploaded any photo, send error.
+		/* If user has not uploaded any photo, send error */
 		if (customerPhoto == null) {
 			req.setAttribute(Misc.ERROR_ATTR, ErrorType.INVALID_IMAGE);
 			showSection(PersonalPageSection.EDIT_PROFILE, req, resp);
 			return;
 		}
 
-		// Lookup bean to update informations
+		/* Lookup bean to update informations */
 		UserProfileControllerRemote profileCtrl = lookupBean(
 				UserProfileControllerRemote.class, Misc.BeanNames.PROFILE);
 		String username = getUsername(session);
@@ -203,7 +203,7 @@ public class PersonalPageServlet extends SwimServlet {
 			return;
 		}
 
-		// show profile edit page again
+		/* show profile edit page again */
 		req.setAttribute(Misc.NOTIFICATION_ATTR,
 				NotificationMessages.PHOTO_CHANGED);
 		showSection(PersonalPageSection.EDIT_PROFILE, req, resp);
@@ -329,7 +329,7 @@ public class PersonalPageServlet extends SwimServlet {
 
 			} else {
 
-				/* For the field birthdate, convert it into a date. */
+				/* For the field birthdate, convert it into a date */
 				if (name.equals("birthdate") && !Misc.isStringEmpty(value)) {
 					try {
 						Date date = Misc.DATE_FORMAT.parse(value);
@@ -439,7 +439,7 @@ public class PersonalPageServlet extends SwimServlet {
 				sum += feedback.getMark();
 			}
 
-			// we want an integer mean
+			/* We want an integer mean */
 			mean = sum / feedbackList.size();
 		}
 
@@ -532,6 +532,7 @@ public class PersonalPageServlet extends SwimServlet {
 	}
 
 	/* Enumerations */
+	
 	/**
 	 * PersonalPageSection is an enumeration useful to provide all the possible
 	 * sections accessible from the home page of a logged user.
