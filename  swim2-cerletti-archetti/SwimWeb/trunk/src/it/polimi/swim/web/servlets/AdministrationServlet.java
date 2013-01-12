@@ -188,6 +188,7 @@ public class AdministrationServlet extends SwimServlet {
 	}
 
 	/* Enumerations */
+	
 	/**
 	 * AdministrationSection is an enumeration useful to provide all the
 	 * possible sections accessible from the home page of an administrator.
