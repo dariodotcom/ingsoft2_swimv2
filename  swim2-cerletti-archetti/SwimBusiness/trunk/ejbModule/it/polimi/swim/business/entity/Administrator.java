@@ -12,6 +12,9 @@ import javax.persistence.Table;
 @Table(name = "administrator")
 public class Administrator extends User {
 
+	/**
+	 * Class constructor.
+	 */
 	public Administrator() {
 	}
 

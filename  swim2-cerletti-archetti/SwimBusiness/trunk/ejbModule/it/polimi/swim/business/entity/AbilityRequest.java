@@ -165,7 +165,7 @@ public class AbilityRequest {
 	/**
 	 * Getter method.
 	 * 
-	 * @return an Integer that represents the identificator of the request.
+	 * @return an Integer that represents the identifier of the request.
 	 */
 	public int getId() {
 		return id;
