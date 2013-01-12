@@ -124,25 +124,16 @@ public class AuthenticationController implements AuthenticationControllerRemote 
 	 */
 	public void validateCustomerEmail(String emailValidationKey)
 			throws BadRequestException, InvalidStateException {
-		Query q = manager
-				.createQuery("From EmailValidationRequest r WHERE r.reqKey=:key");
-		q.setParameter("key", emailValidationKey);
+		EmailValidationRequest req = Helpers.getEntityChecked(manager,
+				EmailValidationRequest.class, emailValidationKey);
 
-		EmailValidationRequest req;
+		Customer author = req.getAuthor();
 
-		try {
-			req = (EmailValidationRequest) q.getSingleResult();
-		} catch (NoResultException e) {
-			throw new BadRequestException();
-		}
-
-		Customer c = req.getAuthor();
-
-		if (c.isEmailConfirmed()) {
+		if (author.isEmailConfirmed()) {
 			throw new InvalidStateException();
 		}
 
-		c.setEmailConfirmed();
+		author.setEmailConfirmed();
 		manager.remove(req);
 
 		return;
