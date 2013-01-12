@@ -4,7 +4,6 @@ import it.polimi.swim.business.bean.Helpers;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
@@ -15,12 +14,8 @@ import javax.persistence.Table;
 public class EmailValidationRequest {
 
 	@Id
-	@GeneratedValue
-	@Column(name = "id")
-	private int id;
-
-	@Column(name = "reqKey", unique = true)
-	private String reqKey;
+	@Column(name = "reqKey")
+	private String key;
 
 	@OneToOne
 	@JoinColumn(name = "author", unique = true)
@@ -39,17 +34,8 @@ public class EmailValidationRequest {
 	 *            a Customer that is the author of the email validation request.
 	 */
 	public EmailValidationRequest(Customer author) {
-		this.reqKey = Helpers.generateRandomString(10);
+		this.key = Helpers.generateRandomString(32);
 		this.author = author;
-	}
-
-	/**
-	 * Getter method.
-	 * 
-	 * @return an integer that contains the email validation request identifier.
-	 */
-	public int getId() {
-		return id;
 	}
 
 	/**
@@ -58,7 +44,7 @@ public class EmailValidationRequest {
 	 * @return a String that contains the key of the email validation request.
 	 */
 	public String getKey() {
-		return reqKey;
+		return key;
 	}
 
 	/**
