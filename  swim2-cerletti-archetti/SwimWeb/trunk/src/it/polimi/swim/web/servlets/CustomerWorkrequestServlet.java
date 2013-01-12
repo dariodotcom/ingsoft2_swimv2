@@ -416,7 +416,7 @@ public class CustomerWorkrequestServlet extends SwimServlet {
 		}
 	}
 
-	public static void redirectToRequestView(HttpServletRequest req,
+	private void redirectToRequestView(HttpServletRequest req,
 			HttpServletResponse resp, int reqId) throws IOException {
 		String link = String.format("%s/%s/view?%s=%s", req.getContextPath(),
 				CONTEXT_NAME, WORK_REQUEST_PARAM, reqId);
