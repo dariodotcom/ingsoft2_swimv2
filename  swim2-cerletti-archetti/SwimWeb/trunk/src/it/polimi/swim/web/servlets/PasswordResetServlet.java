@@ -21,21 +21,6 @@ public class PasswordResetServlet extends SwimServlet {
 
 	private static final long serialVersionUID = -1677560603959997510L;
 
-	public static enum PasswordResetSections {
-		LANDING("Reset password."), EMAIL_SENT("Email inviata."), CONFIRM(
-				"Password reimpostata.");
-
-		String pageTitle;
-
-		private PasswordResetSections(String title) {
-			this.pageTitle = title;
-		}
-
-		public String getTitle() {
-			return pageTitle;
-		}
-	}
-
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
@@ -151,5 +136,21 @@ public class PasswordResetServlet extends SwimServlet {
 		}
 
 		req.getRequestDispatcher(Misc.PASSWORD_RESET_JSP).forward(req, resp);
+	}
+
+	/* Enumerations */
+	public static enum PasswordResetSections {
+		LANDING("Reset password."), EMAIL_SENT("Email inviata."), CONFIRM(
+				"Password reimpostata.");
+
+		String pageTitle;
+
+		private PasswordResetSections(String title) {
+			this.pageTitle = title;
+		}
+
+		public String getTitle() {
+			return pageTitle;
+		}
 	}
 }

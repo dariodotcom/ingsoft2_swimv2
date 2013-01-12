@@ -27,10 +27,6 @@ public class CustomerImageServlet extends SwimServlet {
 	public static final String USER_PARAM = "u";
 	private final String imageFormat = "png";
 
-	private enum CustomerImage {
-		FULL, THUMB
-	}
-
 	/**
 	 * @see SwimServlet#SwimServlet()
 	 */
@@ -112,5 +108,10 @@ public class CustomerImageServlet extends SwimServlet {
 		ServletContext ctx = request.getSession().getServletContext();
 		InputStream input = ctx.getResourceAsStream(path);
 		return ImageIO.read(input);
+	}
+
+	/* Enumerations */
+	private enum CustomerImage {
+		FULL, THUMB
 	}
 }

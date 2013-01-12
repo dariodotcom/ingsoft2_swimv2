@@ -30,41 +30,6 @@ public class AdministrationServlet extends SwimServlet {
 	private static final String REVIEW_REQUEST = "request";
 
 	/**
-	 * AdministrationSection is an enumeration useful to provide all the
-	 * possible sections accessible from the home page of an administrator.
-	 */
-	public enum AdministrationSection {
-		REQUEST("Richieste", ""), MANAGEMENT("Amministrazione", "manage");
-
-		private String sectionName, sectionIdentifier;
-
-		AdministrationSection(String sectionName, String sectionIdentifier) {
-			this.sectionIdentifier = sectionIdentifier;
-			this.sectionName = sectionName;
-		}
-
-		/**
-		 * Getter method.
-		 * 
-		 * @return a String that contains the name of this
-		 *         AdministrationSection.
-		 */
-		public String getSectionName() {
-			return sectionName;
-		}
-
-		/**
-		 * Getter method.
-		 * 
-		 * @return a String that contains the identifier of this
-		 *         AdministrationSection.
-		 */
-		public String getSectionIdentifier() {
-			return sectionIdentifier;
-		}
-	}
-
-	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
 	public AdministrationServlet() {
@@ -194,7 +159,7 @@ public class AdministrationServlet extends SwimServlet {
 
 		NotificationMessages mess = accept ? NotificationMessages.ABILITY_ADDED
 				: NotificationMessages.ABILITY_REQ_REFUSED;
-		
+
 		req.setAttribute(Misc.NOTIFICATION_ATTR, mess);
 		showSection(AdministrationSection.REQUEST, req, resp);
 
@@ -220,5 +185,41 @@ public class AdministrationServlet extends SwimServlet {
 		req.setAttribute(Misc.SELECTED_TAB_ATTR, AdminMenu.MANAGEMENT);
 		req.setAttribute(Misc.SELECTED_SECTION_ATTR, section);
 		req.getRequestDispatcher(Misc.ADMIN_JSP).forward(req, resp);
+	}
+
+	/* Enumerations */
+	/**
+	 * AdministrationSection is an enumeration useful to provide all the
+	 * possible sections accessible from the home page of an administrator.
+	 */
+	public enum AdministrationSection {
+		REQUEST("Richieste", ""), MANAGEMENT("Amministrazione", "manage");
+
+		private String sectionName, sectionIdentifier;
+
+		AdministrationSection(String sectionName, String sectionIdentifier) {
+			this.sectionIdentifier = sectionIdentifier;
+			this.sectionName = sectionName;
+		}
+
+		/**
+		 * Getter method.
+		 * 
+		 * @return a String that contains the name of this
+		 *         AdministrationSection.
+		 */
+		public String getSectionName() {
+			return sectionName;
+		}
+
+		/**
+		 * Getter method.
+		 * 
+		 * @return a String that contains the identifier of this
+		 *         AdministrationSection.
+		 */
+		public String getSectionIdentifier() {
+			return sectionIdentifier;
+		}
 	}
 }

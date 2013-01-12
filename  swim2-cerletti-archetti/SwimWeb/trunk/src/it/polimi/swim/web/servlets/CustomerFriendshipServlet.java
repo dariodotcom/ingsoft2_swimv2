@@ -26,27 +26,6 @@ public class CustomerFriendshipServlet extends SwimServlet {
 
 	public static final String CONTEXT_NAME = "friends";
 
-	public enum CustomerFriendshipSection {
-		FRIENDS("Amici", ""), FRIENDSHIP_REQUESTS("Richieste di amicizia",
-				"requests");
-
-		private String sectionName, sectionIdentifier;
-
-		private CustomerFriendshipSection(String sectionName,
-				String sectionIdentifier) {
-			this.sectionIdentifier = sectionIdentifier;
-			this.sectionName = sectionName;
-		}
-
-		public String getSectionName() {
-			return sectionName;
-		}
-
-		public String getSectionIdentifier() {
-			return sectionIdentifier;
-		}
-	}
-
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
@@ -239,5 +218,28 @@ public class CustomerFriendshipServlet extends SwimServlet {
 		req.setAttribute(Misc.SELECTED_SECTION_ATTR, section);
 		req.getRequestDispatcher(Misc.FRIENDS_JSP).forward(req, resp);
 		return;
+	}
+
+	/* Enumerations */
+
+	public enum CustomerFriendshipSection {
+		FRIENDS("Amici", ""), FRIENDSHIP_REQUESTS("Richieste di amicizia",
+				"requests");
+
+		private String sectionName, sectionIdentifier;
+
+		private CustomerFriendshipSection(String sectionName,
+				String sectionIdentifier) {
+			this.sectionIdentifier = sectionIdentifier;
+			this.sectionName = sectionName;
+		}
+
+		public String getSectionName() {
+			return sectionName;
+		}
+
+		public String getSectionIdentifier() {
+			return sectionIdentifier;
+		}
 	}
 }

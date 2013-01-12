@@ -31,27 +31,6 @@ public class CustomerWorkrequestServlet extends SwimServlet {
 	public static final String CONTEXT_NAME = "works";
 	public final static String WORK_REQUEST_PARAM = "w";
 
-	public enum CustomerWorkRequestSection {
-		ACTIVE_REQUESTS("Richieste attive", ""), ARCHIVED_REQUESTS(
-				"Richieste archiviate", "archived");
-
-		private String sectionName, sectionIdentifier;
-
-		private CustomerWorkRequestSection(String sectionName,
-				String sectionIdentifier) {
-			this.sectionIdentifier = sectionIdentifier;
-			this.sectionName = sectionName;
-		}
-
-		public String getSectionName() {
-			return sectionName;
-		}
-
-		public String getSectionIdentifier() {
-			return sectionIdentifier;
-		}
-	}
-
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
@@ -442,5 +421,28 @@ public class CustomerWorkrequestServlet extends SwimServlet {
 		String link = String.format("%s/%s/view?%s=%s", req.getContextPath(),
 				CONTEXT_NAME, WORK_REQUEST_PARAM, reqId);
 		resp.sendRedirect(link);
+	}
+
+	/* Enumerations */
+
+	public enum CustomerWorkRequestSection {
+		ACTIVE_REQUESTS("Richieste attive", ""), ARCHIVED_REQUESTS(
+				"Richieste archiviate", "archived");
+
+		private String sectionName, sectionIdentifier;
+
+		private CustomerWorkRequestSection(String sectionName,
+				String sectionIdentifier) {
+			this.sectionIdentifier = sectionIdentifier;
+			this.sectionName = sectionName;
+		}
+
+		public String getSectionName() {
+			return sectionName;
+		}
+
+		public String getSectionIdentifier() {
+			return sectionIdentifier;
+		}
 	}
 }

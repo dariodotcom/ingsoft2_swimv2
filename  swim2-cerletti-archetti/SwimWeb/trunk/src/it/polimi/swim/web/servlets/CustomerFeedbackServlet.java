@@ -24,44 +24,6 @@ public class CustomerFeedbackServlet extends SwimServlet {
 	public static final String CONTEXT_NAME = "feedbacks";
 
 	/**
-	 * CustomerFeedbackSection is an enumeration useful to provide all the
-	 * possible sections accessible from the feedback page of a logged user.
-	 */
-	public enum CustomerFeedbackSection {
-
-		RECEIVED_FEEDBACKS("Feedback ricevuti", ""), SENT_FEEDBACKS(
-				"Feedback inviati", "sent");
-
-		private String sectionName, sectionIdentifier;
-
-		private CustomerFeedbackSection(String sectionName,
-				String sectionIdentifier) {
-			this.sectionIdentifier = sectionIdentifier;
-			this.sectionName = sectionName;
-		}
-
-		/**
-		 * Getter method.
-		 * 
-		 * @return a String that contains the name of this
-		 *         CustomerFeedbackSection.
-		 */
-		public String getSectionName() {
-			return sectionName;
-		}
-
-		/**
-		 * Getter method.
-		 * 
-		 * @return a String that contains the identifier of this
-		 *         CustomerFeedbackSection.
-		 */
-		public String getSectionIdentifier() {
-			return sectionIdentifier;
-		}
-	}
-
-	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
 	public CustomerFeedbackServlet() {
@@ -145,5 +107,44 @@ public class CustomerFeedbackServlet extends SwimServlet {
 		req.setAttribute(Misc.SELECTED_SECTION_ATTR, section);
 		req.getRequestDispatcher(Misc.FEEDBACKS_JSP).forward(req, resp);
 		return;
+	}
+
+	/* Enumerations */
+	/**
+	 * CustomerFeedbackSection is an enumeration useful to provide all the
+	 * possible sections accessible from the feedback page of a logged user.
+	 */
+	public enum CustomerFeedbackSection {
+
+		RECEIVED_FEEDBACKS("Feedback ricevuti", ""), SENT_FEEDBACKS(
+				"Feedback inviati", "sent");
+
+		private String sectionName, sectionIdentifier;
+
+		private CustomerFeedbackSection(String sectionName,
+				String sectionIdentifier) {
+			this.sectionIdentifier = sectionIdentifier;
+			this.sectionName = sectionName;
+		}
+
+		/**
+		 * Getter method.
+		 * 
+		 * @return a String that contains the name of this
+		 *         CustomerFeedbackSection.
+		 */
+		public String getSectionName() {
+			return sectionName;
+		}
+
+		/**
+		 * Getter method.
+		 * 
+		 * @return a String that contains the identifier of this
+		 *         CustomerFeedbackSection.
+		 */
+		public String getSectionIdentifier() {
+			return sectionIdentifier;
+		}
 	}
 }
