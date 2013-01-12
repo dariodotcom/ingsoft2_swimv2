@@ -35,6 +35,8 @@ public class CustomerImageServlet extends SwimServlet {
 
 		setSectionName(CONTEXT_NAME);
 
+		/* GET request actions */
+
 		registerGetActionMapping("full.png", new ServletAction() {
 			public void runAction(HttpServletRequest req,
 					HttpServletResponse resp) throws IOException,
@@ -53,6 +55,8 @@ public class CustomerImageServlet extends SwimServlet {
 
 	}
 
+	/* Methods to respond to different requests */
+
 	private void showCustomerImage(CustomerImage image, HttpServletRequest req,
 			HttpServletResponse resp) throws IOException, ServletException {
 		Image userImage = null;
@@ -62,7 +66,7 @@ public class CustomerImageServlet extends SwimServlet {
 			userImage = new BufferedImage(1, 1, BufferedImage.TYPE_INT_RGB);
 		} else {
 
-			// Retrieve image from DB
+			/* Retrieve image from DB */
 			UserProfileControllerRemote userCtrl = lookupBean(
 					UserProfileControllerRemote.class, Misc.BeanNames.PROFILE);
 
@@ -80,7 +84,7 @@ public class CustomerImageServlet extends SwimServlet {
 					imageBytes = c.getCustomerThumbnail();
 				}
 
-				// If customer has no photo, load default.
+				/* If customer has no photo, load default */
 				if (imageBytes == null) {
 					String path = image.equals(CustomerImage.FULL) ? Misc.DEFAULT_PHOTO_FULL_URL
 							: Misc.DEFAULT_PHOTO_THUMB_URL;
@@ -94,7 +98,7 @@ public class CustomerImageServlet extends SwimServlet {
 			}
 		}
 
-		// Write image to response
+		/* Write image to response */
 		resp.setContentType("image/png");
 		ImageIO.write((BufferedImage) userImage, imageFormat,
 				resp.getOutputStream());
@@ -103,6 +107,7 @@ public class CustomerImageServlet extends SwimServlet {
 	}
 
 	/* Helpers */
+
 	private BufferedImage loadImage(HttpServletRequest request, String path)
 			throws IOException {
 		ServletContext ctx = request.getSession().getServletContext();
@@ -111,6 +116,7 @@ public class CustomerImageServlet extends SwimServlet {
 	}
 
 	/* Enumerations */
+
 	private enum CustomerImage {
 		FULL, THUMB
 	}
