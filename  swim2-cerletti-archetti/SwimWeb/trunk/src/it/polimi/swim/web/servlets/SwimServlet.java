@@ -126,6 +126,7 @@ public abstract class SwimServlet extends HttpServlet {
 	}
 
 	/* Helpers */
+	
 	private String getActionIdentifier(HttpServletRequest request) {
 		String prefix = request.getContextPath() + "/"
 				+ (sectionName.equals("") ? "" : sectionName + "/");
