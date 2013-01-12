@@ -231,6 +231,17 @@ public interface UserProfileControllerRemote {
 	 */
 	public Boolean areFriends(String username1, String username2);
 
+	/**
+	 * This method manages the change of a user profile picture.
+	 * 
+	 * @param username
+	 *            a String that contains the username of the user who wants to
+	 *            change his picture.
+	 * @param photo
+	 *            a SerializableImage which contains the new picture.
+	 * @throws BadRequestException
+	 *             a request that does not fit.
+	 */
 	public void changeCustomerPhoto(String username, SerializableImage photo)
 			throws BadRequestException;
 }
