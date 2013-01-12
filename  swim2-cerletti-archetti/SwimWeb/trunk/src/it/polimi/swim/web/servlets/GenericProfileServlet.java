@@ -333,7 +333,11 @@ public class GenericProfileServlet extends SwimServlet {
 			return;
 		}
 
-		CustomerWorkrequestServlet.redirectToRequestView(req, resp, id);
+		// Redirect to work request
+		String link = String.format("%s/%s/view?%s=%s", req.getContextPath(),
+				CustomerWorkrequestServlet.CONTEXT_NAME,
+				CustomerWorkrequestServlet.WORK_REQUEST_PARAM, id);
+		resp.sendRedirect(link);
 	}
 
 	private Date parseDate(String date, String hour) throws ParseException {
