@@ -1,7 +1,7 @@
+<%@page import="it.polimi.swim.web.pagesupport.FriendshipStatus"%>
 <%@page import="it.polimi.swim.business.entity.WorkRequest"%>
 <%@page import="it.polimi.swim.business.entity.Feedback"%>
 <%@page import="it.polimi.swim.business.entity.Friendship"%>
-<%@page import="it.polimi.swim.web.pagesupport.Misc.FriendshipStatus"%>
 <%@page import="it.polimi.swim.web.servlets.GenericProfileServlet"%>
 <%@page
 	import="it.polimi.swim.web.servlets.GenericProfileServlet.GenericProfileSection"%>
@@ -62,7 +62,7 @@
 					<form action="<%=ctx%>/user/sendfriendship" method="post">
 						<input type="hidden" name="u" value="<%=target.getUsername()%>" />
 						<input type="submit" value="<%=status.getButtonText()%>"
-							class="inputsubmit <%=status.getButtonClass()%>" />
+							class="inputsubmit" />
 					</form>
 					<%
 						} else {

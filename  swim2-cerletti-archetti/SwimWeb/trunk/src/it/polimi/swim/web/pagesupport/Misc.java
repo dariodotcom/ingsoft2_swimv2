@@ -162,43 +162,4 @@ public class Misc {
 		public static final String FEEDBACK = "FeedbackController/remote";
 		public static final String SEARCH = "SearchController/remote";
 	}
-
-	/**
-	 * FrienshipStatus is an enumeration which purpose is to represent all the
-	 * possible values related to friendship requests on buttons in the profile
-	 * of a generic user different from the current one.
-	 */
-	public enum FriendshipStatus {
-		NOT_FRIENDS("Invia richiesta di amicizia", "sendable"), CONFIRMATION_AWAITED(
-				"Amicizia in attesa di conferma", "awaited"), ALREADY_FRIENDS(
-				"Siete amici", "disabled"), FRIENDSHIP_UNAVAILABLE(
-				"Non sei registrato", "disabled");
-
-		private String buttonText;
-		private String buttonClass;
-
-		private FriendshipStatus(String buttonText, String buttonClass) {
-			this.buttonClass = buttonClass;
-			this.buttonText = buttonText;
-		}
-
-		/**
-		 * Getter method.
-		 * 
-		 * @return a String that contains the value present on this button.
-		 */
-		public String getButtonText() {
-			return buttonText;
-		}
-
-		/**
-		 * Getter method
-		 * 
-		 * @return a String which says if the request on the button is sendable,
-		 *         awaited or disabled.
-		 */
-		public String getButtonClass() {
-			return buttonClass;
-		}
-	}
 }

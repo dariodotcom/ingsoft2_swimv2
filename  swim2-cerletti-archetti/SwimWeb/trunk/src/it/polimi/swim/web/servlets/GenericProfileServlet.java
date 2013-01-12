@@ -9,9 +9,9 @@ import it.polimi.swim.business.exceptions.BadRequestException;
 import it.polimi.swim.business.exceptions.InvalidStateException;
 import it.polimi.swim.web.pagesupport.CustomerMenu;
 import it.polimi.swim.web.pagesupport.ErrorType;
+import it.polimi.swim.web.pagesupport.FriendshipStatus;
 import it.polimi.swim.web.pagesupport.MenuDescriptor;
 import it.polimi.swim.web.pagesupport.Misc;
-import it.polimi.swim.web.pagesupport.Misc.FriendshipStatus;
 import it.polimi.swim.web.pagesupport.NotificationMessages;
 import it.polimi.swim.web.pagesupport.UnloggedMenu;
 
