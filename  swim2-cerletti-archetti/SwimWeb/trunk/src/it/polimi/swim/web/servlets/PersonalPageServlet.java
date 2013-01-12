@@ -179,11 +179,11 @@ public class PersonalPageServlet extends SwimServlet {
 			}
 		});
 	}
-	
+
 	/* Methods to respond to different requests */
 
-	private void doChangePhoto(HttpServletRequest req,
-			HttpServletResponse resp) throws IOException, ServletException {
+	private void doChangePhoto(HttpServletRequest req, HttpServletResponse resp)
+			throws IOException, ServletException {
 		HttpSession session = req.getSession();
 
 		if (!isCustomerLoggedIn(session)) {
@@ -200,7 +200,7 @@ public class PersonalPageServlet extends SwimServlet {
 		BufferedImage customerPhoto = null;
 		ServletFileUpload upload = new ServletFileUpload();
 
-		//Retrieve uploaded photo from request
+		// Retrieve uploaded photo from request
 		try {
 			FileItemIterator iterator = upload.getItemIterator(req);
 			while (iterator.hasNext()) {
@@ -217,14 +217,14 @@ public class PersonalPageServlet extends SwimServlet {
 			return;
 		}
 
-		//If user has not uploaded any photo, send error.
+		// If user has not uploaded any photo, send error.
 		if (customerPhoto == null) {
 			req.setAttribute(Misc.ERROR_ATTR, ErrorType.INVALID_IMAGE);
 			showSection(PersonalPageSection.EDIT_PROFILE, req, resp);
 			return;
 		}
 
-		//Lookup bean to update informations
+		// Lookup bean to update informations
 		UserProfileControllerRemote profileCtrl = lookupBean(
 				UserProfileControllerRemote.class, Misc.BeanNames.PROFILE);
 		String username = getUsername(session);
@@ -238,7 +238,7 @@ public class PersonalPageServlet extends SwimServlet {
 			return;
 		}
 
-		//show profile edit page again
+		// show profile edit page again
 		req.setAttribute(Misc.NOTIFICATION_ATTR,
 				NotificationMessages.PHOTO_CHANGED);
 		showSection(PersonalPageSection.EDIT_PROFILE, req, resp);
@@ -466,20 +466,20 @@ public class PersonalPageServlet extends SwimServlet {
 		/* Compute feedback average */
 		List<?> feedbackList = profile.getReceivedFeedbacks(selfUsername);
 		Integer mean = null;
-		
-		if(feedbackList.size() > 0){
+
+		if (feedbackList.size() > 0) {
 			int sum = 0;
-			for(Object o : feedbackList){
+			for (Object o : feedbackList) {
 				Feedback feedback = (Feedback) o;
-				sum += feedback.getMark();				
+				sum += feedback.getMark();
 			}
-			
+
 			// we want an integer mean
 			mean = sum / feedbackList.size();
 		}
 
 		req.setAttribute(Misc.MARK_VALUE, mean);
-		
+
 		/* Put user informations in request */
 		req.setAttribute(Misc.USER_TO_SHOW, c);
 
@@ -495,7 +495,7 @@ public class PersonalPageServlet extends SwimServlet {
 	}
 
 	private void getAbilityList(HttpServletRequest req, HttpServletResponse resp)
-			throws IOException {
+			throws IOException, ServletException {
 		resp.setContentType("application/json");
 
 		PrintWriter respWriter = resp.getWriter();
@@ -550,7 +550,8 @@ public class PersonalPageServlet extends SwimServlet {
 		}
 	}
 
-	private Boolean authenticateRequest(String password, HttpServletRequest req) {
+	private Boolean authenticateRequest(String password, HttpServletRequest req)
+			throws ServletException {
 		AuthenticationControllerRemote auth = lookupBean(
 				AuthenticationControllerRemote.class,
 				Misc.BeanNames.AUTHENTICATION);

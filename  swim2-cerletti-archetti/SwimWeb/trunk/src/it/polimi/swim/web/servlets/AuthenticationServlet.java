@@ -235,11 +235,11 @@ public class AuthenticationServlet extends SwimServlet {
 		}
 
 		/* Check email */
-		String email = values.get(RegistrationFields.EMAIL.getName());
-		if (!Misc.isEmailValid(email)) {
-			retry("registration", ErrorType.BAD_EMAIL, req, resp);
-			return;
-		}
+//		String email = values.get(RegistrationFields.EMAIL.getName());
+//		if (!Misc.isEmailValid(email)) {
+//			retry("registration", ErrorType.BAD_EMAIL, req, resp);
+//			return;
+//		}
 
 		/* Retrieve bean used for registration */
 		AuthenticationControllerRemote auth = lookupBean(
