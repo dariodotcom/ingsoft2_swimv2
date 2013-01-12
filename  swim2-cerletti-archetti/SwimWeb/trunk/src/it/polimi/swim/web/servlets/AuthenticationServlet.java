@@ -126,7 +126,7 @@ public class AuthenticationServlet extends SwimServlet {
 				return;
 			}
 
-			// Check that customer email is validated
+			/* Check that customer email is validated */
 			if (loggedUserType.equals(UserType.CUSTOMER)) {
 
 				UserProfileControllerRemote profileCtrl = lookupBean(
@@ -136,14 +136,14 @@ public class AuthenticationServlet extends SwimServlet {
 				Customer c = profileCtrl.getByUsername(username);
 
 				if (!c.isEmailConfirmed()) {
-					// User has to validate its email address
+					/* User has to validate its email address */
 					session.setAttribute(Misc.LOGGED_USERNAME, username);
 					resp.sendRedirect(req.getContextPath() + "/validatemail/");
 					return;
 				}
 			}
 
-			// Log in user
+			/* Log in user */
 			session.setAttribute(LOGGED_ATTRIBUTE, true);
 			session.setAttribute(LOGGED_USERNAME, username);
 			session.setAttribute(LOGGED_USERTYPE, loggedUserType);
@@ -262,6 +262,10 @@ public class AuthenticationServlet extends SwimServlet {
 
 	/* Enumerations */
 
+	/**
+	 * RegistrationFields is an enumeration useful to provide all the possible
+	 * fields that a user has to compile to register.
+	 */
 	public static enum RegistrationFields {
 		USERNAME("username", "Username", "text"), PASSWORD("password",
 				"Password", "password"), REPEATPASSWORD("repeatpassword",
@@ -278,14 +282,31 @@ public class AuthenticationServlet extends SwimServlet {
 			this.type = type;
 		}
 
+		/**
+		 * Getter method.
+		 * 
+		 * @return a String that contains the name of this RegistrationFields.
+		 */
 		public String getName() {
 			return name;
 		}
 
+		/**
+		 * Getter method.
+		 * 
+		 * @return a String that contains the label associated to this
+		 *         RegistrationFields.
+		 */
 		public String getLabel() {
 			return label;
 		}
 
+		/**
+		 * Getter method.
+		 * 
+		 * @return a String that contains the type of the input associated to
+		 *         this RegistrationFields.
+		 */
 		public String getType() {
 			return type;
 		}
