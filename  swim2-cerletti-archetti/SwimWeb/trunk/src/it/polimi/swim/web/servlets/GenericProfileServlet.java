@@ -333,7 +333,7 @@ public class GenericProfileServlet extends SwimServlet {
 			return;
 		}
 
-		// Redirect to work request
+		/* Redirect to work request */
 		String link = String.format("%s/%s/view?%s=%s", req.getContextPath(),
 				CustomerWorkrequestServlet.CONTEXT_NAME,
 				CustomerWorkrequestServlet.WORK_REQUEST_PARAM, id);
@@ -384,9 +384,9 @@ public class GenericProfileServlet extends SwimServlet {
 	}
 
 	/**
-	 * createWRField is an enumeration useful to manage compilation of all the
-	 * fields present in a work request form accessible from the profile of a
-	 * user we want to send a work request.
+	 * WorkRequestCreationField is an enumeration useful to manage compilation
+	 * of all the fields present in a work request form accessible from the
+	 * profile of a user we want to send a work request.
 	 */
 	public enum WorkRequestCreationField {
 		SELECTED_ABILITY("Professionalit&agrave; richiesta", "selectedAbility",
