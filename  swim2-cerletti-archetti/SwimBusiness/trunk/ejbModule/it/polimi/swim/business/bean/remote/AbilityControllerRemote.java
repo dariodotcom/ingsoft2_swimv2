@@ -89,7 +89,16 @@ public interface AbilityControllerRemote {
 	 * @return a List of the ability already present in the set.
 	 */
 	public List<?> getAvailableAbilityList();
-	
+
+	/**
+	 * This method is useful to provide a list of the ability already present in
+	 * the set.
+	 * 
+	 * @param match
+	 *            a String that contains the value we want to find
+	 *            correspondences in the ability set.
+	 * @return a List of the ability that matches with the given value.
+	 */
 	public List<?> getAvailableAbilityList(String match);
 
 	/**
