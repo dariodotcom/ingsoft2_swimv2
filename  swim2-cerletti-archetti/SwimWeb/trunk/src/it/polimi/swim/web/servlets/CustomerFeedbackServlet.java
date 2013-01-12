@@ -110,6 +110,7 @@ public class CustomerFeedbackServlet extends SwimServlet {
 	}
 
 	/* Enumerations */
+	
 	/**
 	 * CustomerFeedbackSection is an enumeration useful to provide all the
 	 * possible sections accessible from the feedback page of a logged user.
