@@ -164,8 +164,10 @@ public abstract class SwimServlet extends HttpServlet {
 	 * @param beanName
 	 *            a String that contains the name of the sought bean.
 	 * @return the sought bean.
+	 * @throws ServletException
 	 */
-	protected <T> T lookupBean(Class<T> beanClass, String beanName) {
+	protected <T> T lookupBean(Class<T> beanClass, String beanName)
+			throws ServletException {
 		Hashtable<String, String> env = new Hashtable<String, String>();
 		env.put(Context.INITIAL_CONTEXT_FACTORY,
 				"org.jnp.interfaces.NamingContextFactory");
@@ -175,8 +177,7 @@ public abstract class SwimServlet extends HttpServlet {
 			InitialContext jndiContext = new InitialContext(env);
 			return beanClass.cast(jndiContext.lookup(beanName));
 		} catch (NamingException e) {
-			e.printStackTrace();
-			return null;
+			throw new ServletException();
 		}
 	}
 
