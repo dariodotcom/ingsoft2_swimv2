@@ -476,10 +476,12 @@ span.propertyValue{
 	border-radius: 2px;
 	color: rgba(255,255,255,.9);
 	box-shadow: 0 -1px 0 rgba(255,255,255,.3) inset;
-	font-size: 12px;
+	font-size: 13px;
 	font-weight: bold;
 	display: block;
-    line-height: 14px;
+    font-family: "Droid Sans";
+    padding: 5px;
+	line-height: 19px !important;
 }
 	
 #swimContent a.button,
@@ -494,14 +496,10 @@ span.propertyValue{
 	background-color: #797979;
 	text-shadow: 0 0 1px  #696969;
 }
-	
-#swimContent .inputsubmit{
-	padding: 5px;
-}
+
 
 #swimContent .disabledButton,
 #swimContent a.button{
-	padding: 5px;
 	text-decoration: none;
     font-weight: bold;
 }
@@ -640,6 +638,7 @@ body.welcome .formContainer h2{
 #profileHeader .userControls{
 	float: right;
 	margin-left: 25px;
+	vertical-align: top;
 }
 
 #profileHeader .username{
@@ -859,24 +858,24 @@ form.actionForm{
 }
 
 /*Workrequest messages*/
-.messageContainer.other .smallImageFrame{
+#swimContent .messageContainer.other .smallImageFrame{
     float: left;
 }
 
-.messageContainer .smallImageFrame,
-.messageContainer .smallImageFrame + .arrow{
+#swimContent .messageContainer .smallImageFrame,
+#swimContent .messageContainer .smallImageFrame + .arrow{
     margin-top: 10px;
 }
 
-.messageContainer.other .smallImageFrame + .arrow{
+#swimContent .messageContainer.other .smallImageFrame + .arrow{
     margin-left: -7px;
 }
 
-.messageContainer.self .smallImageFrame{
+#swimContent .messageContainer.self .smallImageFrame{
     float: right;
 }
 
-.messageContainer.self .smallImageFrame + .arrow{
+#swimContent .messageContainer.self .smallImageFrame + .arrow{
     margin-right: -7px;
 }
 
