@@ -9,7 +9,6 @@ import it.polimi.swim.business.exceptions.BadRequestException;
 import it.polimi.swim.business.exceptions.InvalidStateException;
 import it.polimi.swim.web.pagesupport.CustomerMenu;
 import it.polimi.swim.web.pagesupport.ErrorType;
-import it.polimi.swim.web.pagesupport.FriendshipStatus;
 import it.polimi.swim.web.pagesupport.MenuDescriptor;
 import it.polimi.swim.web.pagesupport.Misc;
 import it.polimi.swim.web.pagesupport.NotificationMessages;
@@ -38,95 +37,6 @@ public class GenericProfileServlet extends SwimServlet {
 	public static final String CONTEXT_NAME = "user";
 
 	private static final String TARGET_USER_PARAM = "u";
-
-	/**
-	 * GenericProfileSection is an enumeration useful to provide all the
-	 * possible sections accessible from profile of an another user.
-	 */
-	public enum GenericProfileSection {
-		PROFILE("Profilo", ""), FEEDBACKS("Feedback", "feedbacks"), FRIENDS(
-				"Amici", "friends");
-
-		private String sectionName, sectionIdentifier;
-
-		private GenericProfileSection(String sectionName,
-				String sectionIdentifier) {
-			this.sectionIdentifier = sectionIdentifier;
-			this.sectionName = sectionName;
-		}
-
-		/**
-		 * Getter method.
-		 * 
-		 * @return a String that contains the name of this
-		 *         GenericProfileSection.
-		 */
-		public String getSectionName() {
-			return sectionName;
-		}
-
-		/**
-		 * Getter method.
-		 * 
-		 * @return a String that contains the identifier of this
-		 *         GenericProfileSection.
-		 */
-		public String getSectionIdentifier() {
-			return sectionIdentifier;
-		}
-	}
-
-	/**
-	 * createWRField is an enumeration useful to manage compilation of all the
-	 * fields present in a work request form accessible from the profile of a
-	 * user we want to send a work request.
-	 */
-	public enum createWRField {
-		SELECTED_ABILITY("Professionalit&agrave; richiesta", "selectedAbility",
-				true), START_DATE("Data inizio (gg/mm/aa)", "startDate", true), START_HOUR(
-				"Ora inizio (hh:mm)", "startHour", true), END_DATE(
-				"Data fine (gg/mm/aa)", "endDate", false), END_HOUR(
-				"Ora fine(hh:mm)", "endHour", false), LOCATION("Luogo",
-				"location", true), DESCRIPTION("Descrizione", "description",
-				true);
-
-		private String labelText, name;
-		private Boolean mandatory;
-
-		private createWRField(String labelText, String name, Boolean mandatory) {
-			this.labelText = labelText;
-			this.name = name;
-			this.mandatory = mandatory;
-		}
-
-		/**
-		 * Getter method.
-		 * 
-		 * @return a String that contains the name of this field to compile.
-		 */
-		public String getLabelText() {
-			return labelText;
-		}
-
-		/**
-		 * Getter method.
-		 * 
-		 * @return a String that contains the value inserted for this field.
-		 */
-		public String getName() {
-			return name;
-		}
-
-		/**
-		 * Getter method.
-		 * 
-		 * @return true if the compilation of this field is mandatory, false
-		 *         otherwise.
-		 */
-		public Boolean isMandatory() {
-			return mandatory;
-		}
-	}
 
 	/**
 	 * @see HttpServlet#HttpServlet()
@@ -370,7 +280,7 @@ public class GenericProfileServlet extends SwimServlet {
 		workRequestProperties.put("sender", getUsername(session));
 
 		/* Initially parse request and retrieve all field values */
-		for (createWRField field : createWRField.values()) {
+		for (WorkRequestCreationField field : WorkRequestCreationField.values()) {
 			String name = field.getName();
 			String value = (String) req.getParameter(name);
 			if (field.isMandatory() && Misc.isStringEmpty(value)) {
@@ -429,4 +339,123 @@ public class GenericProfileServlet extends SwimServlet {
 	private Date parseDate(String date, String hour) throws ParseException {
 		return Misc.DATE_TIME_FORMAT.parse(date + " " + hour);
 	}
+
+	/* Enumerations */
+
+	/**
+	 * GenericProfileSection is an enumeration useful to provide all the
+	 * possible sections accessible from profile of an another user.
+	 */
+	public enum GenericProfileSection {
+		PROFILE("Profilo", ""), FEEDBACKS("Feedback", "feedbacks"), FRIENDS(
+				"Amici", "friends");
+
+		private String sectionName, sectionIdentifier;
+
+		private GenericProfileSection(String sectionName,
+				String sectionIdentifier) {
+			this.sectionIdentifier = sectionIdentifier;
+			this.sectionName = sectionName;
+		}
+
+		/**
+		 * Getter method.
+		 * 
+		 * @return a String that contains the name of this
+		 *         GenericProfileSection.
+		 */
+		public String getSectionName() {
+			return sectionName;
+		}
+
+		/**
+		 * Getter method.
+		 * 
+		 * @return a String that contains the identifier of this
+		 *         GenericProfileSection.
+		 */
+		public String getSectionIdentifier() {
+			return sectionIdentifier;
+		}
+	}
+
+	/**
+	 * createWRField is an enumeration useful to manage compilation of all the
+	 * fields present in a work request form accessible from the profile of a
+	 * user we want to send a work request.
+	 */
+	public enum WorkRequestCreationField {
+		SELECTED_ABILITY("Professionalit&agrave; richiesta", "selectedAbility",
+				true), START_DATE("Data inizio (gg/mm/aa)", "startDate", true), START_HOUR(
+				"Ora inizio (hh:mm)", "startHour", true), END_DATE(
+				"Data fine (gg/mm/aa)", "endDate", false), END_HOUR(
+				"Ora fine(hh:mm)", "endHour", false), LOCATION("Luogo",
+				"location", true), DESCRIPTION("Descrizione", "description",
+				true);
+
+		private String labelText, name;
+		private Boolean mandatory;
+
+		private WorkRequestCreationField(String labelText, String name,
+				Boolean mandatory) {
+			this.labelText = labelText;
+			this.name = name;
+			this.mandatory = mandatory;
+		}
+
+		/**
+		 * Getter method.
+		 * 
+		 * @return a String that contains the name of this field to compile.
+		 */
+		public String getLabelText() {
+			return labelText;
+		}
+
+		/**
+		 * Getter method.
+		 * 
+		 * @return a String that contains the value inserted for this field.
+		 */
+		public String getName() {
+			return name;
+		}
+
+		/**
+		 * Getter method.
+		 * 
+		 * @return true if the compilation of this field is mandatory, false
+		 *         otherwise.
+		 */
+		public Boolean isMandatory() {
+			return mandatory;
+		}
+	}
+
+	/**
+	 * FrienshipStatus is an enumeration which purpose is to represent all the
+	 * possible values related to friendship requests on buttons in the profile
+	 * of a generic user different from the current one.
+	 */
+	public enum FriendshipStatus {
+		NOT_FRIENDS("Invia richiesta di amicizia"), CONFIRMATION_AWAITED(
+				"Amicizia in attesa di conferma"), ALREADY_FRIENDS(
+				"Siete amici"), FRIENDSHIP_UNAVAILABLE("Non sei registrato");
+
+		private String buttonText;
+
+		private FriendshipStatus(String buttonText) {
+			this.buttonText = buttonText;
+		}
+
+		/**
+		 * Getter method.
+		 * 
+		 * @return a String that contains the value present on this button.
+		 */
+		public String getButtonText() {
+			return buttonText;
+		}
+	}
+
 }

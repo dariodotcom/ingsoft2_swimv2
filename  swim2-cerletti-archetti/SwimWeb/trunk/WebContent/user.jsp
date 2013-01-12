@@ -1,4 +1,5 @@
-<%@page import="it.polimi.swim.web.pagesupport.FriendshipStatus"%>
+<%@page
+	import="it.polimi.swim.web.servlets.GenericProfileServlet.FriendshipStatus"%>
 <%@page import="it.polimi.swim.business.entity.WorkRequest"%>
 <%@page import="it.polimi.swim.business.entity.Feedback"%>
 <%@page import="it.polimi.swim.business.entity.Friendship"%>
