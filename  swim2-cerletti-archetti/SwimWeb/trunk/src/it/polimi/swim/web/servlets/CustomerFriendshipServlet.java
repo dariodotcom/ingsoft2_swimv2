@@ -103,21 +103,21 @@ public class CustomerFriendshipServlet extends SwimServlet {
 			return;
 		}
 
-		// Check login
+		/* Check login */
 		if (!isCustomerLoggedIn(session)) {
 			sendError(req, resp, ErrorType.LOGIN_REQUIRED);
 			return;
 		}
 
-		// Get logged user
+		/* Get logged user */
 		String loggedUsername = (String) session
 				.getAttribute(AuthenticationServlet.LOGGED_USERNAME);
 
-		// Lookup bean
+		/* Lookup bean */
 		FriendshipControllerRemote friendship = lookupBean(
 				FriendshipControllerRemote.class, Misc.BeanNames.FRIENDSHIP);
 
-		// Respond to friendship request
+		/* Respond to friendship request */
 		try {
 			friendship.respondToRequest(loggedUsername, friendshipId, response);
 		} catch (BadRequestException e) {
@@ -131,7 +131,7 @@ public class CustomerFriendshipServlet extends SwimServlet {
 			return;
 		}
 
-		// Show friend list page
+		/* Show friend list page */
 		showSection(CustomerFriendshipSection.FRIENDSHIP_REQUESTS, req, resp);
 	}
 
@@ -140,7 +140,7 @@ public class CustomerFriendshipServlet extends SwimServlet {
 
 		HttpSession session = req.getSession();
 
-		// Retrieve logged user
+		/* Retrieve logged user */
 		if (!isCustomerLoggedIn(session)) {
 			sendError(req, resp, ErrorType.LOGIN_REQUIRED);
 			return;
@@ -149,7 +149,7 @@ public class CustomerFriendshipServlet extends SwimServlet {
 		String selfUsername = (String) session
 				.getAttribute(AuthenticationServlet.LOGGED_USERNAME);
 
-		// Retrieve friendship id
+		/* Retrieve friendship id */
 		int friendshipId;
 
 		try {
@@ -159,11 +159,11 @@ public class CustomerFriendshipServlet extends SwimServlet {
 			return;
 		}
 
-		// Lookup bean
+		/* Lookup bean */
 		FriendshipControllerRemote friendship = lookupBean(
 				FriendshipControllerRemote.class, Misc.BeanNames.FRIENDSHIP);
 
-		// Remove friendship
+		/* Remove friendship */
 		try {
 			friendship.removeFriendship(selfUsername, friendshipId);
 		} catch (BadRequestException e) {
@@ -177,7 +177,7 @@ public class CustomerFriendshipServlet extends SwimServlet {
 			return;
 		}
 
-		// Show friend list page
+		/* Show friend list page */
 		resp.sendRedirect(req.getContextPath() + "/friends/");
 		return;
 	}
@@ -193,11 +193,11 @@ public class CustomerFriendshipServlet extends SwimServlet {
 			return;
 		}
 
-		// Retrieve username
+		/* Retrieve username */
 		String loggedUsername = (String) session
 				.getAttribute(AuthenticationServlet.LOGGED_USERNAME);
 
-		// Retrieve bean
+		/* Retrieve bean */
 		UserProfileControllerRemote profile = lookupBean(
 				UserProfileControllerRemote.class, Misc.BeanNames.PROFILE);
 
@@ -222,6 +222,10 @@ public class CustomerFriendshipServlet extends SwimServlet {
 
 	/* Enumerations */
 
+	/**
+	 * CustomerFriendshipSection is an enumeration useful to provide possible
+	 * sections accessible from the friendship section of a logged user.
+	 */
 	public enum CustomerFriendshipSection {
 		FRIENDS("Amici", ""), FRIENDSHIP_REQUESTS("Richieste di amicizia",
 				"requests");
@@ -234,10 +238,22 @@ public class CustomerFriendshipServlet extends SwimServlet {
 			this.sectionName = sectionName;
 		}
 
+		/**
+		 * Getter method.
+		 * 
+		 * @return a String that contains the name associated to this
+		 *         CustomerFriendshipSection.
+		 */
 		public String getSectionName() {
 			return sectionName;
 		}
 
+		/**
+		 * Getter method.
+		 * 
+		 * @return a String that contains the identifier associated to this
+		 *         CustomerFriendshipSection.
+		 */
 		public String getSectionIdentifier() {
 			return sectionIdentifier;
 		}
