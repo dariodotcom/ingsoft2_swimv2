@@ -57,6 +57,7 @@ public class SearchServlet extends SwimServlet {
 	}
 
 	/* Methods to respond to different requests */
+	
 	private void doPerformSearch(HttpServletRequest req,
 			HttpServletResponse resp) throws ServletException, IOException {
 
