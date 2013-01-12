@@ -107,7 +107,7 @@ public class UserProfileController implements UserProfileControllerRemote {
 		Class<?>[] stringParam = new Class<?>[] { String.class };
 		Class<?>[] dateParam = new Class<?>[] { Date.class };
 
-		// Initialize setter list
+		/* Initialize setter list */
 		try {
 			setters.put("name", custClass.getMethod("setName", stringParam));
 			setters.put("surname",
@@ -311,12 +311,15 @@ public class UserProfileController implements UserProfileControllerRemote {
 		return q.getResultList().size() == 0;
 	}
 
+	/**
+	 * @see UserProfileControllerRemote
+	 */
 	public void changeCustomerPhoto(String username, SerializableImage img)
 			throws BadRequestException {
 
 		Image fullPhoto = img.getImage();
 
-		// Check image size
+		/* Check image size */
 		if (fullPhoto.getWidth(null) != IMAGE_SIZE
 				|| fullPhoto.getHeight(null) != IMAGE_SIZE) {
 			throw new BadRequestException();
