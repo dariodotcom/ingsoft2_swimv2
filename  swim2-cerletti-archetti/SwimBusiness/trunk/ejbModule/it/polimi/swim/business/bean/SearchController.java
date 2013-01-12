@@ -28,17 +28,19 @@ public class SearchController implements SearchControllerRemote {
 	 * Default constructor.
 	 */
 	public SearchController() {
-		// TODO Auto-generated constructor stub
 	}
 
+	/**
+	 * @see SearchControllerRemote
+	 */
 	public QueryResult performQuery(Map<String, String> searchTerms,
 			String friendRestrictUsr) throws BadRequestException {
 		List<?> resultList;
 
-		// Create query
+		/* Create query */
 		Query q = buildQuery(searchTerms);
 
-		// Perform query
+		/* Perform query */
 		Date queryStart = new Date();
 		resultList = q.getResultList();
 		Date queryEnd = new Date();
@@ -86,7 +88,7 @@ public class SearchController implements SearchControllerRemote {
 
 		Query q = manager.createQuery(queryString.toString());
 
-		// Set parameters
+		/* Set parameters */
 		for (String key : searchTerms.keySet()) {
 			q.setParameter(key, searchTerms.get(key));
 		}
