@@ -14,21 +14,42 @@ import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
+/**
+ * MailMessage is a class which manages the messages that have to be sent to a
+ * user via email.
+ */
 public class MailMessage {
 
 	private final String platformMail = "heartripperdesign@gmail.com";
 	private final String platformMailPassword = "swimpassword";
-	
+
 	private String to;
 	private String subject;
 	private String message;
 
+	/**
+	 * Class constructor.
+	 * 
+	 * @param to
+	 *            a String that identifies the receiver of a message.
+	 * @param subject
+	 *            a String that contains the subject of a message.
+	 * @param message
+	 *            a String that is the content of a message.
+	 */
 	public MailMessage(String to, String subject, String message) {
 		this.to = to;
 		this.subject = "[SWIM] " + subject;
 		this.message = message;
 	}
 
+	/**
+	 * This method provides informations about the status of a mail messages.
+	 * 
+	 * @return true if the message has been sent correctly, false otherwise.
+	 * @throws IOException
+	 *             there is an error in the input.
+	 */
 	public boolean sendMail() throws IOException {
 
 		try {
@@ -38,7 +59,8 @@ public class MailMessage {
 			props.setProperty("mail.smtp.auth", "true");
 			props.setProperty("mail.smtp.starttls.enable", "true");
 
-			Authenticator auth = new SMTPAuthenticator(platformMail, platformMailPassword);
+			Authenticator auth = new SMTPAuthenticator(platformMail,
+					platformMailPassword);
 
 			Session session = Session.getInstance(props, auth);
 
