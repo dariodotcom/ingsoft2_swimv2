@@ -51,7 +51,8 @@
 		showOwnProfile = false;
 	}
 
-	Integer feedbackAvg = (Integer) request.getAttribute(Misc.MARK_VALUE);
+	Integer feedbackAvg = (Integer) request
+			.getAttribute(Misc.MARK_VALUE);
 %>
 
 <div id="userProfileDetails" class="profilePage">
@@ -86,7 +87,9 @@
 			<%
 				} else {
 			%>
-			<%@include file="feedbackMarker.jsp"%>
+			<div class="propertyValue">
+				<%@include file="feedbackMarker.jsp"%>
+			</div>
 			<%
 				}
 			%>
