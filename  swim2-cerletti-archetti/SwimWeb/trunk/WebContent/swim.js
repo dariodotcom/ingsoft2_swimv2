@@ -6,36 +6,35 @@ $(function() {
 		delay : 250
 	});
 
-	//Fake image input
+	// Fake image input
 	var realInput = $('#realImageInput');
 	var fakeInput = $('#fakeImageInput');
 	var control = $('#fakeImageSubmit');
 
-	control.click(function(){
-	    realInput.click();
+	control.click(function() {
+		realInput.click();
 	});
 
-	fakeInput.click(function(){
-	    realInput.click();
+	fakeInput.click(function() {
+		realInput.click();
 	});
 
-	realInput.change(function(){
-	    text = $(this).val();
-	    fakeInput.val(text);
+	realInput.change(function() {
+		text = $(this).val();
+		fakeInput.val(text);
 	});
-	
-	
+
 	var currentForm = null;
 
-	// review options
-	window.createReviewForm = function(reqId, accept, node) {
+	// Quick reply (admin ability req review, feedback reply)
+	window.quickReply = function(action, node, textName, params) {
 		var target = node.parentNode.parentNode;
 
 		if (currentForm) {
 			currentForm.remove();
 		}
 
-		// Create HTML
+		// Create container box
 		var messageBox = $('<div class="messageContainer reviewMessage"></div>')
 				.hide();
 		var message = $('<div class="message"></div>');
@@ -43,16 +42,26 @@ $(function() {
 		messageBox.append(arrow);
 		messageBox.append(message);
 
-		var form = $('<form action="/SwimWeb/admin/respond" method="post"></form>');
-		form.append($('<input type="hidden" name="accept" value="' + accept
-				+ '"/>'));
-		form.append($('<input type="hidden" name="request" value="' + reqId
-				+ '"/>'));
-		form.append($('<textarea class="inputtext" name="review"></textarea>'));
-		form
-				.append($('<div class="submitLine"></div>')
-						.append(
-								$('<input type="submit" class="inputsubmit" value="Rispondi"/>')));
+		// Create form
+		var form = $('<form action="' + action + '" method="post"></form>');
+
+		// Add params
+		for ( var k in params) {
+			if (params.hasOwnProperty(k)) {
+				var input = $('<input type="hidden" name="' + k + '" value="'
+						+ params[k] + '"/>');
+				form.append(input);
+			}
+		}
+
+		// Add textarea
+		form.append($('<textarea class="inputtext" name="' + textName
+				+ '"></textarea>'));
+
+		// Add submit button
+		var submit = $('<input type="submit" class="inputsubmit" value="Rispondi"/>');
+		form.append($('<div class="submitLine"></div>').append(submit));
+
 		message.append(form);
 
 		// Append form
@@ -131,7 +140,7 @@ $(function() {
 			this.currentMark = mark;
 			this.setInputValue(mark);
 		}
-	}
+	};
 
 	var marker = document.querySelector("#marker");
 	var input = document.querySelector("#feedbackReview");
