@@ -1,6 +1,10 @@
 package it.polimi.swim.web.servlets;
 
+import it.polimi.swim.business.bean.remote.FeedbackControllerRemote;
 import it.polimi.swim.business.bean.remote.UserProfileControllerRemote;
+import it.polimi.swim.business.exceptions.BadRequestException;
+import it.polimi.swim.business.exceptions.InvalidStateException;
+import it.polimi.swim.business.exceptions.UnauthorizedRequestException;
 import it.polimi.swim.web.pagesupport.CustomerMenu;
 import it.polimi.swim.web.pagesupport.ErrorType;
 import it.polimi.swim.web.pagesupport.Misc;
@@ -60,9 +64,10 @@ public class CustomerFeedbackServlet extends SwimServlet {
 
 		/* POST request actions */
 
-		registerPostActionMapping("/respond", new ServletAction() {
+		registerPostActionMapping("reply", new ServletAction() {
 			public void runAction(HttpServletRequest req,
-					HttpServletResponse resp) throws IOException {
+					HttpServletResponse resp) throws IOException,
+					ServletException {
 				respondToReceivedFeedback(req, resp);
 			}
 		});
@@ -72,8 +77,50 @@ public class CustomerFeedbackServlet extends SwimServlet {
 	/* Methods to respond to different requests */
 
 	private void respondToReceivedFeedback(HttpServletRequest req,
-			HttpServletResponse resp) throws IOException {
+			HttpServletResponse resp) throws IOException, ServletException {
+		HttpSession session = req.getSession();
 
+		if (!isCustomerLoggedIn(session)) {
+			sendError(req, resp, ErrorType.LOGIN_REQUIRED);
+			return;
+		}
+
+		// Retrieve request id from request
+		int reqId;
+
+		try {
+			reqId = Integer.parseInt(req.getParameter("reqId"));
+		} catch (NumberFormatException e) {
+			sendError(req, resp, ErrorType.BAD_REQUEST);
+			return;
+		}
+
+		String username = getUsername(session);
+		String reply = req.getParameter("reply");
+
+		if (Misc.isStringEmpty(reply)) {
+			sendError(req, resp, ErrorType.EMPTY_FIELDS);
+			return;
+		}
+
+		FeedbackControllerRemote feedbackCtrl = lookupBean(
+				FeedbackControllerRemote.class, Misc.BeanNames.FEEDBACK);
+
+		try {
+			feedbackCtrl.replyToFeedback(reqId, username, reply);
+		} catch (UnauthorizedRequestException e) {
+			sendError(req, resp, ErrorType.UNAUTHORIZED_REQUEST);
+			return;
+		} catch (BadRequestException e) {
+			sendError(req, resp, ErrorType.BAD_REQUEST);
+			return;
+		} catch (InvalidStateException e) {
+			sendError(req, resp, ErrorType.INVALID_REQUEST);
+			return;
+		}
+
+		resp.sendRedirect(req.getContextPath() + "/feedbacks/");
+		return;
 	}
 
 	private void showSection(CustomerFeedbackSection section,
@@ -110,7 +157,7 @@ public class CustomerFeedbackServlet extends SwimServlet {
 	}
 
 	/* Enumerations */
-	
+
 	/**
 	 * CustomerFeedbackSection is an enumeration useful to provide all the
 	 * possible sections accessible from the feedback page of a logged user.

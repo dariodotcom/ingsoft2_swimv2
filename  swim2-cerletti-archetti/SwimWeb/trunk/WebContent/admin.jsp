@@ -63,6 +63,9 @@
 										Customer requestAuthor = a.getRequestAuthor();
 										String name = a.getAbilityName();
 										String description = a.getAbilityDescription();
+										String action = request.getContextPath()
+												+ "/admin/respond";
+										int id = a.getId();
 						%>
 						<div id="abilityRequestList" class="property">
 							<span class="propertyName"> <span class="bold">Nome:&nbsp;</span><%=a.getAbilityName()%>&emsp;
@@ -70,9 +73,9 @@
 							</span>
 							<div class="propertyValue">
 								<a class="button yes" href="javascript:"
-									onclick="javascript:createReviewForm(<%=a.getId()%>, true, this)">Accetta</a>&nbsp;
+									onclick="javascript:quickReply('<%=action%>', this, 'review', {request: <%=id%>, accept: true})">Accetta</a>&nbsp;
 								<a class="button no" href="javascript:"
-									onclick="javascript:createReviewForm(<%=a.getId()%>, false, this)">Rifiuta</a>
+									onclick="javascript:quickReply('<%=action%>', this, 'review', {request: <%=id%>, accept: false})">Rifiuta</a>
 							</div>
 						</div>
 
