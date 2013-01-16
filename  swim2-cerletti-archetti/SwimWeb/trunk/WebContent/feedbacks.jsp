@@ -86,12 +86,13 @@
 									int feedbackMark = f.getMark();
 									request.setAttribute(Misc.MARK_VALUE, feedbackMark);
 									String reply = f.getReply();
+									Boolean showReplyInsertion = (showReceived && reply == null);
 									String link = String.format("%s/%s/view?%s=%s", context,
 											CustomerWorkrequestServlet.CONTEXT_NAME,
 											CustomerWorkrequestServlet.WORK_REQUEST_PARAM,
 											relatedWork.getId());
 						%>
-						<div class="feedback">
+						<div class="feedback clearfix">
 							<p class=heading>
 								<span class="bold"><%=targetDesc%>:&nbsp;</span><%=identity%>
 								&emsp;<span class="bold">Voto:&nbsp;</span>
@@ -103,15 +104,29 @@
 								<span class="bold">Recensione:</span>&nbsp;<%=f.getReview()%>
 							</p>
 							<%
-								if (reply != null) {
+								if (showReceived) {
 							%>
 							<p class="reply">
+								<%
+									if (reply != null) {
+								%>
 								<span class="bold">Risposta:</span>&nbsp;<%=reply%>
+								<%
+									} else if (showReplyInsertion) {
+													String onclickFormat = "javascript:quickReply('%s', this, 'reply', {reqId: %s})";
+													String action = request.getContextPath()
+															+ "/feedbacks/reply";
+													String onclick = String.format(onclickFormat,
+															action, relatedWork.getId());
+								%>
+								<a class="button no" href="javascript:" onclick="<%=onclick%>">Rispondi</a>
+								<%
+									}
+								%>
 							</p>
 							<%
 								}
 							%>
-
 						</div>
 						<%
 							}
