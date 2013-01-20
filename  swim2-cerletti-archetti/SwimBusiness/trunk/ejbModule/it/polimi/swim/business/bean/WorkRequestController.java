@@ -47,8 +47,9 @@ public class WorkRequestController implements WorkRequestControllerRemote {
 
 		/* Check receiver abilities */
 		List<Ability> receiverAbilities = receiver.getAbilityList();
+		String abilityName = (String) properties.get("selectedAbility");
 		Ability a = Helpers.getEntityChecked(manager, Ability.class,
-				properties.get("selectedAbility"));
+				abilityName.toLowerCase());
 
 		/* We can't send a work request to a user that has no declared abilities */
 		if (receiverAbilities.size() == 0 || !receiverAbilities.contains(a)) {

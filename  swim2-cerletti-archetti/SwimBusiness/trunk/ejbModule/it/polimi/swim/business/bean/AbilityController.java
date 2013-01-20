@@ -51,7 +51,7 @@ public class AbilityController implements AbilityControllerRemote {
 			throw new InvalidStateException();
 		}
 		
-		AbilityRequest r = new AbilityRequest(author, name, description);
+		AbilityRequest r = new AbilityRequest(author, name.toLowerCase(), description);
 		manager.persist(r);
 	}
 
@@ -99,7 +99,7 @@ public class AbilityController implements AbilityControllerRemote {
 			throw new InvalidStateException();
 		}
 
-		Ability ab = new Ability(name, description, admin);
+		Ability ab = new Ability(name.toLowerCase(), description, admin);
 		manager.persist(ab);
 	}
 
