@@ -826,18 +826,18 @@ form.actionForm{
     line-height: 30px ;
 }
 
-#swimContent .messageContainer.reviewMessage{
+#swimContent .messageContainer.quickReply{
     position: relative ;
     position: relative ;
     margin-top: 20px;
 }
 
-#swimContent .messageContainer.reviewMessage .message .inputtext{
+#swimContent .messageContainer.quickReply .message .inputtext{
     width: 238px ;
-    height: 150px;
+    height: 75px;
 }
 
-#swimContent .messageContainer.reviewMessage .arrow{
+#swimContent .messageContainer.quickReply .arrow{
     background: url('resources/arrow-top.png');
     display: block ;
     width: 28px ;
@@ -845,7 +845,7 @@ form.actionForm{
     margin: 0 0 -1px 225px ;
 }
 
-#swimContent .messageContainer.reviewMessage .message{
+#swimContent .messageContainer.quickReply .message{
 	background: #ffffff ;
 }
 
