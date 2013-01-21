@@ -35,7 +35,7 @@ $(function() {
 		}
 
 		// Create container box
-		var messageBox = $('<div class="messageContainer reviewMessage"></div>')
+		var messageBox = $('<div class="messageContainer quickReply"></div>')
 				.hide();
 		var message = $('<div class="message"></div>');
 		var arrow = $('<div class="arrow">&nbsp;</div>');
@@ -59,7 +59,7 @@ $(function() {
 				+ '"></textarea>'));
 
 		// Add submit button
-		var submit = $('<input type="submit" class="inputsubmit" value="Rispondi"/>');
+		var submit = $('<input type="submit" class="inputsubmit" value="Invia"/>');
 		form.append($('<div class="submitLine"></div>').append(submit));
 
 		message.append(form);
